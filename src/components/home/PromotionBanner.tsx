@@ -6,10 +6,10 @@ export const PromotionBanner = () => {
 
   return (
     <section className="px-5 py-4">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-purple-700 p-6 shadow-lg animate-scale-in">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary/80 p-6 shadow-lg shadow-primary/20 animate-scale-in">
         {/* Background decoration */}
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/20 rounded-full blur-xl" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-xl" />
 
         <div className="relative z-10 flex items-center justify-between">
           <div className="space-y-2">
