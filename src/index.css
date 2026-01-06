@@ -6,109 +6,107 @@
 
 @layer base {
   :root {
-    /* MR. Juice Brand Colors - Yellow & Purple Theme */
-    --background: 45 100% 97%;
-    --foreground: 270 50% 15%;
+    /* MR. Juice Brand Colors - Purple & White/Gray Clean Theme */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 270 50% 15%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 270 50% 15%;
+    --popover-foreground: 0 0% 10%;
 
-    /* Purple - Primary brand color */
-    --primary: 262 83% 58%;
+    /* Purple - Primary brand color from logo */
+    --primary: 262 72% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Yellow/Gold - Secondary brand color */
-    --secondary: 43 96% 56%;
-    --secondary-foreground: 270 50% 15%;
+    /* Light purple accent */
+    --secondary: 262 40% 92%;
+    --secondary-foreground: 262 72% 35%;
 
-    --muted: 45 30% 92%;
-    --muted-foreground: 270 20% 45%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 35 100% 55%;
-    --accent-foreground: 270 50% 15%;
+    --accent: 262 60% 55%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 45 30% 88%;
-    --input: 45 30% 88%;
-    --ring: 262 83% 58%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 262 72% 45%;
 
     --radius: 1rem;
 
     /* Custom brand tokens */
-    --juice-yellow: 43 96% 56%;
-    --juice-yellow-light: 45 100% 70%;
-    --juice-yellow-dark: 38 92% 50%;
-    --juice-purple: 262 83% 58%;
-    --juice-purple-light: 262 80% 70%;
-    --juice-purple-dark: 262 85% 45%;
-    --juice-orange: 25 95% 53%;
-    --juice-green: 142 71% 45%;
+    --juice-purple: 262 72% 45%;
+    --juice-purple-light: 262 60% 65%;
+    --juice-purple-dark: 262 80% 35%;
+    --juice-black: 0 0% 10%;
+    --juice-gray: 0 0% 50%;
+    --juice-light: 0 0% 97%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(43, 96%, 56%) 0%, hsl(35, 100%, 55%) 50%, hsl(25, 95%, 53%) 100%);
-    --gradient-purple: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(262, 85%, 45%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(45, 100%, 98%) 100%);
-    --gradient-golden: linear-gradient(135deg, hsl(45, 100%, 70%) 0%, hsl(43, 96%, 56%) 50%, hsl(38, 92%, 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(262, 72%, 45%) 0%, hsl(262, 80%, 35%) 100%);
+    --gradient-purple: linear-gradient(135deg, hsl(262, 72%, 45%) 0%, hsl(262, 60%, 55%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(262, 20%, 98%) 100%);
+    --gradient-light: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(262, 30%, 96%) 100%);
 
     /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(270 50% 15% / 0.1);
-    --shadow-card: 0 8px 30px -8px hsl(270 50% 15% / 0.12);
-    --shadow-button: 0 4px 14px -2px hsl(262 83% 58% / 0.4);
-    --shadow-golden: 0 4px 20px -4px hsl(43 96% 56% / 0.5);
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 10% / 0.08);
+    --shadow-card: 0 8px 30px -8px hsl(0 0% 10% / 0.1);
+    --shadow-button: 0 4px 14px -2px hsl(262 72% 45% / 0.4);
+    --shadow-purple: 0 4px 20px -4px hsl(262 72% 45% / 0.3);
 
     /* Sidebar defaults */
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 262 72% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 40% 95%;
+    --sidebar-accent-foreground: 262 72% 35%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 262 72% 45%;
   }
 
   .dark {
-    --background: 270 50% 8%;
-    --foreground: 45 100% 97%;
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
 
-    --card: 270 40% 12%;
-    --card-foreground: 45 100% 97%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 270 40% 12%;
-    --popover-foreground: 45 100% 97%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 262 83% 65%;
+    --primary: 262 70% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 43 90% 50%;
-    --secondary-foreground: 270 50% 15%;
+    --secondary: 262 30% 20%;
+    --secondary-foreground: 262 60% 80%;
 
-    --muted: 270 30% 20%;
-    --muted-foreground: 45 20% 70%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 35 100% 55%;
-    --accent-foreground: 270 50% 15%;
+    --accent: 262 50% 50%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 270 30% 20%;
-    --input: 270 30% 20%;
-    --ring: 262 80% 70%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 262 70% 60%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 262 70% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 262 30% 20%;
+    --sidebar-accent-foreground: 262 60% 80%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 262 70% 60%;
   }
 }
 
@@ -140,8 +138,8 @@
     background: var(--gradient-card);
   }
 
-  .bg-golden-gradient {
-    background: var(--gradient-golden);
+  .bg-light-gradient {
+    background: var(--gradient-light);
   }
 
   .shadow-soft {
@@ -156,19 +154,12 @@
     box-shadow: var(--shadow-button);
   }
 
-  .shadow-golden {
-    box-shadow: var(--shadow-golden);
+  .shadow-purple {
+    box-shadow: var(--shadow-purple);
   }
 
   .text-gradient-purple {
     background: var(--gradient-purple);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient-golden {
-    background: var(--gradient-golden);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
