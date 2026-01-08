@@ -9,6 +9,7 @@ import { ProductDetailSheet } from "@/components/product/ProductDetailSheet";
 import { CartView } from "@/components/cart/CartView";
 import { SearchView } from "@/components/search/SearchView";
 import { ProfileView } from "@/components/profile/ProfileView";
+import { CheckoutSheet } from "@/components/checkout/CheckoutSheet";
 import { Product } from "@/types/menu";
 
 const IndexContent = () => {
@@ -16,6 +17,7 @@ const IndexContent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductSheetOpen, setIsProductSheetOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
@@ -27,8 +29,11 @@ const IndexContent = () => {
   };
 
   const handleCheckout = () => {
-    // Future: Navigate to checkout
-    alert("Checkout coming soon! 🛒");
+    setIsCheckoutOpen(true);
+  };
+
+  const handleOrderSuccess = () => {
+    setActiveTab("home");
   };
 
   const renderTabContent = () => {
@@ -96,6 +101,11 @@ const IndexContent = () => {
         product={selectedProduct}
         isOpen={isProductSheetOpen}
         onClose={() => setIsProductSheetOpen(false)}
+      />
+      <CheckoutSheet
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        onSuccess={handleOrderSuccess}
       />
     </div>
   );
