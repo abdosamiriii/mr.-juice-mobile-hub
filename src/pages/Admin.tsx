@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Package, FolderOpen, Ruler, Plus, LogOut } from "lucide-react";
+import { ArrowLeft, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag } from "lucide-react";
 import { ProductsManager } from "@/components/admin/ProductsManager";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { SizesManager } from "@/components/admin/SizesManager";
 import { AddOnsManager } from "@/components/admin/AddOnsManager";
+import { OrdersManager } from "@/components/admin/OrdersManager";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
 const Admin = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isLoading, signOut } = useAuth();
-  const [activeTab, setActiveTab] = useState("products");
+  const [activeTab, setActiveTab] = useState("orders");
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -76,7 +77,11 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsList className="grid w-full grid-cols-5 mb-6">
+            <TabsTrigger value="orders" className="flex items-center gap-2">
+              <ShoppingBag className="h-4 w-4" />
+              <span className="hidden sm:inline">Orders</span>
+            </TabsTrigger>
             <TabsTrigger value="products" className="flex items-center gap-2">
               <Package className="h-4 w-4" />
               <span className="hidden sm:inline">Products</span>
@@ -94,6 +99,10 @@ const Admin = () => {
               <span className="hidden sm:inline">Add-ons</span>
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="orders">
+            <OrdersManager />
+          </TabsContent>
 
           <TabsContent value="products">
             <ProductsManager />
