@@ -1,4 +1,4 @@
-import { categories } from "@/data/menu";
+import { useCategories } from "@/hooks/useProducts";
 
 interface CategorySliderProps {
   selectedCategory: string | null;
@@ -6,6 +6,8 @@ interface CategorySliderProps {
 }
 
 export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategorySliderProps) => {
+  const { data: categories = [], isLoading } = useCategories();
+
   return (
     <section className="py-6">
       <div className="px-5 mb-4">
@@ -24,20 +26,28 @@ export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategoryS
           🔥 All
         </button>
 
-        {categories.map((category, index) => (
-          <button
-            key={category.id}
-            onClick={() => onSelectCategory(category.id)}
-            style={{ animationDelay: `${index * 50}ms` }}
-            className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] animate-scale-in ${
-              selectedCategory === category.id
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                : "bg-card text-foreground shadow-soft border border-border"
-            }`}
-          >
-            {category.icon} {category.name}
-          </button>
-        ))}
+        {isLoading ? (
+          <div className="flex gap-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="w-24 h-10 bg-muted animate-pulse rounded-2xl" />
+            ))}
+          </div>
+        ) : (
+          categories.map((category, index) => (
+            <button
+              key={category.id}
+              onClick={() => onSelectCategory(category.id)}
+              style={{ animationDelay: `${index * 50}ms` }}
+              className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] animate-scale-in ${
+                selectedCategory === category.id
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                  : "bg-card text-foreground shadow-soft border border-border"
+              }`}
+            >
+              {category.icon} {category.name}
+            </button>
+          ))
+        )}
       </div>
     </section>
   );

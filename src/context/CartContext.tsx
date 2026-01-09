@@ -16,9 +16,6 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
-  deliveryFee: number;
-  tax: number;
-  total: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -77,10 +74,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return sum + itemPrice * item.quantity;
   }, 0);
 
-  const deliveryFee = subtotal > 0 ? 15 : 0;
-  const tax = subtotal * 0.14; // 14% VAT
-  const total = subtotal + deliveryFee + tax;
-
   return (
     <CartContext.Provider
       value={{
@@ -91,9 +84,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         clearCart,
         totalItems,
         subtotal,
-        deliveryFee,
-        tax,
-        total,
       }}
     >
       {children}
