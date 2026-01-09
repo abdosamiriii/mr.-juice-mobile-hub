@@ -74,6 +74,36 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_zones: {
+        Row: {
+          created_at: string
+          description: string | null
+          fee: number
+          id: string
+          is_active: boolean | null
+          name: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          fee?: number
+          id?: string
+          is_active?: boolean | null
+          name: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          fee?: number
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           add_ons: Json | null
@@ -130,8 +160,12 @@ export type Database = {
           created_at: string
           customer_name: string | null
           customer_phone: string | null
+          delivery_address: string | null
+          delivery_fee: number | null
+          delivery_zone_id: string | null
           id: string
           notes: string | null
+          order_type: string | null
           status: Database["public"]["Enums"]["order_status"]
           total_amount: number
           updated_at: string
@@ -141,8 +175,12 @@ export type Database = {
           created_at?: string
           customer_name?: string | null
           customer_phone?: string | null
+          delivery_address?: string | null
+          delivery_fee?: number | null
+          delivery_zone_id?: string | null
           id?: string
           notes?: string | null
+          order_type?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           total_amount?: number
           updated_at?: string
@@ -152,14 +190,26 @@ export type Database = {
           created_at?: string
           customer_name?: string | null
           customer_phone?: string | null
+          delivery_address?: string | null
+          delivery_fee?: number | null
+          delivery_zone_id?: string | null
           id?: string
           notes?: string | null
+          order_type?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           total_amount?: number
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_delivery_zone_id_fkey"
+            columns: ["delivery_zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
