@@ -13,6 +13,10 @@ export interface DbOrder {
   status: OrderStatus;
   total_amount: number;
   notes: string | null;
+  order_type: string | null;
+  delivery_address: string | null;
+  delivery_zone_id: string | null;
+  delivery_fee: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -25,7 +29,7 @@ export interface DbOrderItem {
   size_name: string | null;
   quantity: number;
   unit_price: number;
-  add_ons: { name: string; price: number }[];
+  add_ons: { name: string; price: number }[] | null;
   created_at: string;
 }
 
