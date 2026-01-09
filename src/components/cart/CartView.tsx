@@ -7,7 +7,7 @@ interface CartViewProps {
 }
 
 export const CartView = ({ onCheckout }: CartViewProps) => {
-  const { items, updateQuantity, removeItem, subtotal, deliveryFee, tax, total, clearCart } = useCart();
+  const { items, updateQuantity, removeItem, subtotal, clearCart } = useCart();
 
   if (items.length === 0) {
     return (
@@ -132,17 +132,12 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
             <span className="text-muted-foreground">Subtotal</span>
             <span className="text-foreground font-medium">{subtotal.toFixed(0)} EGP</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Delivery Fee</span>
-            <span className="text-foreground font-medium">{deliveryFee.toFixed(0)} EGP</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">VAT (14%)</span>
-            <span className="text-foreground font-medium">{tax.toFixed(0)} EGP</span>
-          </div>
+          <p className="text-xs text-muted-foreground">
+            Delivery fee will be calculated at checkout
+          </p>
           <div className="flex justify-between pt-3 border-t border-border">
-            <span className="font-bold text-foreground">Total</span>
-            <span className="font-bold text-primary text-lg">{total.toFixed(0)} EGP</span>
+            <span className="font-bold text-foreground">Subtotal</span>
+            <span className="font-bold text-primary text-lg">{subtotal.toFixed(0)} EGP</span>
           </div>
         </div>
       </div>

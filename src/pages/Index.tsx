@@ -10,6 +10,7 @@ import { CartView } from "@/components/cart/CartView";
 import { SearchView } from "@/components/search/SearchView";
 import { ProfileView } from "@/components/profile/ProfileView";
 import { CheckoutSheet } from "@/components/checkout/CheckoutSheet";
+import { OrderTracker } from "@/components/orders/OrderTracker";
 import { Product } from "@/types/menu";
 
 const IndexContent = () => {
@@ -42,6 +43,7 @@ const IndexContent = () => {
         return (
           <main className="min-h-screen bg-background">
             <HeroSection onQuickOrder={handleQuickOrder} />
+            <OrderTracker />
             <PromotionBanner />
             <CategorySlider
               selectedCategory={selectedCategory}

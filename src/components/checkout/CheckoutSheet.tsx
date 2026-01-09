@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { X, User, Phone, FileText, CreditCard, Loader2 } from "lucide-react";
+import { X, User, Phone, FileText, CreditCard, Loader2, MapPin, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useDeliveryZones } from "@/hooks/useDeliveryZones";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -16,12 +17,21 @@ interface CheckoutSheetProps {
 }
 
 export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps) => {
-  const { items, subtotal, deliveryFee, tax, total, clearCart } = useCart();
+  const { items, subtotal, clearCart } = useCart();
   const { user } = useAuth();
+  const { data: deliveryZones = [] } = useDeliveryZones();
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [notes, setNotes] = useState("");
+  const [selectedZoneId, setSelectedZoneId] = useState<string>("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
+
+  const selectedZone = deliveryZones.find((z) => z.id === selectedZoneId);
+  const deliveryFee = selectedZone?.fee || 0;
+  const isDelivery = selectedZone?.name !== "Pickup";
+  const total = subtotal + deliveryFee;
 
   const handleSubmitOrder = async () => {
     if (!customerName.trim()) {
@@ -30,6 +40,14 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
     }
     if (!customerPhone.trim()) {
       toast.error("Please enter your phone number");
+      return;
+    }
+    if (!selectedZoneId) {
+      toast.error("Please select pickup or delivery zone");
+      return;
+    }
+    if (isDelivery && !deliveryAddress.trim()) {
+      toast.error("Please enter your delivery address");
       return;
     }
 
@@ -46,6 +64,10 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
           notes: notes.trim() || null,
           total_amount: total,
           status: "pending",
+          order_type: isDelivery ? "delivery" : "pickup",
+          delivery_zone_id: selectedZoneId,
+          delivery_fee: deliveryFee,
+          delivery_address: isDelivery ? deliveryAddress.trim() : null,
         })
         .select()
         .single();
@@ -55,7 +77,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
       // Create order items
       const orderItems = items.map((item) => ({
         order_id: order.id,
-        product_id: null, // We store product_name for historical purposes
+        product_id: null,
         product_name: item.product.name,
         size_name: item.selectedSize.name,
         quantity: item.quantity,
@@ -72,7 +94,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
 
       if (itemsError) throw itemsError;
 
-      // Success!
       toast.success("Order placed successfully! 🎉", {
         description: `Order #${order.id.slice(0, 8)} - We'll notify you when it's ready`,
       });
@@ -85,6 +106,8 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
       setCustomerName("");
       setCustomerPhone("");
       setNotes("");
+      setSelectedZoneId("");
+      setDeliveryAddress("");
     } catch (error: any) {
       console.error("Order error:", error);
       toast.error("Failed to place order", {
@@ -117,7 +140,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
         <div className="relative p-5 border-b border-border flex items-center justify-between">
           <div>
             <h2 className="font-display text-xl font-bold text-foreground">Checkout</h2>
-            <p className="text-sm text-muted-foreground">{items.length} items • {total.toFixed(0)} EGP</p>
+            <p className="text-sm text-muted-foreground">{items.length} items</p>
           </div>
           <button
             onClick={onClose}
@@ -161,6 +184,54 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
               />
             </div>
 
+            {/* Delivery Zone Selection */}
+            <div>
+              <Label className="flex items-center gap-2 mb-2">
+                <Truck className="w-4 h-4 text-primary" />
+                Order Type
+              </Label>
+              <div className="grid grid-cols-2 gap-2">
+                {deliveryZones.map((zone) => (
+                  <button
+                    key={zone.id}
+                    onClick={() => {
+                      setSelectedZoneId(zone.id);
+                      if (zone.name === "Pickup") {
+                        setDeliveryAddress("");
+                      }
+                    }}
+                    className={`p-3 rounded-xl border text-left transition-all ${
+                      selectedZoneId === zone.id
+                        ? "border-primary bg-primary/10"
+                        : "border-border bg-card hover:border-primary/50"
+                    }`}
+                  >
+                    <div className="font-medium text-sm text-foreground">{zone.name}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {zone.fee === 0 ? "Free" : `+${zone.fee} EGP`}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Delivery Address (only if delivery selected) */}
+            {isDelivery && selectedZoneId && (
+              <div className="animate-fade-in">
+                <Label htmlFor="address" className="flex items-center gap-2 mb-2">
+                  <MapPin className="w-4 h-4 text-primary" />
+                  Delivery Address
+                </Label>
+                <Textarea
+                  id="address"
+                  placeholder="Enter your full delivery address"
+                  value={deliveryAddress}
+                  onChange={(e) => setDeliveryAddress(e.target.value)}
+                  className="min-h-20"
+                />
+              </div>
+            )}
+
             {/* Notes */}
             <div>
               <Label htmlFor="notes" className="flex items-center gap-2 mb-2">
@@ -182,14 +253,16 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 <span className="text-muted-foreground">Subtotal</span>
                 <span className="text-foreground">{subtotal.toFixed(0)} EGP</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Delivery Fee</span>
-                <span className="text-foreground">{deliveryFee.toFixed(0)} EGP</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">VAT (14%)</span>
-                <span className="text-foreground">{tax.toFixed(0)} EGP</span>
-              </div>
+              {selectedZoneId && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {isDelivery ? "Delivery Fee" : "Pickup"}
+                  </span>
+                  <span className="text-foreground">
+                    {deliveryFee === 0 ? "Free" : `${deliveryFee.toFixed(0)} EGP`}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between font-bold pt-2 border-t border-border">
                 <span className="text-foreground">Total</span>
                 <span className="text-primary">{total.toFixed(0)} EGP</span>
