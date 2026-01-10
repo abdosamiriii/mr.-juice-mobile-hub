@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX, MapPin } from "lucide-react";
 import { ProductsManager } from "@/components/admin/ProductsManager";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { SizesManager } from "@/components/admin/SizesManager";
@@ -11,6 +11,7 @@ import { AddOnsManager } from "@/components/admin/AddOnsManager";
 import { OrdersManager } from "@/components/admin/OrdersManager";
 import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard";
 import { AdminInvitations } from "@/components/admin/AdminInvitations";
+import { DeliveryZonesManager } from "@/components/admin/DeliveryZonesManager";
 import { useOrderNotifications } from "@/hooks/useOrderNotifications";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
@@ -102,7 +103,7 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-7 mb-6">
+          <TabsList className="grid w-full grid-cols-8 mb-6">
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
               <span className="hidden sm:inline">Orders</span>
@@ -126,6 +127,10 @@ const Admin = () => {
             <TabsTrigger value="addons" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">Add-ons</span>
+            </TabsTrigger>
+            <TabsTrigger value="delivery" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              <span className="hidden sm:inline">Delivery</span>
             </TabsTrigger>
             <TabsTrigger value="team" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -155,6 +160,10 @@ const Admin = () => {
 
           <TabsContent value="addons">
             <AddOnsManager />
+          </TabsContent>
+
+          <TabsContent value="delivery">
+            <DeliveryZonesManager />
           </TabsContent>
 
           <TabsContent value="team">
