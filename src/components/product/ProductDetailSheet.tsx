@@ -127,8 +127,8 @@ export const ProductDetailSheet = ({ product, isOpen, onClose }: ProductDetailSh
             <span className="text-sm text-muted-foreground">{product.calories} calories</span>
           </div>
 
-          {/* Size Selection */}
-          {availableSizes.length > 1 && (
+          {/* Size Selection - only show if there are multiple sizes with ml > 0 */}
+          {availableSizes.length > 1 && availableSizes.some(s => s.ml > 0) && (
             <div className="mb-6">
               <h3 className="font-semibold text-foreground mb-3">Size</h3>
               <div className="flex gap-3">
