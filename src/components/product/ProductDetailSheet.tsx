@@ -187,28 +187,6 @@ export const ProductDetailSheet = ({ product, isOpen, onClose }: ProductDetailSh
             </div>
           )}
 
-          {/* Ingredients */}
-          <div className="mb-6">
-            <h3 className="font-semibold text-foreground mb-3">Ingredients (tap to exclude)</h3>
-            <div className="flex flex-wrap gap-2">
-              {product.ingredients.map((ingredient) => {
-                const isExcluded = excludedIngredients.includes(ingredient);
-                return (
-                  <button
-                    key={ingredient}
-                    onClick={() => toggleIngredient(ingredient)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                      isExcluded
-                        ? "bg-destructive/10 text-destructive line-through"
-                        : "bg-secondary text-secondary-foreground"
-                    }`}
-                  >
-                    {ingredient}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
         </div>
 
         {/* Footer */}
