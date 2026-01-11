@@ -42,7 +42,7 @@ const IndexContent = () => {
       case "home":
         return (
           <main className="min-h-screen bg-background">
-            <HeroSection onQuickOrder={handleQuickOrder} />
+            <HeroSection onQuickOrder={handleQuickOrder} onMenuClick={() => setActiveTab("menu")} />
             <OrderTracker />
             <PromotionBanner />
             <CategorySlider
@@ -81,7 +81,7 @@ const IndexContent = () => {
       case "cart":
         return (
           <main className="min-h-screen bg-background">
-            <CartView onCheckout={handleCheckout} />
+            <CartView onCheckout={handleCheckout} onBrowseMenu={() => setActiveTab("menu")} />
           </main>
         );
       case "profile":

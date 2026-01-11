@@ -1,13 +1,16 @@
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CartViewProps {
   onCheckout: () => void;
+  onBrowseMenu: () => void;
 }
 
-export const CartView = ({ onCheckout }: CartViewProps) => {
+export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
   const { items, updateQuantity, removeItem, subtotal, clearCart } = useCart();
+  const { t, direction } = useLanguage();
 
   if (items.length === 0) {
     return (
@@ -15,12 +18,12 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
         <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
           <ShoppingBag className="w-12 h-12 text-muted-foreground" />
         </div>
-        <h2 className="font-display text-2xl font-bold text-foreground mb-2">Your cart is empty</h2>
+        <h2 className="font-display text-2xl font-bold text-foreground mb-2">{t("cartEmpty")}</h2>
         <p className="text-muted-foreground text-center max-w-xs mb-6">
-          Looks like you haven't added any delicious juices yet!
+          {t("cartEmptyDescription")}
         </p>
-        <Button variant="hero" size="lg">
-          Browse Menu
+        <Button variant="hero" size="lg" onClick={onBrowseMenu}>
+          {t("browseMenu")}
         </Button>
       </div>
     );
@@ -28,14 +31,14 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
 
   return (
     <div className="px-5 py-6 pb-40">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-display text-2xl font-bold text-foreground">Your Cart</h2>
+      <div className={`flex items-center justify-between mb-6 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+        <h2 className="font-display text-2xl font-bold text-foreground">{t("yourCart")}</h2>
         <button 
           onClick={clearCart}
-          className="text-destructive text-sm font-medium flex items-center gap-1"
+          className={`text-destructive text-sm font-medium flex items-center gap-1 ${direction === "rtl" ? "flex-row-reverse" : ""}`}
         >
           <Trash2 className="w-4 h-4" />
-          Clear
+          {t("clear")}
         </button>
       </div>
 
@@ -52,7 +55,7 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
               key={item.id}
               className="bg-card rounded-2xl p-4 shadow-soft border border-border"
             >
-              <div className="flex gap-4">
+              <div className={`flex gap-4 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
                 {/* Product Icon */}
                 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center flex-shrink-0">
                   <span className="text-3xl">
@@ -66,7 +69,7 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
                 </div>
 
                 {/* Details */}
-                <div className="flex-1 min-w-0">
+                <div className={`flex-1 min-w-0 ${direction === "rtl" ? "text-right" : ""}`}>
                   <h4 className="font-display font-bold text-foreground truncate">
                     {item.product.name}
                   </h4>
@@ -86,20 +89,20 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
                 </div>
 
                 {/* Price */}
-                <div className="text-right">
+                <div className={direction === "rtl" ? "text-left" : "text-right"}>
                   <p className="font-bold text-foreground">{(itemPrice * item.quantity).toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">EGP</p>
+                  <p className="text-xs text-muted-foreground">{t("egp")}</p>
                 </div>
               </div>
 
               {/* Quantity Controls */}
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+              <div className={`flex items-center justify-between mt-4 pt-4 border-t border-border ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
                 <button
                   onClick={() => removeItem(item.id)}
-                  className="text-destructive text-sm flex items-center gap-1"
+                  className={`text-destructive text-sm flex items-center gap-1 ${direction === "rtl" ? "flex-row-reverse" : ""}`}
                 >
                   <Trash2 className="w-4 h-4" />
-                  Remove
+                  {t("remove")}
                 </button>
 
                 <div className="flex items-center gap-3 bg-muted rounded-xl p-1">
@@ -125,19 +128,19 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
 
       {/* Order Summary */}
       <div className="bg-card rounded-2xl p-5 shadow-soft border border-border mb-6">
-        <h3 className="font-semibold text-foreground mb-4">Order Summary</h3>
+        <h3 className={`font-semibold text-foreground mb-4 ${direction === "rtl" ? "text-right" : ""}`}>{t("orderSummary")}</h3>
         
         <div className="space-y-3 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Subtotal</span>
-            <span className="text-foreground font-medium">{subtotal.toFixed(0)} EGP</span>
+          <div className={`flex justify-between ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+            <span className="text-muted-foreground">{t("subtotal")}</span>
+            <span className="text-foreground font-medium">{subtotal.toFixed(0)} {t("egp")}</span>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Delivery fee will be calculated at checkout
+          <p className={`text-xs text-muted-foreground ${direction === "rtl" ? "text-right" : ""}`}>
+            {t("deliveryFeeNote")}
           </p>
-          <div className="flex justify-between pt-3 border-t border-border">
-            <span className="font-bold text-foreground">Subtotal</span>
-            <span className="font-bold text-primary text-lg">{subtotal.toFixed(0)} EGP</span>
+          <div className={`flex justify-between pt-3 border-t border-border ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+            <span className="font-bold text-foreground">{t("subtotal")}</span>
+            <span className="font-bold text-primary text-lg">{subtotal.toFixed(0)} {t("egp")}</span>
           </div>
         </div>
       </div>
@@ -147,11 +150,11 @@ export const CartView = ({ onCheckout }: CartViewProps) => {
         <Button 
           variant="hero" 
           size="xl" 
-          className="w-full"
+          className={`w-full ${direction === "rtl" ? "flex-row-reverse" : ""}`}
           onClick={onCheckout}
         >
-          Proceed to Checkout
-          <ArrowRight className="w-5 h-5 ml-2" />
+          {t("proceedToCheckout")}
+          <ArrowRight className={`w-5 h-5 ${direction === "rtl" ? "mr-2 rotate-180" : "ml-2"}`} />
         </Button>
       </div>
     </div>

@@ -1,25 +1,27 @@
 import { Home, Search, ShoppingCart, User, UtensilsCrossed } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface MobileNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
 
-const navItems = [
-  { id: "home", icon: Home, label: "Home" },
-  { id: "menu", icon: UtensilsCrossed, label: "Menu" },
-  { id: "search", icon: Search, label: "Search" },
-  { id: "cart", icon: ShoppingCart, label: "Cart" },
-  { id: "profile", icon: User, label: "Profile" },
-];
-
 export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
   const { totalItems } = useCart();
+  const { t, direction } = useLanguage();
+
+  const navItems = [
+    { id: "home", icon: Home, label: t("home") },
+    { id: "menu", icon: UtensilsCrossed, label: t("menu") },
+    { id: "search", icon: Search, label: t("search") },
+    { id: "cart", icon: ShoppingCart, label: t("cart") },
+    { id: "profile", icon: User, label: t("profile") },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border safe-bottom">
-      <div className="flex items-center justify-around py-2 px-4">
+      <div className={`flex items-center justify-around py-2 px-4 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           const Icon = item.icon;
