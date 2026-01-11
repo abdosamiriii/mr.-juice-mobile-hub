@@ -1,19 +1,24 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, MapPin, CreditCard, Gift, History, Settings, LogOut, ChevronRight, Shield } from "lucide-react";
+import { User, MapPin, CreditCard, Gift, History, Settings, LogOut, ChevronRight, Shield, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { OrderHistory } from "@/components/orders/OrderHistory";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
+
+type ProfileTab = "main" | "orders";
 
 export const ProfileView = () => {
   const navigate = useNavigate();
   const { user, isAdmin, signOut, isLoading } = useAuth();
+  const [activeTab, setActiveTab] = useState<ProfileTab>("main");
 
   const menuItems = [
-    { icon: History, label: "Order History", badge: "3 orders" },
-    { icon: MapPin, label: "Saved Addresses", badge: "2 saved" },
-    { icon: CreditCard, label: "Payment Methods", badge: null },
-    { icon: Gift, label: "Rewards & Points", badge: "250 pts" },
-    { icon: Settings, label: "Settings", badge: null },
+    { icon: History, label: "Order History", badge: null, action: () => setActiveTab("orders") },
+    { icon: MapPin, label: "Saved Addresses", badge: "2 saved", action: undefined },
+    { icon: CreditCard, label: "Payment Methods", badge: null, action: undefined },
+    { icon: Gift, label: "Rewards & Points", badge: "250 pts", action: undefined },
+    { icon: Settings, label: "Settings", badge: null, action: undefined },
   ];
 
   const handleSignOut = async () => {
@@ -24,6 +29,26 @@ export const ProfileView = () => {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="animate-pulse text-primary">Loading...</div>
+      </div>
+    );
+  }
+
+  // Order History View
+  if (activeTab === "orders") {
+    return (
+      <div className="pb-24">
+        <div className="sticky top-0 bg-background z-10 px-5 py-4 border-b border-border">
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setActiveTab("main")}
+              className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h1 className="font-display text-xl font-bold text-foreground">Order History</h1>
+          </div>
+        </div>
+        <OrderHistory />
       </div>
     );
   }
@@ -90,6 +115,7 @@ export const ProfileView = () => {
         {menuItems.map((item, index) => (
           <button
             key={item.label}
+            onClick={item.action}
             className={`w-full flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors ${
               index !== menuItems.length - 1 ? "border-b border-border" : ""
             }`}
