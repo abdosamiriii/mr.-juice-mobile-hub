@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Package, MapPin, Trash2, RefreshCw, ChevronDown, ChevronUp, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -54,10 +55,23 @@ interface OrderHistoryProps {
 
 export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
   const { user } = useAuth();
+  const { t, language, direction } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const getStatusLabel = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      pending: t("pending"),
+      confirmed: t("confirmed"),
+      preparing: t("preparing"),
+      ready: t("ready"),
+      completed: t("completed"),
+      cancelled: t("cancelled"),
+    };
+    return statusMap[status] || status;
+  };
 
   const fetchOrders = async () => {
     if (!user) {
@@ -100,9 +114,9 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
       .eq("id", orderId);
 
     if (error) {
-      toast.error("Failed to delete order");
+      toast.error(t("failedToDelete"));
     } else {
-      toast.success("Order deleted");
+      toast.success(t("orderDeleted"));
       setOrders((prev) => prev.filter((o) => o.id !== orderId));
     }
     setDeletingId(null);
@@ -111,7 +125,7 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
   const handleReorder = (order: Order) => {
     if (onReorder) {
       onReorder(order.order_items);
-      toast.success("Items added to cart!");
+      toast.success(t("itemsAddedToCart"));
     }
   };
 
@@ -132,25 +146,25 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
 
   if (!user) {
     return (
-      <div className="p-5 text-center py-20">
+      <div className="p-5 text-center py-20" dir={direction}>
         <Package className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-        <p className="text-muted-foreground">Sign in to view your order history</p>
+        <p className="text-muted-foreground">{t("signInToViewOrders")}</p>
       </div>
     );
   }
 
   if (orders.length === 0) {
     return (
-      <div className="p-5 text-center py-20">
+      <div className="p-5 text-center py-20" dir={direction}>
         <Package className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-        <p className="text-xl font-semibold text-foreground mb-2">No orders yet</p>
-        <p className="text-muted-foreground">Your order history will appear here</p>
+        <p className="text-xl font-semibold text-foreground mb-2">{t("noOrders")}</p>
+        <p className="text-muted-foreground">{t("noOrdersDescription")}</p>
       </div>
     );
   }
 
   return (
-    <div className="p-5 space-y-4">
+    <div className="p-5 space-y-4" dir={direction}>
       {orders.map((order) => {
         const isExpanded = expandedOrder === order.id;
         const isDeleting = deletingId === order.id;
@@ -169,20 +183,24 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <p className="font-semibold text-foreground">
-                      Order #{order.id.slice(0, 8)}
+                      {t("orders")} #{order.id.slice(0, 8)}
                     </p>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[order.status] || STATUS_COLORS.pending}`}>
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      {getStatusLabel(order.status)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="w-3 h-3" />
-                    <span>{new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>
+                      {new Date(order.created_at).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")} 
+                      {" "}
+                      {new Date(order.created_at).toLocaleTimeString(language === "ar" ? "ar-EG" : "en-US", { hour: '2-digit', minute: '2-digit' })}
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-primary text-lg">
-                    {order.total_amount.toFixed(0)} EGP
+                    {order.total_amount.toFixed(0)} {t("egp")}
                   </span>
                   {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-muted-foreground" />
@@ -200,9 +218,9 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
               )}
 
               <p className="text-sm text-muted-foreground mt-1">
-                {order.order_items.length} item{order.order_items.length !== 1 ? "s" : ""}
+                {order.order_items.length} {order.order_items.length !== 1 ? t("items") : t("items")}
                 {order.delivery_fee && order.delivery_fee > 0 && (
-                  <span> • Delivery fee: {order.delivery_fee.toFixed(0)} EGP</span>
+                  <span> • {t("deliveryFee")}: {order.delivery_fee.toFixed(0)} {t("egp")}</span>
                 )}
               </p>
             </div>
@@ -223,17 +241,17 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
                         </p>
                         {item.size_name && (
                           <p className="text-muted-foreground text-xs">
-                            Size: {item.size_name}
+                            {t("size")}: {item.size_name}
                           </p>
                         )}
                         {parseAddOns(item.add_ons).length > 0 && (
                           <p className="text-muted-foreground text-xs">
-                            Add-ons: {parseAddOns(item.add_ons).map((a) => a.name).join(", ")}
+                            {t("addOns")}: {parseAddOns(item.add_ons).map((a) => a.name).join(", ")}
                           </p>
                         )}
                       </div>
                       <span className="text-foreground font-medium">
-                        {(item.unit_price * item.quantity).toFixed(0)} EGP
+                        {(item.unit_price * item.quantity).toFixed(0)} {t("egp")}
                       </span>
                     </div>
                   ))}
@@ -243,7 +261,7 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
                 {order.notes && (
                   <div className="px-4 pb-4">
                     <p className="text-sm text-muted-foreground">
-                      <span className="font-medium">Notes:</span> {order.notes}
+                      <span className="font-medium">{t("specialInstructions")}:</span> {order.notes}
                     </p>
                   </div>
                 )}
@@ -256,8 +274,8 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
                     className="flex-1"
                     onClick={() => handleReorder(order)}
                   >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Reorder
+                    <RefreshCw className="w-4 h-4 me-2" />
+                    {t("reorder")}
                   </Button>
                   <Button
                     variant="destructive"
@@ -266,8 +284,8 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
                     onClick={() => handleDelete(order.id)}
                     disabled={isDeleting}
                   >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    {isDeleting ? "Deleting..." : "Delete"}
+                    <Trash2 className="w-4 h-4 me-2" />
+                    {isDeleting ? t("deleting") : t("delete")}
                   </Button>
                 </div>
               </div>

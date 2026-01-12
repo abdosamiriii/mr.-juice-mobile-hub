@@ -63,6 +63,19 @@ const translations: Translations = {
   total: { en: "Total", ar: "الإجمالي" },
   placeOrder: { en: "Place Order", ar: "تأكيد الطلب" },
   placingOrder: { en: "Placing Order...", ar: "جاري تأكيد الطلب..." },
+  addressDetails: { en: "Address Details", ar: "تفاصيل العنوان" },
+  streetAddress: { en: "Street Address", ar: "عنوان الشارع" },
+  enterStreetAddress: { en: "Enter street address", ar: "أدخل عنوان الشارع" },
+  building: { en: "Building/Villa", ar: "المبنى/الفيلا" },
+  enterBuilding: { en: "Building or villa number", ar: "رقم المبنى أو الفيلا" },
+  floor: { en: "Floor", ar: "الطابق" },
+  enterFloor: { en: "Floor number", ar: "رقم الطابق" },
+  apartment: { en: "Apartment", ar: "الشقة" },
+  enterApartment: { en: "Apartment number", ar: "رقم الشقة" },
+  landmark: { en: "Landmark", ar: "علامة مميزة" },
+  enterLandmark: { en: "Nearby landmark", ar: "علامة مميزة قريبة" },
+  fillAllFields: { en: "Fill All", ar: "ملء الكل" },
+  clearAllFields: { en: "Clear", ar: "مسح" },
 
   // Payment Methods
   paymentMethod: { en: "Payment Method", ar: "طريقة الدفع" },
@@ -109,6 +122,9 @@ const translations: Translations = {
   ready: { en: "Ready", ar: "جاهز" },
   completed: { en: "Completed", ar: "مكتمل" },
   cancelled: { en: "Cancelled", ar: "ملغي" },
+  orderDeleted: { en: "Order deleted", ar: "تم حذف الطلب" },
+  itemsAddedToCart: { en: "Items added to cart!", ar: "تمت إضافة المنتجات للسلة!" },
+  signInToViewOrders: { en: "Sign in to view your order history", ar: "سجل الدخول لعرض سجل طلباتك" },
 
   // Product
   size: { en: "Size", ar: "الحجم" },
@@ -124,11 +140,36 @@ const translations: Translations = {
   fullMenu: { en: "Full Menu", ar: "القائمة الكاملة" },
   exploreAllDrinks: { en: "Explore all our fresh drinks", ar: "اكتشف جميع مشروباتنا الطازجة" },
   popularItems: { en: "Popular Items", ar: "الأكثر شعبية" },
+  popularNow: { en: "Popular Now", ar: "الأكثر طلباً" },
+  categories: { en: "Categories", ar: "التصنيفات" },
+  noProductsInCategory: { en: "No products in this category yet", ar: "لا توجد منتجات في هذا التصنيف بعد" },
+  seeAll: { en: "See All", ar: "عرض الكل" },
 
   // Search
   searchPlaceholder: { en: "Search for drinks...", ar: "ابحث عن المشروبات..." },
+  searchForJuices: { en: "Search for juices, ingredients...", ar: "ابحث عن العصائر والمكونات..." },
   noResults: { en: "No results found", ar: "لا توجد نتائج" },
   tryDifferentSearch: { en: "Try a different search term", ar: "جرب كلمة بحث مختلفة" },
+  whatAreYouCraving: { en: "What are you craving?", ar: "ماذا تشتهي؟" },
+  searchDescription: { en: "Search for your favorite juices, smoothies, or ingredients", ar: "ابحث عن عصائرك المفضلة أو السموثي أو المكونات" },
+  resultsFor: { en: "results for", ar: "نتائج لـ" },
+  result: { en: "result", ar: "نتيجة" },
+
+  // Admin Dashboard
+  adminDashboard: { en: "Admin Dashboard", ar: "لوحة التحكم" },
+  manageMenuOrders: { en: "Manage your menu & orders", ar: "إدارة القائمة والطلبات" },
+  orders: { en: "Orders", ar: "الطلبات" },
+  analytics: { en: "Analytics", ar: "التحليلات" },
+  products: { en: "Products", ar: "المنتجات" },
+  categoriesTab: { en: "Categories", ar: "التصنيفات" },
+  sizes: { en: "Sizes", ar: "الأحجام" },
+  addons: { en: "Add-ons", ar: "الإضافات" },
+  deliveryTab: { en: "Delivery", ar: "التوصيل" },
+  team: { en: "Team", ar: "الفريق" },
+  muteNotifications: { en: "Mute notifications", ar: "كتم الإشعارات" },
+  enableNotifications: { en: "Enable notifications", ar: "تفعيل الإشعارات" },
+  noAccessPage: { en: "You don't have access to this page.", ar: "ليس لديك صلاحية الوصول لهذه الصفحة." },
+  goHome: { en: "Go Home", ar: "الذهاب للرئيسية" },
 
   // Misc
   egp: { en: "EGP", ar: "ج.م" },
@@ -150,6 +191,8 @@ const translations: Translations = {
   orderNotification: { en: "We'll notify you when it's ready", ar: "سنخبرك عندما يكون جاهزاً" },
   failedToPlaceOrder: { en: "Failed to place order", ar: "فشل في تأكيد الطلب" },
   comingSoon: { en: "Coming Soon", ar: "قريباً" },
+  failedToDelete: { en: "Failed to delete order", ar: "فشل في حذف الطلب" },
+  deleting: { en: "Deleting...", ar: "جاري الحذف..." },
 };
 
 interface LanguageContextType {
@@ -180,7 +223,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     
     // Update font for Arabic
     if (language === "ar") {
-      document.body.style.fontFamily = "'SF Arabic', 'Geeza Pro', 'Arial', sans-serif";
+      document.body.style.fontFamily = "'Noto Sans Arabic', 'SF Arabic', 'Geeza Pro', 'Arial', sans-serif";
     } else {
       document.body.style.fontFamily = "'Poppins', sans-serif";
     }

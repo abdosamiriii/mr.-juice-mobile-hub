@@ -1,4 +1,5 @@
 import { useCategories } from "@/hooks/useProducts";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CategorySliderProps {
   selectedCategory: string | null;
@@ -7,11 +8,12 @@ interface CategorySliderProps {
 
 export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategorySliderProps) => {
   const { data: categories = [], isLoading } = useCategories();
+  const { t } = useLanguage();
 
   return (
     <section className="py-6">
       <div className="px-5 mb-4">
-        <h3 className="font-display text-lg font-bold text-foreground">Categories</h3>
+        <h3 className="font-display text-lg font-bold text-foreground">{t("categories")}</h3>
       </div>
 
       <div className="flex gap-3 overflow-x-auto px-5 pb-2 hide-scrollbar">
@@ -23,7 +25,7 @@ export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategoryS
               : "bg-card text-foreground shadow-soft border border-border"
           }`}
         >
-          🔥 All
+          🔥 {t("allItems")}
         </button>
 
         {isLoading ? (
