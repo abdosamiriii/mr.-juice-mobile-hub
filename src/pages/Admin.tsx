@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowRight, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX, MapPin } from "lucide-react";
 import { ProductsManager } from "@/components/admin/ProductsManager";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { SizesManager } from "@/components/admin/SizesManager";
@@ -18,6 +19,7 @@ import logoImage from "@/assets/mr-juice-logo-new.jpg";
 const Admin = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isLoading, signOut } = useAuth();
+  const { t, direction, language } = useLanguage();
   const [activeTab, setActiveTab] = useState("orders");
   const [soundEnabled, setSoundEnabled] = useState(true);
   
@@ -45,10 +47,12 @@ const Admin = () => {
     playNotificationSound();
   };
 
+  const BackArrow = direction === "rtl" ? ArrowRight : ArrowLeft;
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-primary">Loading...</div>
+        <div className="animate-pulse text-primary">{t("loading")}</div>
       </div>
     );
   }
@@ -57,26 +61,26 @@ const Admin = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
-          <p className="text-muted-foreground">You don't have access to this page.</p>
-          <Button onClick={() => navigate("/")}>Go Home</Button>
+          <p className="text-muted-foreground">{t("noAccessPage")}</p>
+          <Button onClick={() => navigate("/")}>{t("goHome")}</Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={direction}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card border-b border-border">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
-              <ArrowLeft className="h-5 w-5" />
+              <BackArrow className="h-5 w-5" />
             </Button>
             <img src={logoImage} alt="MR. Juice" className="w-10 h-10 rounded-xl object-cover" />
             <div>
-              <h1 className="font-display text-xl font-bold text-foreground">Admin Dashboard</h1>
-              <p className="text-xs text-muted-foreground">Manage your menu & orders</p>
+              <h1 className="font-display text-xl font-bold text-foreground">{t("adminDashboard")}</h1>
+              <p className="text-xs text-muted-foreground">{t("manageMenuOrders")}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -84,7 +88,7 @@ const Admin = () => {
               variant="ghost"
               size="icon"
               onClick={() => setSoundEnabled(!soundEnabled)}
-              title={soundEnabled ? "Mute notifications" : "Enable notifications"}
+              title={soundEnabled ? t("muteNotifications") : t("enableNotifications")}
             >
               {soundEnabled ? (
                 <Volume2 className="h-5 w-5 text-primary" />
@@ -93,8 +97,8 @@ const Admin = () => {
               )}
             </Button>
             <Button variant="outline" size="sm" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
+              <LogOut className="h-4 w-4 me-2" />
+              {t("signOut")}
             </Button>
           </div>
         </div>
@@ -106,35 +110,35 @@ const Admin = () => {
           <TabsList className="grid w-full grid-cols-8 mb-6">
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
-              <span className="hidden sm:inline">Orders</span>
+              <span className="hidden sm:inline">{t("orders")}</span>
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              <span className="hidden sm:inline">Analytics</span>
+              <span className="hidden sm:inline">{t("analytics")}</span>
             </TabsTrigger>
             <TabsTrigger value="products" className="flex items-center gap-2">
               <Package className="h-4 w-4" />
-              <span className="hidden sm:inline">Products</span>
+              <span className="hidden sm:inline">{t("products")}</span>
             </TabsTrigger>
             <TabsTrigger value="categories" className="flex items-center gap-2">
               <FolderOpen className="h-4 w-4" />
-              <span className="hidden sm:inline">Categories</span>
+              <span className="hidden sm:inline">{t("categoriesTab")}</span>
             </TabsTrigger>
             <TabsTrigger value="sizes" className="flex items-center gap-2">
               <Ruler className="h-4 w-4" />
-              <span className="hidden sm:inline">Sizes</span>
+              <span className="hidden sm:inline">{t("sizes")}</span>
             </TabsTrigger>
             <TabsTrigger value="addons" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
-              <span className="hidden sm:inline">Add-ons</span>
+              <span className="hidden sm:inline">{t("addons")}</span>
             </TabsTrigger>
             <TabsTrigger value="delivery" className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              <span className="hidden sm:inline">Delivery</span>
+              <span className="hidden sm:inline">{t("deliveryTab")}</span>
             </TabsTrigger>
             <TabsTrigger value="team" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
-              <span className="hidden sm:inline">Team</span>
+              <span className="hidden sm:inline">{t("team")}</span>
             </TabsTrigger>
           </TabsList>
 
