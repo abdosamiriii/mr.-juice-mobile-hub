@@ -1,6 +1,7 @@
 import { Plus, Star } from "lucide-react";
 import { Product } from "@/types/menu";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ProductCardProps {
   product: Product;
@@ -24,14 +25,25 @@ const getCategoryEmoji = (categoryId: string): string => {
   return emojis[categoryId] || "🍹";
 };
 
+// Categories that have M/L sizes
+const MULTI_SIZE_CATEGORIES = ["smoothie", "fresh-juice", "milkshake"];
+
 export const ProductCard = ({ product, onSelect, index }: ProductCardProps) => {
+  const { t, language } = useLanguage();
   const emoji = getCategoryEmoji(product.categoryId);
   
-  // Get large price (base price + 10 for large size modifier)
-  const mediumPrice = product.basePrice;
-  const largePrice = product.sizes.find(s => s.id === "large")?.priceModifier 
-    ? product.basePrice + (product.sizes.find(s => s.id === "large")?.priceModifier || 0)
-    : product.basePrice;
+  // Check if this product has multiple sizes
+  const hasMultipleSizes = MULTI_SIZE_CATEGORIES.some(cat => 
+    product.categoryId.toLowerCase().includes(cat.toLowerCase())
+  ) || (product.sizes.length > 1 && product.sizes.some(s => s.ml > 0));
+
+  // Get prices
+  const basePrice = product.basePrice;
+  const largePrice = basePrice + 10; // Large adds 10 EGP
+
+  // Display name based on language
+  const displayName = language === "ar" ? product.description || product.name : product.name;
+  const displayDescription = language === "ar" ? product.name : product.description;
 
   return (
     <div
@@ -47,12 +59,12 @@ export const ProductCard = ({ product, onSelect, index }: ProductCardProps) => {
         <div className="absolute top-2 right-2 flex gap-1">
           {product.isPopular && (
             <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
-              <Star className="w-3 h-3" /> Popular
+              <Star className="w-3 h-3" /> {language === "ar" ? "شائع" : "Popular"}
             </span>
           )}
           {product.isSeasonal && (
             <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2 py-1 rounded-full">
-              🌸 Seasonal
+              🌸 {language === "ar" ? "موسمي" : "Seasonal"}
             </span>
           )}
         </div>
@@ -72,25 +84,25 @@ export const ProductCard = ({ product, onSelect, index }: ProductCardProps) => {
       {/* Content */}
       <div className="p-4">
         <h4 className="font-display font-bold text-foreground text-base mb-1 truncate">
-          {product.name}
+          {displayName}
         </h4>
         <p className="text-muted-foreground text-xs line-clamp-2 mb-3 h-8">
-          {product.description}
+          {displayDescription}
         </p>
 
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">M:</span>
-              <span className="text-sm font-semibold text-foreground">{mediumPrice}</span>
-              {product.sizes.length > 1 && (
-                <>
-                  <span className="text-xs text-muted-foreground">L:</span>
-                  <span className="text-sm font-semibold text-primary">{largePrice}</span>
-                </>
-              )}
-            </div>
-            <span className="text-muted-foreground text-[10px]">EGP</span>
+            {hasMultipleSizes ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">M:</span>
+                <span className="text-sm font-semibold text-foreground">{basePrice}</span>
+                <span className="text-xs text-muted-foreground">L:</span>
+                <span className="text-sm font-semibold text-primary">{largePrice}</span>
+              </div>
+            ) : (
+              <span className="text-lg font-semibold text-primary">{basePrice}</span>
+            )}
+            <span className="text-muted-foreground text-[10px]">{t("egp")}</span>
           </div>
 
           <Button
