@@ -30,7 +30,7 @@ const getEmoji = (categoryId: string): string => {
 
 export const ProductDetailSheet = ({ product, isOpen, onClose }: ProductDetailSheetProps) => {
   const { addItem } = useCart();
-  const { t, direction } = useLanguage();
+  const { t, direction, language } = useLanguage();
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
   const [selectedAddOns, setSelectedAddOns] = useState<AddOn[]>([]);
   const [excludedIngredients, setExcludedIngredients] = useState<string[]>([]);
@@ -115,8 +115,12 @@ export const ProductDetailSheet = ({ product, isOpen, onClose }: ProductDetailSh
           {/* Title & Price */}
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h2 className="font-display text-2xl font-bold text-foreground">{product.name}</h2>
-              <p className="text-muted-foreground text-sm mt-1">{product.description}</p>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {language === "ar" ? product.description || product.name : product.name}
+              </h2>
+              <p className="text-muted-foreground text-sm mt-1">
+                {language === "ar" ? product.name : product.description}
+              </p>
             </div>
             <div className="text-end">
               <p className="text-2xl font-bold text-primary">{product.basePrice}</p>

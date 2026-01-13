@@ -145,6 +145,22 @@ const translations: Translations = {
   noProductsInCategory: { en: "No products in this category yet", ar: "لا توجد منتجات في هذا التصنيف بعد" },
   seeAll: { en: "See All", ar: "عرض الكل" },
 
+  // Category Names
+  catSmoothie: { en: "Smoothie", ar: "سموذي" },
+  catFreshJuices: { en: "Fresh Juices", ar: "عصاير فريش" },
+  catFamilyJuices: { en: "Family Juices", ar: "عصاير عائلية" },
+  catMilkshake: { en: "Milkshake", ar: "ميلك شيك" },
+  catGelato: { en: "Gelato", ar: "جيلاتو" },
+  catWaffles: { en: "Waffles", ar: "وافل" },
+  catBelila: { en: "Belila", ar: "بليلة" },
+  catOmAli: { en: "Om Ali", ar: "أم علي" },
+  catMojito: { en: "Mojito", ar: "موهيتو" },
+  catGreekYogurt: { en: "Greek Yogurt", ar: "زبادي يوناني" },
+  catFruitSalad: { en: "Fruit Salad", ar: "فروت سلاد" },
+  catSundae: { en: "Sundae", ar: "صانداي" },
+  catHot: { en: "Hot", ar: "ساخن" },
+  catPancakes: { en: "Pancakes", ar: "بان كيك" },
+
   // Search
   searchPlaceholder: { en: "Search for drinks...", ar: "ابحث عن المشروبات..." },
   searchForJuices: { en: "Search for juices, ingredients...", ar: "ابحث عن العصائر والمكونات..." },
