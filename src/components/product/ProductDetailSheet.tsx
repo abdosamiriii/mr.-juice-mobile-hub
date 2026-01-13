@@ -5,30 +5,16 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { sizes as defaultSizes } from "@/data/menu";
+import { getCategoryImage } from "@/utils/categoryImages";
 
 interface ProductDetailSheetProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
+  categoryName?: string;
 }
 
-// Category emoji mapping
-const getEmoji = (categoryId: string): string => {
-  const emojis: Record<string, string> = {
-    "fresh-juice": "🍊",
-    milkshake: "🥛",
-    smoothie: "🥤",
-    gelato: "🍨",
-    waffle: "🧇",
-    mojito: "🍹",
-    "greek-yogurt": "🥣",
-    hot: "☕",
-    pancakes: "🥞",
-  };
-  return emojis[categoryId] || "🍹";
-};
-
-export const ProductDetailSheet = ({ product, isOpen, onClose }: ProductDetailSheetProps) => {
+export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: ProductDetailSheetProps) => {
   const { addItem } = useCart();
   const { t, direction, language } = useLanguage();
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
@@ -42,7 +28,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose }: ProductDetailSh
   const availableSizes = product.sizes.length > 0 ? product.sizes : defaultSizes;
   const currentSize = selectedSize || availableSizes[0];
 
-  const emoji = getEmoji(product.categoryId);
+  const productImage = getCategoryImage(product.categoryId, categoryName);
 
   const toggleAddOn = (addOn: AddOn) => {
     setSelectedAddOns((prev) =>
@@ -94,20 +80,19 @@ export const ProductDetailSheet = ({ product, isOpen, onClose }: ProductDetailSh
         dir={direction}
       >
         {/* Header Image */}
-        <div className="relative h-48 bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+        <div className="relative h-56 overflow-hidden">
+          <img 
+            src={productImage} 
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <button
             onClick={onClose}
-            className="absolute top-4 end-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white"
+            className="absolute top-4 end-4 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white z-10"
           >
             <X className="w-5 h-5" />
           </button>
-          <span className="text-8xl drop-shadow-lg">{emoji}</span>
-          <div className="absolute inset-0 bg-white/10 opacity-50" 
-            style={{ 
-              backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)", 
-              backgroundSize: "20px 20px" 
-            }} 
-          />
         </div>
 
         {/* Content */}
