@@ -2,35 +2,21 @@ import { Plus, Star } from "lucide-react";
 import { Product } from "@/types/menu";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
+import { getCategoryImage } from "@/utils/categoryImages";
 
 interface ProductCardProps {
   product: Product;
   onSelect: (product: Product) => void;
   index: number;
+  categoryName?: string;
 }
-
-// Category emoji mapping
-const getCategoryEmoji = (categoryId: string): string => {
-  const emojis: Record<string, string> = {
-    "fresh-juice": "🍊",
-    milkshake: "🥛",
-    smoothie: "🥤",
-    gelato: "🍨",
-    waffle: "🧇",
-    mojito: "🍹",
-    "greek-yogurt": "🥣",
-    hot: "☕",
-    pancakes: "🥞",
-  };
-  return emojis[categoryId] || "🍹";
-};
 
 // Categories that have M/L sizes
 const MULTI_SIZE_CATEGORIES = ["smoothie", "fresh-juice", "milkshake"];
 
-export const ProductCard = ({ product, onSelect, index }: ProductCardProps) => {
+export const ProductCard = ({ product, onSelect, index, categoryName }: ProductCardProps) => {
   const { t, language } = useLanguage();
-  const emoji = getCategoryEmoji(product.categoryId);
+  const productImage = getCategoryImage(product.categoryId, categoryName);
   
   // Check if this product has multiple sizes
   const hasMultipleSizes = MULTI_SIZE_CATEGORIES.some(cat => 
@@ -50,35 +36,33 @@ export const ProductCard = ({ product, onSelect, index }: ProductCardProps) => {
       style={{ animationDelay: `${index * 50}ms` }}
       className="bg-card rounded-3xl shadow-card overflow-hidden border border-border animate-scale-in hover:-translate-y-1 transition-transform duration-200"
     >
-      {/* Image placeholder with gradient */}
+      {/* Product Image */}
       <div 
-        className="relative h-36 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden cursor-pointer"
+        className="relative h-36 overflow-hidden cursor-pointer group"
         onClick={() => onSelect(product)}
       >
-        {/* Decorative elements */}
+        <img 
+          src={productImage} 
+          alt={product.name}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        
+        {/* Badges */}
         <div className="absolute top-2 right-2 flex gap-1">
           {product.isPopular && (
-            <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+            <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-lg">
               <Star className="w-3 h-3" /> {language === "ar" ? "شائع" : "Popular"}
             </span>
           )}
           {product.isSeasonal && (
-            <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2 py-1 rounded-full">
+            <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2 py-1 rounded-full shadow-lg">
               🌸 {language === "ar" ? "موسمي" : "Seasonal"}
             </span>
           )}
         </div>
-
-        {/* Product icon/illustration */}
-        <span className="text-6xl drop-shadow-lg">{emoji}</span>
-
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 bg-primary/5 opacity-50" 
-          style={{ 
-            backgroundImage: "radial-gradient(circle at 2px 2px, hsl(var(--primary) / 0.1) 1px, transparent 0)", 
-            backgroundSize: "20px 20px" 
-          }} 
-        />
       </div>
 
       {/* Content */}

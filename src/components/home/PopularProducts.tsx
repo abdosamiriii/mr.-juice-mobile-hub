@@ -28,8 +28,8 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
 
   const isLoading = productsLoading || sizesLoading || addOnsLoading || categoriesLoading;
 
-  // Convert DB products to menu Product format
-  const products: Product[] = useMemo(() => {
+  // Convert DB products to menu Product format with category info
+  const productsWithCategory = useMemo(() => {
     return dbProducts.map((p) => {
       // Find the category name for this product
       const category = dbCategories.find((c) => c.id === p.category_id);
@@ -38,7 +38,7 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
       // Check if this category should have sizes
       const hasSize = !NO_SIZE_CATEGORIES.includes(categoryName);
       
-      return {
+      const product: Product = {
         id: p.id,
         name: p.name,
         description: p.description || "",
@@ -62,12 +62,14 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
         isPopular: p.is_popular,
         isSeasonal: p.is_seasonal,
       };
+      
+      return { product, categoryName };
     });
   }, [dbProducts, dbSizes, dbAddOns, dbCategories]);
 
-  const filteredProducts = categoryFilter
-    ? products.filter((p) => p.categoryId === categoryFilter)
-    : products.filter((p) => p.isPopular);
+  const filteredItems = categoryFilter
+    ? productsWithCategory.filter((item) => item.product.categoryId === categoryFilter)
+    : productsWithCategory.filter((item) => item.product.isPopular);
 
   if (isLoading) {
     return (
@@ -96,17 +98,18 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {filteredProducts.map((product, index) => (
+        {filteredItems.map(({ product, categoryName }, index) => (
           <ProductCard
             key={product.id}
             product={product}
             onSelect={onSelectProduct}
             index={index}
+            categoryName={categoryName}
           />
         ))}
       </div>
 
-      {filteredProducts.length === 0 && (
+      {filteredItems.length === 0 && (
         <div className="text-center py-12 animate-fade-in">
           <span className="text-5xl mb-4 block">🍹</span>
           <p className="text-muted-foreground">{t("noProductsInCategory")}</p>

@@ -18,40 +18,47 @@ export const SearchView = ({ onSelectProduct }: SearchViewProps) => {
   const { data: dbAddOns = [] } = useAddOns();
   const { data: dbCategories = [] } = useCategories();
 
-  // Convert DB products to Product format
-  const products: Product[] = useMemo(() => {
-    return dbProducts.map((p) => ({
-      id: p.id,
-      name: p.name,
-      description: p.description || "",
-      basePrice: p.base_price,
-      image: p.image_url || "https://images.unsplash.com/photo-1546173159-315724a31696?w=400",
-      categoryId: p.category_id || "",
-      sizes: dbSizes.map((s) => ({
-        id: s.id,
-        name: s.name,
-        priceModifier: s.price_modifier,
-        ml: s.ml,
-      })),
-      addOns: dbAddOns.map((a) => ({
-        id: a.id,
-        name: a.name,
-        price: a.price,
-        icon: a.icon,
-      })),
-      ingredients: p.ingredients || [],
-      calories: p.calories || 0,
-      isPopular: p.is_popular,
-      isSeasonal: p.is_seasonal,
-    }));
-  }, [dbProducts, dbSizes, dbAddOns]);
+  // Convert DB products to Product format with category info
+  const productsWithCategory = useMemo(() => {
+    return dbProducts.map((p) => {
+      const category = dbCategories.find((c) => c.id === p.category_id);
+      const categoryName = category?.name || "";
+      
+      const product: Product = {
+        id: p.id,
+        name: p.name,
+        description: p.description || "",
+        basePrice: p.base_price,
+        image: p.image_url || "",
+        categoryId: p.category_id || "",
+        sizes: dbSizes.map((s) => ({
+          id: s.id,
+          name: s.name,
+          priceModifier: s.price_modifier,
+          ml: s.ml,
+        })),
+        addOns: dbAddOns.map((a) => ({
+          id: a.id,
+          name: a.name,
+          price: a.price,
+          icon: a.icon,
+        })),
+        ingredients: p.ingredients || [],
+        calories: p.calories || 0,
+        isPopular: p.is_popular,
+        isSeasonal: p.is_seasonal,
+      };
+      
+      return { product, categoryName };
+    });
+  }, [dbProducts, dbSizes, dbAddOns, dbCategories]);
 
-  const filteredProducts = query.trim()
-    ? products.filter(
-        (p) =>
-          p.name.toLowerCase().includes(query.toLowerCase()) ||
-          p.description.toLowerCase().includes(query.toLowerCase()) ||
-          p.ingredients.some((i) => i.toLowerCase().includes(query.toLowerCase()))
+  const filteredItems = query.trim()
+    ? productsWithCategory.filter(
+        ({ product }) =>
+          product.name.toLowerCase().includes(query.toLowerCase()) ||
+          product.description.toLowerCase().includes(query.toLowerCase()) ||
+          product.ingredients.some((i) => i.toLowerCase().includes(query.toLowerCase()))
       )
     : [];
 
@@ -73,17 +80,18 @@ export const SearchView = ({ onSelectProduct }: SearchViewProps) => {
       {query.trim() ? (
         <>
           <p className="text-sm text-muted-foreground mb-4">
-            {filteredProducts.length} {filteredProducts.length === 1 ? t("result") : t("resultsFor")} "{query}"
+            {filteredItems.length} {filteredItems.length === 1 ? t("result") : t("resultsFor")} "{query}"
           </p>
           
-          {filteredProducts.length > 0 ? (
+          {filteredItems.length > 0 ? (
             <div className="grid grid-cols-2 gap-4">
-              {filteredProducts.map((product, index) => (
+              {filteredItems.map(({ product, categoryName }, index) => (
                 <ProductCard
                   key={product.id}
                   product={product}
                   onSelect={onSelectProduct}
                   index={index}
+                  categoryName={categoryName}
                 />
               ))}
             </div>
