@@ -18,7 +18,7 @@ interface CheckoutSheetProps {
   onSuccess: () => void;
 }
 
-type PaymentMethod = "credit_card" | "instapay" | "vodafone_cash" | "cash";
+type PaymentMethod = "instapay" | "cash";
 
 export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps) => {
   const { items, subtotal, clearCart } = useCart();

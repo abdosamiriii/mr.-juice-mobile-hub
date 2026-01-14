@@ -1,7 +1,7 @@
-import { CreditCard, Smartphone, Banknote, Check } from "lucide-react";
+import { Smartphone, Banknote, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
-type PaymentMethod = "credit_card" | "instapay" | "vodafone_cash" | "cash";
+type PaymentMethod = "instapay" | "cash";
 
 interface PaymentMethodSelectorProps {
   selectedMethod: PaymentMethod | null;
@@ -16,28 +16,16 @@ export const PaymentMethodSelector = ({
 
   const paymentMethods = [
     {
-      id: "credit_card" as PaymentMethod,
-      label: t("creditCard"),
-      icon: CreditCard,
-      color: "from-blue-500 to-blue-600",
+      id: "cash" as PaymentMethod,
+      label: t("cashOnDelivery"),
+      icon: Banknote,
+      color: "from-amber-500 to-amber-600",
     },
     {
       id: "instapay" as PaymentMethod,
       label: t("instaPay"),
       icon: Smartphone,
       color: "from-green-500 to-green-600",
-    },
-    {
-      id: "vodafone_cash" as PaymentMethod,
-      label: t("vodafoneCash"),
-      icon: Smartphone,
-      color: "from-red-500 to-red-600",
-    },
-    {
-      id: "cash" as PaymentMethod,
-      label: t("cashOnDelivery"),
-      icon: Banknote,
-      color: "from-amber-500 to-amber-600",
     },
   ];
 
