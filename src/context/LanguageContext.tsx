@@ -83,6 +83,15 @@ const translations: Translations = {
   instaPay: { en: "InstaPay", ar: "إنستا باي" },
   vodafoneCash: { en: "Vodafone Cash", ar: "فودافون كاش" },
   cashOnDelivery: { en: "Cash on Delivery", ar: "الدفع عند الاستلام" },
+  
+  // InstaPay Instructions
+  instaPayInstructions: { en: "InstaPay Payment Instructions", ar: "تعليمات الدفع عبر إنستا باي" },
+  instaPayStep1: { en: "Open your banking app and go to InstaPay", ar: "افتح تطبيق البنك واذهب إلى إنستا باي" },
+  instaPayStep2: { en: "Send the total amount to the number below", ar: "أرسل المبلغ الإجمالي إلى الرقم أدناه" },
+  instaPayStep3: { en: "Take a screenshot and send it via WhatsApp", ar: "خذ لقطة شاشة وأرسلها عبر واتساب" },
+  instaPayNumber: { en: "InstaPay Number", ar: "رقم إنستا باي" },
+  instaPayName: { en: "Account Name", ar: "اسم الحساب" },
+  instaPayNote: { en: "Your order will be confirmed after payment verification", ar: "سيتم تأكيد طلبك بعد التحقق من الدفع" },
 
   // Profile
   guestUser: { en: "Guest User", ar: "زائر" },
