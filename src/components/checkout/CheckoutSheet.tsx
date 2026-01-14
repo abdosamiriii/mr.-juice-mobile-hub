@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, User, Phone, FileText, CreditCard, Loader2, MapPin, Truck, Building, Layers, Home, Navigation, CheckCircle2 } from "lucide-react";
+import { X, User, Phone, FileText, CreditCard, Loader2, MapPin, Truck, Building, Layers, Home, Navigation, CheckCircle2, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -374,6 +374,29 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
               selectedMethod={paymentMethod}
               onSelect={setPaymentMethod}
             />
+
+            {/* InstaPay Instructions */}
+            {paymentMethod === "instapay" && (
+              <div className="animate-fade-in bg-green-500/10 border border-green-500/30 rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Smartphone className="w-5 h-5 text-green-600" />
+                  <span className="font-semibold text-green-700">{t("instaPayInstructions")}</span>
+                </div>
+                <div className="space-y-2 text-sm text-foreground/80">
+                  <p>1. {t("instaPayStep1")}</p>
+                  <p>2. {t("instaPayStep2")}</p>
+                  <p>3. {t("instaPayStep3")}</p>
+                </div>
+                <div className="bg-white rounded-lg p-3 border border-green-500/20">
+                  <p className="text-xs text-muted-foreground mb-1">{t("instaPayNumber")}</p>
+                  <p className="font-mono text-lg font-bold text-green-700 select-all">01012345678</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t("instaPayName")}: Mr. Juice</p>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {t("instaPayNote")}
+                </p>
+              </div>
+            )}
 
             {/* Notes */}
             <div>
