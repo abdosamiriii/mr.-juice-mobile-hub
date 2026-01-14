@@ -263,9 +263,9 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
 
             {/* Address Details (only if delivery selected) */}
             {isDelivery && selectedZoneId && (
-              <div className="animate-fade-in space-y-3">
+              <div className="animate-fade-in bg-muted/30 rounded-xl p-4 space-y-4 border border-border/50">
                 <div className="flex items-center justify-between">
-                  <Label className="flex items-center gap-2">
+                  <Label className="flex items-center gap-2 text-base font-medium">
                     <MapPin className="w-4 h-4 text-primary" />
                     {t("addressDetails")}
                   </Label>
@@ -294,8 +294,8 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
 
                 {/* Street Address */}
                 <div>
-                  <Label htmlFor="street" className="flex items-center gap-2 mb-2 text-xs">
-                    <Navigation className="w-3 h-3 text-muted-foreground" />
+                  <Label htmlFor="street" className="flex items-center gap-2 mb-2 text-sm">
+                    <Navigation className="w-3.5 h-3.5 text-muted-foreground" />
                     {t("streetAddress")}
                   </Label>
                   <Input
@@ -303,15 +303,15 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                     placeholder={t("enterStreetAddress")}
                     value={streetAddress}
                     onChange={(e) => setStreetAddress(e.target.value)}
-                    className="h-10"
+                    className="h-11"
                   />
                 </div>
 
                 {/* Building & Floor */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="building" className="flex items-center gap-2 mb-2 text-xs">
-                      <Building className="w-3 h-3 text-muted-foreground" />
+                    <Label htmlFor="building" className="flex items-center gap-2 mb-2 text-sm">
+                      <Building className="w-3.5 h-3.5 text-muted-foreground" />
                       {t("building")}
                     </Label>
                     <Input
@@ -319,12 +319,12 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterBuilding")}
                       value={building}
                       onChange={(e) => setBuilding(e.target.value)}
-                      className="h-10"
+                      className="h-11"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="floor" className="flex items-center gap-2 mb-2 text-xs">
-                      <Layers className="w-3 h-3 text-muted-foreground" />
+                    <Label htmlFor="floor" className="flex items-center gap-2 mb-2 text-sm">
+                      <Layers className="w-3.5 h-3.5 text-muted-foreground" />
                       {t("floor")}
                     </Label>
                     <Input
@@ -332,7 +332,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterFloor")}
                       value={floor}
                       onChange={(e) => setFloor(e.target.value)}
-                      className="h-10"
+                      className="h-11"
                     />
                   </div>
                 </div>
@@ -340,8 +340,8 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 {/* Apartment & Landmark */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="apartment" className="flex items-center gap-2 mb-2 text-xs">
-                      <Home className="w-3 h-3 text-muted-foreground" />
+                    <Label htmlFor="apartment" className="flex items-center gap-2 mb-2 text-sm">
+                      <Home className="w-3.5 h-3.5 text-muted-foreground" />
                       {t("apartment")}
                     </Label>
                     <Input
@@ -349,12 +349,12 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterApartment")}
                       value={apartment}
                       onChange={(e) => setApartment(e.target.value)}
-                      className="h-10"
+                      className="h-11"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="landmark" className="flex items-center gap-2 mb-2 text-xs">
-                      <MapPin className="w-3 h-3 text-muted-foreground" />
+                    <Label htmlFor="landmark" className="flex items-center gap-2 mb-2 text-sm">
+                      <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
                       {t("landmark")}
                     </Label>
                     <Input
@@ -362,7 +362,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterLandmark")}
                       value={landmark}
                       onChange={(e) => setLandmark(e.target.value)}
-                      className="h-10"
+                      className="h-11"
                     />
                   </div>
                 </div>
