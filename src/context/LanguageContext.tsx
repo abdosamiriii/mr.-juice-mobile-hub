@@ -143,6 +143,7 @@ const translations: Translations = {
   twoScoops: { en: "2 Scoops", ar: "٢ سكوب" },
   threeScoops: { en: "3 Scoops", ar: "٣ سكوب" },
   fourScoops: { en: "4 Scoops", ar: "٤ سكوب" },
+  fiveScoops: { en: "5 Scoops", ar: "٥ سكوب" },
   addToCart: { en: "Add to Cart", ar: "أضف للسلة" },
   calories: { en: "calories", ar: "سعرة حرارية" },
   standard: { en: "Standard", ar: "عادي" },

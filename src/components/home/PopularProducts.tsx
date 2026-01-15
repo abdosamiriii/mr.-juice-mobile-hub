@@ -16,7 +16,7 @@ const NO_SIZE_CATEGORIES = [
 ];
 
 // Scoop add-on names (for Gelato only)
-const SCOOP_ADDON_NAMES = ["2 Scoops", "3 Scoops", "4 Scoops"];
+const SCOOP_ADDON_NAMES = ["2 Scoops", "3 Scoops", "4 Scoops", "5 Scoops"];
 
 // Categories that use scoop add-ons
 const SCOOP_CATEGORIES = ["Gelato"];
