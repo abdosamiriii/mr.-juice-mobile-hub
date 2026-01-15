@@ -30,12 +30,31 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
   const productImage = getCategoryImage(product.categoryId, categoryName);
 
+  // Check if add-on is a scoop add-on
+  const isScoopAddOn = (name: string) => ["2 Scoops", "3 Scoops", "4 Scoops"].includes(name);
+  const hasScoopAddOns = product.addOns.some(a => isScoopAddOn(a.name));
+
   const toggleAddOn = (addOn: AddOn) => {
-    setSelectedAddOns((prev) =>
-      prev.find((a) => a.id === addOn.id)
-        ? prev.filter((a) => a.id !== addOn.id)
-        : [...prev, addOn]
-    );
+    // For scoop add-ons, make them mutually exclusive (single select)
+    if (isScoopAddOn(addOn.name)) {
+      setSelectedAddOns((prev) => {
+        const isCurrentlySelected = prev.find((a) => a.id === addOn.id);
+        if (isCurrentlySelected) {
+          // Deselect - go back to 1 scoop
+          return prev.filter((a) => !isScoopAddOn(a.name));
+        } else {
+          // Select this scoop, remove any other scoop selections
+          return [...prev.filter((a) => !isScoopAddOn(a.name)), addOn];
+        }
+      });
+    } else {
+      // Regular add-ons: toggle normally
+      setSelectedAddOns((prev) =>
+        prev.find((a) => a.id === addOn.id)
+          ? prev.filter((a) => a.id !== addOn.id)
+          : [...prev, addOn]
+      );
+    }
   };
 
   const toggleIngredient = (ingredient: string) => {
@@ -46,11 +65,31 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     );
   };
 
-  const totalPrice =
-    (product.basePrice +
-      currentSize.priceModifier +
-      selectedAddOns.reduce((sum, a) => sum + a.price, 0)) *
-    quantity;
+  // Calculate number of scoops for Gelato
+  const getNumberOfScoops = () => {
+    const scoopAddOn = selectedAddOns.find(a => isScoopAddOn(a.name));
+    if (!scoopAddOn) return 1;
+    if (scoopAddOn.name === "2 Scoops") return 2;
+    if (scoopAddOn.name === "3 Scoops") return 3;
+    if (scoopAddOn.name === "4 Scoops") return 4;
+    return 1;
+  };
+
+  // Calculate total price
+  const calculateTotalPrice = () => {
+    if (hasScoopAddOns) {
+      // Gelato: price = basePrice × number of scoops × quantity
+      const scoops = getNumberOfScoops();
+      return product.basePrice * scoops * quantity;
+    } else {
+      // Regular products: basePrice + size modifier + add-ons
+      return (product.basePrice +
+        currentSize.priceModifier +
+        selectedAddOns.reduce((sum, a) => sum + a.price, 0)) * quantity;
+    }
+  };
+
+  const totalPrice = calculateTotalPrice();
 
   const handleAddToCart = () => {
     addItem(product, currentSize, selectedAddOns, excludedIngredients, quantity);
@@ -149,11 +188,19 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
           {product.addOns.length > 0 && (
             <div className="mb-6">
               <h3 className="font-semibold text-foreground mb-3">
-                {product.addOns.some(a => a.name.includes("Scoop")) ? t("scoops") : t("addOns")}
+                {hasScoopAddOns ? t("scoops") : t("addOns")}
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 {product.addOns.map((addOn) => {
                   const isSelected = selectedAddOns.find((a) => a.id === addOn.id);
+                  const isScoop = isScoopAddOn(addOn.name);
+                  
+                  // Get scoop count and calculate price for scoops
+                  const scoopCount = addOn.name === "2 Scoops" ? 2 :
+                                    addOn.name === "3 Scoops" ? 3 :
+                                    addOn.name === "4 Scoops" ? 4 : 1;
+                  const scoopPrice = isScoop ? product.basePrice * scoopCount : 0;
+                  
                   // Translate scoop names
                   const displayName = addOn.name === "2 Scoops" ? t("twoScoops") :
                                      addOn.name === "3 Scoops" ? t("threeScoops") :
@@ -172,7 +219,9 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                       <div className="text-start flex-1">
                         <p className="font-medium text-foreground text-sm">{displayName}</p>
                         <p className="text-xs text-muted-foreground">
-                          {addOn.price > 0 ? `+${addOn.price} ${t("egp")}` : t("free")}
+                          {isScoop 
+                            ? `${scoopPrice} ${t("egp")}` 
+                            : addOn.price > 0 ? `+${addOn.price} ${t("egp")}` : t("free")}
                         </p>
                       </div>
                       {isSelected && (
