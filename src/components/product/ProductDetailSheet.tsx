@@ -31,7 +31,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
   const productImage = getCategoryImage(product.categoryId, categoryName);
 
   // Check if add-on is a scoop add-on
-  const isScoopAddOn = (name: string) => ["2 Scoops", "3 Scoops", "4 Scoops"].includes(name);
+  const isScoopAddOn = (name: string) => ["2 Scoops", "3 Scoops", "4 Scoops", "5 Scoops"].includes(name);
   const hasScoopAddOns = product.addOns.some(a => isScoopAddOn(a.name));
 
   const toggleAddOn = (addOn: AddOn) => {
@@ -72,6 +72,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     if (scoopAddOn.name === "2 Scoops") return 2;
     if (scoopAddOn.name === "3 Scoops") return 3;
     if (scoopAddOn.name === "4 Scoops") return 4;
+    if (scoopAddOn.name === "5 Scoops") return 5;
     return 1;
   };
 
@@ -198,13 +199,15 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                   // Get scoop count and calculate price for scoops
                   const scoopCount = addOn.name === "2 Scoops" ? 2 :
                                     addOn.name === "3 Scoops" ? 3 :
-                                    addOn.name === "4 Scoops" ? 4 : 1;
+                                    addOn.name === "4 Scoops" ? 4 :
+                                    addOn.name === "5 Scoops" ? 5 : 1;
                   const scoopPrice = isScoop ? product.basePrice * scoopCount : 0;
                   
                   // Translate scoop names
                   const displayName = addOn.name === "2 Scoops" ? t("twoScoops") :
                                      addOn.name === "3 Scoops" ? t("threeScoops") :
-                                     addOn.name === "4 Scoops" ? t("fourScoops") : addOn.name;
+                                     addOn.name === "4 Scoops" ? t("fourScoops") :
+                                     addOn.name === "5 Scoops" ? t("fiveScoops") : addOn.name;
                   return (
                     <button
                       key={addOn.id}
