@@ -138,6 +138,11 @@ const translations: Translations = {
   // Product
   size: { en: "Size", ar: "الحجم" },
   addOns: { en: "Add-ons", ar: "إضافات" },
+  scoops: { en: "Number of Scoops", ar: "عدد السكوب" },
+  oneScoop: { en: "1 Scoop", ar: "سكوب واحد" },
+  twoScoops: { en: "2 Scoops", ar: "٢ سكوب" },
+  threeScoops: { en: "3 Scoops", ar: "٣ سكوب" },
+  fourScoops: { en: "4 Scoops", ar: "٤ سكوب" },
   addToCart: { en: "Add to Cart", ar: "أضف للسلة" },
   calories: { en: "calories", ar: "سعرة حرارية" },
   standard: { en: "Standard", ar: "عادي" },

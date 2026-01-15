@@ -148,10 +148,16 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
           {/* Add-ons */}
           {product.addOns.length > 0 && (
             <div className="mb-6">
-              <h3 className="font-semibold text-foreground mb-3">{t("addOns")}</h3>
+              <h3 className="font-semibold text-foreground mb-3">
+                {product.addOns.some(a => a.name.includes("Scoop")) ? t("scoops") : t("addOns")}
+              </h3>
               <div className="grid grid-cols-2 gap-3">
                 {product.addOns.map((addOn) => {
                   const isSelected = selectedAddOns.find((a) => a.id === addOn.id);
+                  // Translate scoop names
+                  const displayName = addOn.name === "2 Scoops" ? t("twoScoops") :
+                                     addOn.name === "3 Scoops" ? t("threeScoops") :
+                                     addOn.name === "4 Scoops" ? t("fourScoops") : addOn.name;
                   return (
                     <button
                       key={addOn.id}
@@ -164,7 +170,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                     >
                       <span className="text-xl">{addOn.icon}</span>
                       <div className="text-start flex-1">
-                        <p className="font-medium text-foreground text-sm">{addOn.name}</p>
+                        <p className="font-medium text-foreground text-sm">{displayName}</p>
                         <p className="text-xs text-muted-foreground">
                           {addOn.price > 0 ? `+${addOn.price} ${t("egp")}` : t("free")}
                         </p>

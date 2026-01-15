@@ -4,15 +4,22 @@ import { Product } from "@/types/menu";
 import { useMemo } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 
-// Categories that should NOT have size selection
+// Categories that should NOT have size selection (single size only)
 const NO_SIZE_CATEGORIES = [
   "Sundae",
   "Waffles", 
   "Pancakes",
   "Mojito",
   "Belila",
-  "Om Ali"
+  "Om Ali",
+  "Gelato"
 ];
+
+// Scoop add-on names (for Gelato only)
+const SCOOP_ADDON_NAMES = ["2 Scoops", "3 Scoops", "4 Scoops"];
+
+// Categories that use scoop add-ons
+const SCOOP_CATEGORIES = ["Gelato"];
 
 interface PopularProductsProps {
   categoryFilter: string | null;
@@ -51,12 +58,21 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
           priceModifier: s.price_modifier,
           ml: s.ml,
         })) : [{ id: "default", name: "Regular", priceModifier: 0, ml: 0 }],
-        addOns: dbAddOns.map((a) => ({
-          id: a.id,
-          name: a.name,
-          price: a.price,
-          icon: a.icon,
-        })),
+        addOns: dbAddOns
+          .filter((a) => {
+            // Scoop add-ons only for Gelato
+            if (SCOOP_ADDON_NAMES.includes(a.name)) {
+              return SCOOP_CATEGORIES.includes(categoryName);
+            }
+            // Other add-ons for non-Gelato (or show none for Gelato except scoops)
+            return !SCOOP_CATEGORIES.includes(categoryName);
+          })
+          .map((a) => ({
+            id: a.id,
+            name: a.name,
+            price: a.price,
+            icon: a.icon,
+          })),
         ingredients: p.ingredients || [],
         calories: p.calories || 0,
         isPopular: p.is_popular,
