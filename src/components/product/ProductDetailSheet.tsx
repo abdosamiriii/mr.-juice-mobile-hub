@@ -24,8 +24,27 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
   if (!product) return null;
 
-  // Use product's sizes or default sizes
-  const availableSizes = product.sizes.length > 0 ? product.sizes : defaultSizes;
+  // Categories that only have Standard size (no M/L)
+  const standardOnlyCategories = ["Gelato", "Sundae", "Waffles", "Pancakes", "Mojito", "Belila", "Om Ali", "Greek Yogurt", "Fruit Salad", "Hot", "Family Juices"];
+  
+  // Categories that have M/L sizes (no Standard)
+  const mlOnlyCategories = ["Smoothie", "Fresh Juice", "Milkshake"];
+  
+  // Determine which sizes to show based on category
+  const isStandardOnly = standardOnlyCategories.includes(categoryName || "");
+  const isMlOnly = mlOnlyCategories.includes(categoryName || "");
+  
+  // Filter sizes based on category
+  const productSizes = product.sizes.length > 0 ? product.sizes : defaultSizes;
+  const availableSizes = productSizes.filter(size => {
+    if (isStandardOnly) {
+      return size.name === "Standard";
+    }
+    if (isMlOnly) {
+      return size.name === "Medium" || size.name === "Large";
+    }
+    return true;
+  });
   const currentSize = selectedSize || availableSizes[0];
 
   const productImage = getCategoryImage(product.categoryId, categoryName);
