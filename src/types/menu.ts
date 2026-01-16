@@ -17,6 +17,7 @@ export interface Product {
   name: string;
   description: string;
   basePrice: number;
+  largePrice?: number;
   image: string;
   categoryId: string;
   sizes: Size[];
