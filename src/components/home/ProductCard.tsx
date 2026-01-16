@@ -23,9 +23,9 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
     product.categoryId.toLowerCase().includes(cat.toLowerCase())
   ) || (product.sizes.length > 1 && product.sizes.some(s => s.ml > 0));
 
-  // Get prices
+  // Get prices - use product-specific large price if available, otherwise fallback to base + 10
   const basePrice = product.basePrice;
-  const largePrice = basePrice + 10; // Large adds 10 EGP
+  const largePrice = product.largePrice ?? (basePrice + 10);
 
   // Display name based on language
   const displayName = language === "ar" ? product.description || product.name : product.name;

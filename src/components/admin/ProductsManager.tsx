@@ -25,6 +25,7 @@ export const ProductsManager = () => {
     name: "",
     description: "",
     base_price: 0,
+    large_price: null as number | null,
     category_id: "",
     calories: 0,
     is_popular: false,
@@ -39,6 +40,7 @@ export const ProductsManager = () => {
       name: "",
       description: "",
       base_price: 0,
+      large_price: null,
       category_id: "",
       calories: 0,
       is_popular: false,
@@ -56,6 +58,7 @@ export const ProductsManager = () => {
       name: product.name,
       description: product.description || "",
       base_price: product.base_price,
+      large_price: product.large_price,
       category_id: product.category_id || "",
       calories: product.calories,
       is_popular: product.is_popular,
@@ -142,6 +145,21 @@ export const ProductsManager = () => {
                 </div>
                 
                 <div className="space-y-2">
+                  <Label htmlFor="large_price">Large Price (EGP)</Label>
+                  <Input
+                    id="large_price"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={formData.large_price ?? ""}
+                    onChange={(e) => setFormData({ ...formData, large_price: e.target.value ? parseFloat(e.target.value) : null })}
+                    placeholder="Auto (+10)"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
                   <Label htmlFor="calories">Calories</Label>
                   <Input
                     id="calories"
@@ -151,25 +169,25 @@ export const ProductsManager = () => {
                     onChange={(e) => setFormData({ ...formData, calories: parseInt(e.target.value) || 0 })}
                   />
                 </div>
-              </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select
-                  value={formData.category_id}
-                  onValueChange={(value) => setFormData({ ...formData, category_id: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories?.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>
-                        {cat.icon} {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select
+                    value={formData.category_id}
+                    onValueChange={(value) => setFormData({ ...formData, category_id: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories?.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id}>
+                          {cat.icon} {cat.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               
               <div className="space-y-2">

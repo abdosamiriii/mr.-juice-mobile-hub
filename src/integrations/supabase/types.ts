@@ -224,6 +224,7 @@ export type Database = {
           is_active: boolean | null
           is_popular: boolean | null
           is_seasonal: boolean | null
+          large_price: number | null
           name: string
           updated_at: string
         }
@@ -239,6 +240,7 @@ export type Database = {
           is_active?: boolean | null
           is_popular?: boolean | null
           is_seasonal?: boolean | null
+          large_price?: number | null
           name: string
           updated_at?: string
         }
@@ -254,6 +256,7 @@ export type Database = {
           is_active?: boolean | null
           is_popular?: boolean | null
           is_seasonal?: boolean | null
+          large_price?: number | null
           name?: string
           updated_at?: string
         }

@@ -50,6 +50,7 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
         name: p.name,
         description: p.description || "",
         basePrice: p.base_price,
+        largePrice: p.large_price ?? undefined,
         image: p.image_url || "https://images.unsplash.com/photo-1546173159-315724a31696?w=400",
         categoryId: p.category_id || "",
         sizes: hasSize ? dbSizes.map((s) => ({

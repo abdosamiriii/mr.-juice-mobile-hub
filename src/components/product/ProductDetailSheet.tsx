@@ -83,10 +83,12 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
       const scoops = getNumberOfScoops();
       return product.basePrice * scoops * quantity;
     } else {
-      // Regular products: basePrice + size modifier + add-ons
-      return (product.basePrice +
-        currentSize.priceModifier +
-        selectedAddOns.reduce((sum, a) => sum + a.price, 0)) * quantity;
+      // Regular products: use actual price based on size selection
+      const sizePrice = currentSize.name === "Large" && product.largePrice
+        ? product.largePrice
+        : product.basePrice + currentSize.priceModifier;
+      const addOnsTotal = selectedAddOns.reduce((sum, a) => sum + a.price, 0);
+      return (sizePrice + addOnsTotal) * quantity;
     }
   };
 
@@ -164,23 +166,28 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             <div className="mb-6">
               <h3 className="font-semibold text-foreground mb-3">{t("size")}</h3>
               <div className="flex gap-3">
-                {availableSizes.map((size) => (
-                  <button
-                    key={size.id}
-                    onClick={() => setSelectedSize(size)}
-                    className={`flex-1 py-3 rounded-2xl border-2 transition-all duration-200 ${
-                      currentSize.id === size.id
-                        ? "border-primary bg-primary/10"
-                        : "border-border bg-card"
-                    }`}
-                  >
-                    <p className="font-semibold text-foreground">{size.name}</p>
-                    {size.ml > 0 && <p className="text-xs text-muted-foreground">{size.ml}ml</p>}
-                    {size.priceModifier > 0 && (
-                      <p className="text-xs text-primary mt-1">+{size.priceModifier} {t("egp")}</p>
-                    )}
-                  </button>
-                ))}
+                {availableSizes.map((size) => {
+                  // Calculate price for this size
+                  const sizeDisplayPrice = size.name === "Large" && product.largePrice
+                    ? product.largePrice
+                    : product.basePrice + size.priceModifier;
+                  
+                  return (
+                    <button
+                      key={size.id}
+                      onClick={() => setSelectedSize(size)}
+                      className={`flex-1 py-3 rounded-2xl border-2 transition-all duration-200 ${
+                        currentSize.id === size.id
+                          ? "border-primary bg-primary/10"
+                          : "border-border bg-card"
+                      }`}
+                    >
+                      <p className="font-semibold text-foreground">{size.name}</p>
+                      {size.ml > 0 && <p className="text-xs text-muted-foreground">{size.ml}ml</p>}
+                      <p className="text-xs text-primary mt-1">{sizeDisplayPrice} {t("egp")}</p>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
