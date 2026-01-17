@@ -11,17 +11,15 @@ interface ProductCardProps {
   categoryName?: string;
 }
 
-// Categories that have M/L sizes
-const MULTI_SIZE_CATEGORIES = ["smoothie", "fresh-juice", "milkshake"];
+// Categories that have M/L sizes (no Standard)
+const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
 
 export const ProductCard = ({ product, onSelect, index, categoryName }: ProductCardProps) => {
   const { t, language } = useLanguage();
   const productImage = getCategoryImage(product.categoryId, categoryName);
   
-  // Check if this product has multiple sizes
-  const hasMultipleSizes = MULTI_SIZE_CATEGORIES.some(cat => 
-    product.categoryId.toLowerCase().includes(cat.toLowerCase())
-  ) || (product.sizes.length > 1 && product.sizes.some(s => s.ml > 0));
+  // Check if this product has multiple sizes based on category name
+  const hasMultipleSizes = ML_ONLY_CATEGORIES.includes(categoryName || "");
 
   // Get prices - use product-specific large price if available, otherwise fallback to base + 10
   const basePrice = product.basePrice;
