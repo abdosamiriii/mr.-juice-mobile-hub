@@ -1,7 +1,8 @@
 import { Category, Product, Promotion, Size, AddOn } from "@/types/menu";
 
 export const sizes: Size[] = [
-  { id: "medium", name: "Medium", priceModifier: 0, ml: 400 },
+  { id: "standard", name: "Standard", priceModifier: 0, ml: 0 },
+  { id: "medium", name: "Medium", priceModifier: 0, ml: 450 },
   { id: "large", name: "Large", priceModifier: 10, ml: 600 },
 ];
 
