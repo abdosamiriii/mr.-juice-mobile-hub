@@ -15,12 +15,23 @@ const statusColors: Record<OrderStatus, string> = {
   pending: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
   confirmed: "bg-blue-500/10 text-blue-600 border-blue-500/20",
   preparing: "bg-orange-500/10 text-orange-600 border-orange-500/20",
-  ready: "bg-green-500/10 text-green-600 border-green-500/20",
+  ready: "bg-purple-500/10 text-purple-600 border-purple-500/20",
+  out_for_delivery: "bg-green-500/10 text-green-600 border-green-500/20",
   completed: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
   cancelled: "bg-red-500/10 text-red-600 border-red-500/20",
 };
 
-const statusOptions: OrderStatus[] = ['pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled'];
+const statusLabels: Record<OrderStatus, string> = {
+  pending: "Pending",
+  confirmed: "Confirmed",
+  preparing: "Preparation",
+  ready: "Packaging",
+  out_for_delivery: "Delivery",
+  completed: "Completed",
+  cancelled: "Cancelled",
+};
+
+const statusOptions: OrderStatus[] = ['pending', 'confirmed', 'preparing', 'ready', 'out_for_delivery', 'completed', 'cancelled'];
 
 export function OrdersManager() {
   const { data: orders, isLoading: ordersLoading } = useOrders();
@@ -126,7 +137,7 @@ export function OrdersManager() {
               <SelectItem value="all">All Orders</SelectItem>
               {statusOptions.map(status => (
                 <SelectItem key={status} value={status}>
-                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                  {statusLabels[status]}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -181,7 +192,7 @@ export function OrdersManager() {
                           <SelectContent>
                             {statusOptions.map(status => (
                               <SelectItem key={status} value={status}>
-                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                                {statusLabels[status]}
                               </SelectItem>
                             ))}
                           </SelectContent>
