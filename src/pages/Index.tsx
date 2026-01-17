@@ -17,11 +17,13 @@ const IndexContent = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string | undefined>(undefined);
   const [isProductSheetOpen, setIsProductSheetOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-  const handleSelectProduct = (product: Product) => {
+  const handleSelectProduct = (product: Product, categoryName?: string) => {
     setSelectedProduct(product);
+    setSelectedCategoryName(categoryName);
     setIsProductSheetOpen(true);
   };
 
@@ -103,6 +105,7 @@ const IndexContent = () => {
         product={selectedProduct}
         isOpen={isProductSheetOpen}
         onClose={() => setIsProductSheetOpen(false)}
+        categoryName={selectedCategoryName}
       />
       <CheckoutSheet
         isOpen={isCheckoutOpen}

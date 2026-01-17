@@ -23,7 +23,7 @@ const SCOOP_CATEGORIES = ["Gelato"];
 
 interface PopularProductsProps {
   categoryFilter: string | null;
-  onSelectProduct: (product: Product) => void;
+  onSelectProduct: (product: Product, categoryName?: string) => void;
 }
 
 export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProductsProps) => {
@@ -119,7 +119,7 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
           <ProductCard
             key={product.id}
             product={product}
-            onSelect={onSelectProduct}
+            onSelect={(p) => onSelectProduct(p, categoryName)}
             index={index}
             categoryName={categoryName}
           />
