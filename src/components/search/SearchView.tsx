@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/home/ProductCard";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface SearchViewProps {
-  onSelectProduct: (product: Product) => void;
+  onSelectProduct: (product: Product, categoryName?: string) => void;
 }
 
 export const SearchView = ({ onSelectProduct }: SearchViewProps) => {
@@ -89,7 +89,7 @@ export const SearchView = ({ onSelectProduct }: SearchViewProps) => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onSelect={onSelectProduct}
+                  onSelect={(p) => onSelectProduct(p, categoryName)}
                   index={index}
                   categoryName={categoryName}
                 />
