@@ -23,11 +23,6 @@ const STATUS_STEPS = [
   { key: "completed", label: "Completed", labelAr: "مكتمل", icon: Check, color: "text-primary", bgColor: "bg-primary" },
 ];
 
-const getStatusIndex = (status: string) => {
-  const index = STATUS_STEPS.findIndex((s) => s.key === status);
-  return index === -1 ? 0 : index;
-};
-
 const getEstimatedTime = (status: string, orderType: string | null): { min: number; max: number } => {
   const isDelivery = orderType === "delivery";
   switch (status) {
@@ -112,8 +107,8 @@ export const OrderTracker = () => {
   if (loading) {
     return (
       <div className="p-5">
-        <div className="animate-pulse space-y-4">
-          <div className="h-32 bg-muted rounded-2xl" />
+        <div className="space-y-4">
+          <div className="h-32 glass-card rounded-2xl shimmer" />
         </div>
       </div>
     );
@@ -146,7 +141,7 @@ export const OrderTracker = () => {
       </h3>
 
       <div className="space-y-4">
-        {orders.map((order) => {
+        {orders.map((order, orderIndex) => {
           const displaySteps = getDisplaySteps(order.order_type);
           const currentStepIndex = displaySteps.findIndex(s => s.key === order.status);
           const currentStep = currentStepIndex === -1 ? 0 : currentStepIndex;
@@ -157,36 +152,39 @@ export const OrderTracker = () => {
           return (
             <div
               key={order.id}
-              className="bg-card rounded-2xl p-4 shadow-soft border border-border overflow-hidden animate-fade-in"
+              style={{ animationDelay: `${orderIndex * 100}ms` }}
+              className="glass-card rounded-3xl p-5 overflow-hidden animate-scale-in floating"
             >
               {/* Header */}
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <p className="font-semibold text-foreground">
+                  <p className="font-display font-bold text-foreground text-lg">
                     {language === "ar" ? "طلب" : "Order"} #{order.id.slice(0, 8)}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {new Date(order.created_at).toLocaleTimeString(language === "ar" ? "ar-EG" : "en-US", { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
-                <span className="font-bold text-primary text-lg">
+                <span className="font-bold text-primary text-xl">
                   {order.total_amount.toFixed(0)} {language === "ar" ? "ج.م" : "EGP"}
                 </span>
               </div>
 
-              {/* Estimated Time */}
+              {/* Estimated Time - Glass Card */}
               {!isCancelled && (
-                <div className="flex items-center gap-2 mb-4 p-3 rounded-xl bg-primary/10 border border-primary/20">
-                  <Timer className="w-5 h-5 text-primary animate-pulse" />
+                <div className="glass-button rounded-2xl p-4 mb-4 flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center glossy-highlight">
+                    <Timer className="w-6 h-6 text-primary glow-pulse" />
+                  </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-foreground">
                       {language === "ar" ? "الوقت المتوقع" : "Estimated Time"}
                     </p>
-                    <p className="text-lg font-bold text-primary">
-                      {estimatedTime.min}-{estimatedTime.max} {language === "ar" ? "دقيقة" : "min"}
+                    <p className="text-2xl font-bold text-primary">
+                      {estimatedTime.min}-{estimatedTime.max} <span className="text-sm font-medium">{language === "ar" ? "دقيقة" : "min"}</span>
                     </p>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium text-white ${currentStatusStep?.bgColor || "bg-primary"}`}>
+                  <div className={`px-4 py-2 rounded-xl text-xs font-bold text-white ${currentStatusStep?.bgColor || "bg-primary"} shadow-lg glossy-highlight`}>
                     {language === "ar" ? currentStatusStep?.labelAr : currentStatusStep?.label}
                   </div>
                 </div>
@@ -194,24 +192,24 @@ export const OrderTracker = () => {
 
               {/* Delivery Address */}
               {order.order_type === "delivery" && order.delivery_address && (
-                <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
-                  <MapPin className="w-4 h-4" />
+                <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground glass-button rounded-xl px-3 py-2">
+                  <MapPin className="w-4 h-4 text-primary" />
                   <span className="truncate">{order.delivery_address}</span>
                 </div>
               )}
 
               {/* Status Tracker */}
               {isCancelled ? (
-                <div className="flex items-center gap-2 text-destructive">
+                <div className="flex items-center gap-2 text-destructive glass-button rounded-xl px-4 py-3">
                   <X className="w-5 h-5" />
                   <span className="font-medium">{language === "ar" ? "تم إلغاء الطلب" : "Order Cancelled"}</span>
                 </div>
               ) : (
-                <div className="relative">
+                <div className="relative pt-2">
                   {/* Progress Line */}
-                  <div className="absolute top-5 left-5 right-5 h-1 bg-muted rounded-full">
+                  <div className="absolute top-7 left-5 right-5 h-1.5 bg-muted rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
+                      className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-700 ease-out"
                       style={{ width: `${(currentStep / (displaySteps.length - 1)) * 100}%` }}
                     />
                   </div>
@@ -226,17 +224,17 @@ export const OrderTracker = () => {
                       return (
                         <div key={step.key} className="flex flex-col items-center">
                           <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                            className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-500 ${
                               isCompleted
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-muted text-muted-foreground"
-                            } ${isCurrent ? "ring-4 ring-primary/30 scale-110 animate-pulse" : ""}`}
+                                ? "bg-primary text-primary-foreground shadow-button"
+                                : "glass-button text-muted-foreground"
+                            } ${isCurrent ? "ring-4 ring-primary/30 scale-110 glow-pulse glossy-highlight" : ""}`}
                           >
                             <Icon className="w-5 h-5" />
                           </div>
                           <span
-                            className={`text-[10px] mt-2 text-center max-w-[60px] leading-tight ${
-                              isCompleted ? "text-foreground font-medium" : "text-muted-foreground"
+                            className={`text-[10px] mt-2 text-center max-w-[60px] leading-tight font-medium ${
+                              isCompleted ? "text-foreground" : "text-muted-foreground"
                             }`}
                           >
                             {language === "ar" ? step.labelAr : step.label}

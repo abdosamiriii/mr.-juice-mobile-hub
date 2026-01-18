@@ -32,7 +32,7 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
   return (
     <div
       style={{ animationDelay: `${index * 50}ms` }}
-      className="bg-card rounded-3xl shadow-card overflow-hidden border border-border animate-scale-in hover:-translate-y-1 transition-transform duration-200"
+      className="glass-card rounded-3xl overflow-hidden animate-scale-in floating glossy-highlight"
     >
       {/* Product Image */}
       <div 
@@ -42,21 +42,21 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
         <img 
           src={productImage} 
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        {/* Gradient overlay with glass effect */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/10" />
         
-        {/* Badges */}
+        {/* Badges with glass effect */}
         <div className="absolute top-2 right-2 flex gap-1">
           {product.isPopular && (
-            <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-lg">
+            <span className="glass-button bg-primary/90 text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-lg">
               <Star className="w-3 h-3" /> {language === "ar" ? "شائع" : "Popular"}
             </span>
           )}
           {product.isSeasonal && (
-            <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2 py-1 rounded-full shadow-lg">
+            <span className="glass-button bg-secondary/90 text-secondary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg">
               🌸 {language === "ar" ? "موسمي" : "Seasonal"}
             </span>
           )}
@@ -76,13 +76,13 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           <div className="flex flex-col">
             {hasMultipleSizes ? (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">M:</span>
+                <span className="glass-button text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground">M</span>
                 <span className="text-sm font-semibold text-foreground">{basePrice}</span>
-                <span className="text-xs text-muted-foreground">L:</span>
+                <span className="glass-button text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground">L</span>
                 <span className="text-sm font-semibold text-primary">{largePrice}</span>
               </div>
             ) : (
-              <span className="text-lg font-semibold text-primary">{basePrice}</span>
+              <span className="text-lg font-bold text-primary">{basePrice}</span>
             )}
             <span className="text-muted-foreground text-[10px]">{t("egp")}</span>
           </div>
@@ -90,7 +90,7 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           <Button
             variant="default"
             size="icon"
-            className="rounded-xl w-10 h-10 shadow-button"
+            className="rounded-xl w-10 h-10 shadow-button glossy-highlight"
             onClick={(e) => {
               e.stopPropagation();
               onSelect(product);
