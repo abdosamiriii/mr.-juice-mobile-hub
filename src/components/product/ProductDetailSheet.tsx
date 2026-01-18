@@ -127,7 +127,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/50 backdrop-blur-md z-40 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -135,7 +135,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
       {/* Sheet */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-3xl max-h-[90vh] overflow-hidden transition-transform duration-300 ${
+        className={`fixed inset-x-0 bottom-0 z-50 glass-sheet rounded-t-[2rem] max-h-[90vh] overflow-hidden transition-transform duration-300 ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         dir={direction}
@@ -147,28 +147,32 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             alt={product.name}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-white/10" />
           <button
             onClick={onClose}
-            className="absolute top-4 end-4 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white z-10"
+            className="absolute top-4 end-4 w-10 h-10 rounded-full glass-button flex items-center justify-center text-white z-10 transition-transform hover:scale-110"
           >
             <X className="w-5 h-5" />
           </button>
+          
+          {/* Product title overlay */}
+          <div className="absolute bottom-4 start-4 end-4">
+            <h2 className="font-display text-2xl font-bold text-white drop-shadow-lg">
+              {language === "ar" ? product.description || product.name : product.name}
+            </h2>
+          </div>
         </div>
 
         {/* Content */}
         <div className="p-5 overflow-y-auto max-h-[calc(90vh-12rem)] hide-scrollbar">
           {/* Title & Price */}
           <div className="flex items-start justify-between mb-2">
-            <div>
-              <h2 className="font-display text-2xl font-bold text-foreground">
-                {language === "ar" ? product.description || product.name : product.name}
-              </h2>
-              <p className="text-muted-foreground text-sm mt-1">
+            <div className="flex-1">
+              <p className="text-muted-foreground text-sm">
                 {language === "ar" ? product.name : product.description}
               </p>
             </div>
-            <div className="text-end">
+            <div className="text-end glass-button rounded-xl px-3 py-2">
               <p className="text-2xl font-bold text-primary">{product.basePrice}</p>
               <p className="text-muted-foreground text-xs">{t("egp")}</p>
             </div>
@@ -176,8 +180,10 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
           {/* Calories */}
           <div className="flex items-center gap-2 mb-6">
-            <Leaf className="w-4 h-4 text-primary" />
-            <span className="text-sm text-muted-foreground">{product.calories} {t("calories")}</span>
+            <div className="glass-button rounded-full px-3 py-1.5 flex items-center gap-2">
+              <Leaf className="w-4 h-4 text-primary" />
+              <span className="text-sm text-foreground font-medium">{product.calories} {t("calories")}</span>
+            </div>
           </div>
 
           {/* Size Selection - only show if there are multiple sizes with ml > 0 */}
@@ -195,15 +201,15 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                     <button
                       key={size.id}
                       onClick={() => setSelectedSize(size)}
-                      className={`flex-1 py-3 rounded-2xl border-2 transition-all duration-200 ${
+                      className={`flex-1 py-3 rounded-2xl transition-all duration-300 floating ${
                         currentSize.id === size.id
-                          ? "border-primary bg-primary/10"
-                          : "border-border bg-card"
+                          ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
+                          : "glass-card hover:shadow-lg"
                       }`}
                     >
-                      <p className="font-semibold text-foreground">{size.name}</p>
-                      {size.ml > 0 && <p className="text-xs text-muted-foreground">{size.ml}ml</p>}
-                      <p className="text-xs text-primary mt-1">{sizeDisplayPrice} {t("egp")}</p>
+                      <p className={`font-semibold ${currentSize.id === size.id ? "text-primary-foreground" : "text-foreground"}`}>{size.name}</p>
+                      {size.ml > 0 && <p className={`text-xs ${currentSize.id === size.id ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{size.ml}ml</p>}
+                      <p className={`text-xs mt-1 font-medium ${currentSize.id === size.id ? "text-primary-foreground" : "text-primary"}`}>{sizeDisplayPrice} {t("egp")}</p>
                     </button>
                   );
                 })}
@@ -238,23 +244,23 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                     <button
                       key={addOn.id}
                       onClick={() => toggleAddOn(addOn)}
-                      className={`flex items-center gap-3 p-3 rounded-2xl border-2 transition-all duration-200 ${
+                      className={`flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 floating ${
                         isSelected
-                          ? "border-primary bg-primary/10"
-                          : "border-border bg-card"
+                          ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
+                          : "glass-card hover:shadow-lg"
                       }`}
                     >
                       <span className="text-xl">{addOn.icon}</span>
                       <div className="text-start flex-1">
-                        <p className="font-medium text-foreground text-sm">{displayName}</p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className={`font-medium text-sm ${isSelected ? "text-primary-foreground" : "text-foreground"}`}>{displayName}</p>
+                        <p className={`text-xs ${isSelected ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
                           {isScoop 
                             ? `${scoopPrice} ${t("egp")}` 
                             : addOn.price > 0 ? `+${addOn.price} ${t("egp")}` : t("free")}
                         </p>
                       </div>
                       {isSelected && (
-                        <Check className="w-5 h-5 text-primary" />
+                        <Check className="w-5 h-5 text-primary-foreground" />
                       )}
                     </button>
                   );
@@ -266,20 +272,20 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
         </div>
 
         {/* Footer */}
-        <div className="p-5 border-t border-border bg-card safe-bottom">
+        <div className="p-5 border-t border-white/10 glass-nav safe-bottom">
           <div className="flex items-center gap-4 mb-4">
             {/* Quantity */}
-            <div className="flex items-center gap-3 bg-secondary rounded-2xl p-2">
+            <div className="flex items-center gap-3 glass-button rounded-2xl p-2">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 rounded-xl bg-card flex items-center justify-center shadow-sm"
+                className="w-10 h-10 rounded-xl bg-card flex items-center justify-center shadow-sm hover:bg-muted transition-colors"
               >
                 <Minus className="w-4 h-4 text-foreground" />
               </button>
               <span className="w-8 text-center font-bold text-foreground">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 rounded-xl bg-card flex items-center justify-center shadow-sm"
+                className="w-10 h-10 rounded-xl bg-card flex items-center justify-center shadow-sm hover:bg-muted transition-colors"
               >
                 <Plus className="w-4 h-4 text-foreground" />
               </button>
@@ -289,7 +295,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             <Button
               variant="default"
               size="lg"
-              className="flex-1 shadow-button"
+              className="flex-1 shadow-button glossy-highlight"
               onClick={handleAddToCart}
             >
               {t("addToCart")} • {totalPrice.toFixed(0)} {t("egp")}

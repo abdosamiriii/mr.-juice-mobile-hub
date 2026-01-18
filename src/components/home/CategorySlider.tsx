@@ -19,10 +19,10 @@ export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategoryS
       <div className="flex gap-3 overflow-x-auto px-5 pb-2 hide-scrollbar">
         <button
           onClick={() => onSelectCategory(null)}
-          className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+          className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-300 floating ${
             selectedCategory === null
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-              : "bg-card text-foreground shadow-soft border border-border"
+              ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
+              : "glass-card text-foreground hover:shadow-lg"
           }`}
         >
           🔥 {t("allItems")}
@@ -31,7 +31,7 @@ export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategoryS
         {isLoading ? (
           <div className="flex gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="w-24 h-10 bg-muted animate-pulse rounded-2xl" />
+              <div key={i} className="w-24 h-10 glass-card rounded-2xl shimmer" />
             ))}
           </div>
         ) : (
@@ -40,10 +40,10 @@ export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategoryS
               key={category.id}
               onClick={() => onSelectCategory(category.id)}
               style={{ animationDelay: `${index * 50}ms` }}
-              className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] animate-scale-in ${
+              className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-300 animate-scale-in floating ${
                 selectedCategory === category.id
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                  : "bg-card text-foreground shadow-soft border border-border"
+                  ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
+                  : "glass-card text-foreground hover:shadow-lg"
               }`}
             >
               {category.icon} {category.name}
