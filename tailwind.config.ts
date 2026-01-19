@@ -112,6 +112,33 @@ export default {
           "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--juice-purple) / 0.4)" },
           "50%": { boxShadow: "0 0 20px 4px hsl(var(--juice-purple) / 0.2)" },
         },
+        // iOS 26 micro-animations
+        "press": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(0.96)" },
+          "100%": { transform: "scale(1)" },
+        },
+        "lift": {
+          "0%": { transform: "translateY(0) scale(1)", boxShadow: "0 4px 12px -2px hsl(var(--primary) / 0.15)" },
+          "100%": { transform: "translateY(-3px) scale(1.02)", boxShadow: "0 12px 24px -4px hsl(var(--primary) / 0.25)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+        "wiggle": {
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "25%": { transform: "rotate(-2deg)" },
+          "75%": { transform: "rotate(2deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -122,6 +149,13 @@ export default {
         "scale-in": "scale-in 0.3s ease-out",
         "bounce-subtle": "bounce-subtle 2s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        // iOS 26 premium animations
+        "press": "press 0.15s ease-out",
+        "lift": "lift 0.2s ease-out forwards",
+        "shimmer": "shimmer 2s linear infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
+        "wiggle": "wiggle 0.3s ease-in-out",
       },
     },
   },
