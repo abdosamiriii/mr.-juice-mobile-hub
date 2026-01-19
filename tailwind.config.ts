@@ -139,6 +139,12 @@ export default {
           "25%": { transform: "rotate(-2deg)" },
           "75%": { transform: "rotate(2deg)" },
         },
+        "logo-entrance": {
+          "0%": { transform: "scale(0) rotate(-180deg)", opacity: "0" },
+          "50%": { transform: "scale(1.15) rotate(10deg)", opacity: "1" },
+          "75%": { transform: "scale(0.95) rotate(-5deg)" },
+          "100%": { transform: "scale(1) rotate(0deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -156,6 +162,7 @@ export default {
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
         "float": "float 3s ease-in-out infinite",
         "wiggle": "wiggle 0.3s ease-in-out",
+        "logo-entrance": "logo-entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
       },
     },
   },
