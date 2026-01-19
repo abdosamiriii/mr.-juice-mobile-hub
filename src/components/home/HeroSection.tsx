@@ -33,11 +33,11 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
             <h2 className="text-white font-display text-xl font-bold">{t("welcomeBack")}</h2>
           </div>
           <div className="relative group cursor-pointer">
-            <div className="absolute inset-0 bg-white/20 rounded-2xl blur-xl group-hover:bg-white/40 transition-all duration-500 ease-out group-hover:scale-110" />
+            <div className="absolute inset-0 bg-white/20 rounded-xl blur-lg group-hover:bg-white/40 transition-all duration-500 ease-out group-hover:scale-110" />
             <img
               src={logoImage}
               alt="MR. Juice"
-              className="relative w-18 h-18 rounded-2xl shadow-xl object-cover bg-white/90 ring-2 ring-white/30 transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl group-active:scale-95"
+              className="relative w-12 h-12 rounded-xl shadow-lg object-cover bg-white/90 ring-1 ring-white/30 transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-xl group-active:scale-95"
             />
           </div>
         </div>
