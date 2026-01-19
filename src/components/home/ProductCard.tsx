@@ -32,17 +32,17 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
   return (
     <div
       style={{ animationDelay: `${index * 50}ms` }}
-      className="glass-card rounded-3xl overflow-hidden animate-scale-in floating glossy-highlight"
+      className="glass-card rounded-3xl overflow-hidden animate-scale-in group/card transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15 active:scale-[0.98]"
     >
       {/* Product Image */}
       <div 
-        className="relative h-36 overflow-hidden cursor-pointer group"
+        className="relative h-36 overflow-hidden cursor-pointer"
         onClick={() => onSelect(product)}
       >
         <img 
           src={productImage} 
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover/card:scale-110"
         />
         
         {/* Gradient overlay with glass effect */}
@@ -90,13 +90,13 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           <Button
             variant="default"
             size="icon"
-            className="rounded-xl w-10 h-10 shadow-button glossy-highlight"
+            className="rounded-xl w-10 h-10 shadow-lg shadow-primary/25 transition-all duration-300 hover:rotate-90 hover:scale-110 hover:shadow-xl hover:shadow-primary/35 active:scale-95"
             onClick={(e) => {
               e.stopPropagation();
               onSelect(product);
             }}
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-5 h-5 transition-transform duration-300" />
           </Button>
         </div>
       </div>

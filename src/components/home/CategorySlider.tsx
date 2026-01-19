@@ -19,10 +19,10 @@ export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategoryS
       <div className="flex gap-3 overflow-x-auto px-5 pb-2 hide-scrollbar">
         <button
           onClick={() => onSelectCategory(null)}
-          className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-300 floating ${
+          className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-300 ease-out active:scale-95 ${
             selectedCategory === null
-              ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
-              : "glass-card text-foreground hover:shadow-lg"
+              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/40"
+              : "glass-card text-foreground hover:-translate-y-1 hover:shadow-lg hover:bg-white/20"
           }`}
         >
           🔥 {t("allItems")}
@@ -40,13 +40,13 @@ export const CategorySlider = ({ selectedCategory, onSelectCategory }: CategoryS
               key={category.id}
               onClick={() => onSelectCategory(category.id)}
               style={{ animationDelay: `${index * 50}ms` }}
-              className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-300 animate-scale-in floating ${
+              className={`flex-shrink-0 px-5 py-3 rounded-2xl font-medium text-sm transition-all duration-300 ease-out animate-scale-in active:scale-95 ${
                 selectedCategory === category.id
-                  ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
-                  : "glass-card text-foreground hover:shadow-lg"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/40"
+                  : "glass-card text-foreground hover:-translate-y-1 hover:shadow-lg hover:bg-white/20"
               }`}
             >
-              {category.icon} {category.name}
+              <span className="inline-block transition-transform duration-300 group-hover:scale-110">{category.icon}</span> {category.name}
             </button>
           ))
         )}

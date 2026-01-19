@@ -111,7 +111,7 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
         <h3 className="font-display text-lg font-bold text-foreground">
           {categoryFilter ? t("menu") : t("popularNow")} 🔥
         </h3>
-        <button className="text-primary text-sm font-medium">{t("seeAll")}</button>
+        <button className="text-primary text-sm font-medium transition-all duration-300 ease-out hover:scale-105 hover:text-primary/80 active:scale-95">{t("seeAll")}</button>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

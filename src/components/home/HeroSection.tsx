@@ -32,20 +32,20 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
             <p className="text-white/90 text-sm font-medium">{greeting}</p>
             <h2 className="text-white font-display text-xl font-bold">{t("welcomeBack")}</h2>
           </div>
-          <div className="relative group">
-            <div className="absolute inset-0 bg-white/20 rounded-2xl blur-xl group-hover:bg-white/30 transition-all duration-300" />
+          <div className="relative group cursor-pointer">
+            <div className="absolute inset-0 bg-white/20 rounded-2xl blur-xl group-hover:bg-white/40 transition-all duration-500 ease-out group-hover:scale-110" />
             <img
               src={logoImage}
               alt="MR. Juice"
-              className="relative w-18 h-18 rounded-2xl shadow-xl object-cover bg-white/90 ring-2 ring-white/30 hover:scale-105 hover:rotate-3 transition-transform duration-300"
+              className="relative w-18 h-18 rounded-2xl shadow-xl object-cover bg-white/90 ring-2 ring-white/30 transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl group-active:scale-95"
             />
           </div>
         </div>
 
         {/* Main hero content */}
         <div className={`space-y-5 animate-slide-up ${direction === "rtl" ? "text-right" : ""}`}>
-          <div className={`inline-flex items-center gap-2 glass-button rounded-full px-4 py-2 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
-            <Sparkles className="w-4 h-4 text-white" />
+          <div className={`inline-flex items-center gap-2 glass-button rounded-full px-4 py-2 transition-all duration-300 ease-out hover:bg-white/25 hover:scale-105 cursor-default ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+            <Sparkles className="w-4 h-4 text-white animate-pulse" />
             <span className="text-sm font-semibold text-white">{t("freshNatural")}</span>
           </div>
 
@@ -64,16 +64,16 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
               variant="secondary" 
               size="lg" 
               onClick={onQuickOrder}
-              className={`flex-1 glass-card bg-white/90 text-primary hover:bg-white font-bold shadow-xl border-0 ${direction === "rtl" ? "flex-row-reverse" : ""}`}
+              className={`flex-1 glass-card bg-white/90 text-primary hover:bg-white font-bold shadow-xl border-0 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-white/30 active:scale-95 group ${direction === "rtl" ? "flex-row-reverse" : ""}`}
             >
               {t("orderNow")}
-              <ArrowRight className={`w-5 h-5 ${direction === "rtl" ? "mr-1 rotate-180" : "ml-1"}`} />
+              <ArrowRight className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${direction === "rtl" ? "mr-1 rotate-180 group-hover:-translate-x-1" : "ml-1"}`} />
             </Button>
             <Button 
               variant="ghost" 
               size="lg"
               onClick={onMenuClick}
-              className="glass-button text-white border-white/20 hover:bg-white/20 hover:text-white"
+              className="glass-button text-white border-white/20 hover:bg-white/25 hover:text-white transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-lg hover:shadow-white/10 active:scale-95"
             >
               {t("menu")}
             </Button>
@@ -81,16 +81,16 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
         </div>
 
         {/* Stats with glass effect */}
-        <div className={`glass-card rounded-2xl p-4 mt-8 animate-fade-in ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+        <div className={`glass-card rounded-2xl p-4 mt-8 animate-fade-in transition-all duration-300 ease-out hover:bg-white/20 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
           <div className={`flex gap-6 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
             {[
-              { value: "50+", label: t("freshDrinksCount") },
-              { value: "15min", label: t("delivery") },
-              { value: "4.9", label: t("rating") + " ⭐" },
+              { value: "50+", label: t("freshDrinksCount"), emoji: "🍹" },
+              { value: "15min", label: t("delivery"), emoji: "🚀" },
+              { value: "4.9", label: t("rating"), emoji: "⭐" },
             ].map((stat, index) => (
-              <div key={stat.label} className={`flex-1 ${index !== 2 ? "border-r border-white/20" : ""} ${direction === "rtl" ? "text-right" : ""}`}>
-                <p className="text-xl font-bold text-white">{stat.value}</p>
-                <p className="text-xs text-white/75">{stat.label}</p>
+              <div key={stat.label} className={`flex-1 ${index !== 2 ? "border-r border-white/20" : ""} ${direction === "rtl" ? "text-right" : ""} group/stat cursor-default`}>
+                <p className="text-xl font-bold text-white transition-transform duration-300 group-hover/stat:scale-110">{stat.value}</p>
+                <p className="text-xs text-white/75">{stat.label} <span className="inline-block transition-transform duration-300 group-hover/stat:scale-125">{stat.emoji}</span></p>
               </div>
             ))}
           </div>

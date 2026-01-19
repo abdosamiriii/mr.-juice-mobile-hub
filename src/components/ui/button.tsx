@@ -5,19 +5,19 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:scale-[0.95] hover:-translate-y-0.5 hover:shadow-lg",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:opacity-90 shadow-lg shadow-secondary/30",
-        ghost: "hover:bg-muted hover:text-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-gradient-to-r from-primary to-purple-600 text-primary-foreground shadow-lg shadow-primary/40 hover:shadow-xl hover:-translate-y-0.5",
-        golden: "bg-gradient-to-r from-yellow-400 to-amber-500 text-foreground font-bold shadow-lg shadow-yellow-400/30 hover:shadow-xl hover:-translate-y-0.5",
-        glass: "bg-white/20 backdrop-blur-md text-white border border-white/30 hover:bg-white/30",
+        default: "bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-destructive/30",
+        outline: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground hover:shadow-primary/20",
+        secondary: "bg-secondary text-secondary-foreground shadow-md shadow-secondary/20 hover:opacity-90 hover:shadow-xl hover:shadow-secondary/30",
+        ghost: "hover:bg-muted hover:text-foreground hover:shadow-none hover:translate-y-0",
+        link: "text-primary underline-offset-4 hover:underline hover:shadow-none hover:translate-y-0",
+        hero: "bg-gradient-to-r from-primary to-juice-purple text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1",
+        golden: "bg-gradient-to-r from-juice-yellow to-juice-orange text-foreground font-bold shadow-lg shadow-juice-yellow/30 hover:shadow-2xl hover:shadow-juice-yellow/40 hover:-translate-y-1",
+        glass: "bg-white/15 backdrop-blur-xl text-white border border-white/25 hover:bg-white/25 hover:border-white/40 hover:shadow-white/10",
       },
       size: {
         default: "h-11 px-6 py-2",
