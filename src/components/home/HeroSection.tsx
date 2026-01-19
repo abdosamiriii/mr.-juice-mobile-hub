@@ -27,10 +27,10 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
 
       <div className="relative px-5 pt-8 pb-12">
         {/* Logo and greeting with glass card */}
-        <div className={`flex items-center justify-between mb-8 animate-fade-in ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
-          <div className={`glass-card rounded-2xl px-4 py-3 ${direction === "rtl" ? "text-right" : ""}`}>
-            <p className="text-white/90 text-sm font-medium">{greeting}</p>
-            <h2 className="text-white font-display text-xl font-bold">{t("welcomeBack")}</h2>
+        <div className={`flex items-center justify-between mb-6 animate-fade-in ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+          <div className={`glass-card rounded-2xl px-4 py-2.5 ${direction === "rtl" ? "text-right" : ""}`}>
+            <p className="text-white/80 text-xs font-medium">{greeting}</p>
+            <h2 className="text-white font-display text-base font-bold">{t("helloUser")}</h2>
           </div>
           <div className="relative group cursor-pointer animate-logo-entrance">
             <div className="absolute inset-0 bg-white/20 rounded-xl blur-lg group-hover:bg-white/40 transition-all duration-500 ease-out group-hover:scale-110" />

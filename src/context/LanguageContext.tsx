@@ -21,6 +21,7 @@ const translations: Translations = {
   // Greetings
   goodMorning: { en: "Good morning ☀️", ar: "صباح الخير ☀️" },
   goodEvening: { en: "Good evening 🌙", ar: "مساء الخير 🌙" },
+  helloUser: { en: "Hello!", ar: "أهلاً!" },
   welcomeBack: { en: "Welcome back!", ar: "أهلاً بعودتك!" },
 
   // Hero Section
