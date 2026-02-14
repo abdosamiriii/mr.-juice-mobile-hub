@@ -88,7 +88,11 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
               { value: "15min", label: t("delivery"), emoji: "🚀" },
               { value: "4.9", label: t("rating"), emoji: "⭐" },
             ].map((stat, index) => (
-              <div key={stat.label} className={`flex-1 ${index !== 2 ? "border-r border-white/20" : ""} ${direction === "rtl" ? "text-right" : ""} group/stat cursor-default`}>
+              <div 
+                key={stat.label} 
+                className={`flex-1 ${index !== 2 ? "border-r border-white/20" : ""} ${direction === "rtl" ? "text-right" : ""} group/stat cursor-default opacity-0 animate-slide-up`}
+                style={{ animationDelay: `${0.6 + index * 0.15}s`, animationFillMode: 'forwards' }}
+              >
                 <p className="text-xl font-bold text-white transition-transform duration-300 group-hover/stat:scale-110">{stat.value}</p>
                 <p className="text-xs text-white/75">{stat.label} <span className="inline-block transition-transform duration-300 group-hover/stat:scale-125">{stat.emoji}</span></p>
               </div>
