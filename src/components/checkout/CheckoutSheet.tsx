@@ -10,7 +10,19 @@ import { useDeliveryZones } from "@/hooks/useDeliveryZones";
 import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { z } from "zod";
 import { PaymentMethodSelector } from "./PaymentMethodSelector";
+
+const orderSchema = z.object({
+  customerName: z.string().trim().min(1, "Name is required").max(100, "Name too long"),
+  customerPhone: z.string().trim().regex(/^\d{10,15}$/, "Invalid phone number"),
+  notes: z.string().trim().max(500, "Notes too long").optional(),
+  streetAddress: z.string().trim().max(200, "Address too long").optional(),
+  building: z.string().trim().max(100, "Building too long").optional(),
+  floor: z.string().trim().max(10, "Floor too long").optional(),
+  apartment: z.string().trim().max(20, "Apartment too long").optional(),
+  landmark: z.string().trim().max(200, "Landmark too long").optional(),
+});
 
 interface CheckoutSheetProps {
   isOpen: boolean;
@@ -68,14 +80,23 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
   };
 
   const handleSubmitOrder = async () => {
-    if (!customerName.trim()) {
-      toast.error(t("pleaseEnterName"));
+    // Validate inputs with zod
+    const validation = orderSchema.safeParse({
+      customerName,
+      customerPhone,
+      notes: notes || undefined,
+      streetAddress: streetAddress || undefined,
+      building: building || undefined,
+      floor: floor || undefined,
+      apartment: apartment || undefined,
+      landmark: landmark || undefined,
+    });
+
+    if (!validation.success) {
+      toast.error(validation.error.errors[0].message);
       return;
     }
-    if (!customerPhone.trim()) {
-      toast.error(t("pleaseEnterPhone"));
-      return;
-    }
+
     if (!selectedZoneId) {
       toast.error(t("pleaseSelectOrderType"));
       return;
@@ -154,9 +175,8 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
       setLandmark("");
       setPaymentMethod("cash");
     } catch (error: any) {
-      console.error("Order error:", error);
       toast.error(t("failedToPlaceOrder"), {
-        description: error.message,
+        description: "Something went wrong. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -206,11 +226,12 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 {t("yourName")}
               </Label>
               <Input
-                id="name"
-                placeholder={t("enterYourName")}
-                value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
-                className="h-12 glass-input rounded-xl border-white/20 focus:border-primary/50"
+                    id="name"
+                    placeholder={t("enterYourName")}
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    maxLength={100}
+                    className="h-12 glass-input rounded-xl border-white/20 focus:border-primary/50"
               />
             </div>
 
@@ -221,12 +242,13 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 {t("phoneNumber")}
               </Label>
               <Input
-                id="phone"
-                type="tel"
-                placeholder="01XXXXXXXXX"
-                value={customerPhone}
-                onChange={(e) => setCustomerPhone(e.target.value)}
-                className="h-12 glass-input rounded-xl border-white/20 focus:border-primary/50"
+                    id="phone"
+                    type="tel"
+                    placeholder="01XXXXXXXXX"
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    maxLength={15}
+                    className="h-12 glass-input rounded-xl border-white/20 focus:border-primary/50"
               />
             </div>
 
@@ -409,6 +431,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 placeholder={t("anySpecialRequests")}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
+                maxLength={500}
                 className="min-h-20 glass-input rounded-xl border-white/20"
               />
             </div>
