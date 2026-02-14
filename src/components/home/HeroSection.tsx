@@ -17,10 +17,10 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10" />
 
-      <div className="relative px-5 pt-8 pb-12">
-        {/* Logo and greeting with glass card */}
-        <div className={`flex items-center justify-between mb-8 animate-fade-in ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
-          <div className={`bg-white/15 rounded-2xl px-4 py-3 ${direction === "rtl" ? "text-right" : ""}`}>
+      <div className="relative px-5 pt-8 pb-12" dir={direction}>
+        {/* Logo and greeting */}
+        <div className="flex items-center justify-between mb-8 animate-fade-in">
+          <div className="bg-white/15 rounded-2xl px-4 py-3">
             <p className="text-white/90 text-sm font-medium">{greeting}</p>
             <h2 className="text-white font-display text-xl font-bold">{t("welcomeBack")}</h2>
           </div>
@@ -35,8 +35,8 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
         </div>
 
         {/* Main hero content */}
-        <div className={`space-y-5 animate-slide-up ${direction === "rtl" ? "text-right" : ""}`}>
-          <div className={`inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-2 transition-all duration-300 ease-out hover:bg-white/25 hover:scale-105 cursor-default ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+        <div className="space-y-5 animate-slide-up">
+          <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-2 transition-all duration-300 ease-out hover:bg-white/25 hover:scale-105 cursor-default">
             <Sparkles className="w-4 h-4 text-white animate-pulse" />
             <span className="text-sm font-semibold text-white">{t("freshNatural")}</span>
           </div>
@@ -51,15 +51,15 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
             {t("heroDescription")}
           </p>
 
-          <div className={`flex gap-3 pt-3 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+          <div className="flex gap-3 pt-3">
             <Button 
               variant="secondary" 
               size="lg" 
               onClick={onQuickOrder}
-              className={`flex-1 bg-white/90 text-primary hover:bg-white font-bold shadow-lg border-0 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl active:scale-95 group ${direction === "rtl" ? "flex-row-reverse" : ""}`}
+              className="flex-1 bg-white/90 text-primary hover:bg-white font-bold shadow-lg border-0 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl active:scale-95 group"
             >
               {t("orderNow")}
-              <ArrowRight className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${direction === "rtl" ? "mr-1 rotate-180 group-hover:-translate-x-1" : "ml-1"}`} />
+              <ArrowRight className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${direction === "rtl" ? "me-1 rotate-180 group-hover:-translate-x-1" : "ms-1"}`} />
             </Button>
             <Button 
               variant="ghost" 
@@ -72,9 +72,9 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
           </div>
         </div>
 
-        {/* Stats with glass effect */}
-        <div className={`bg-white/15 rounded-2xl p-4 mt-8 animate-fade-in ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
-          <div className={`flex gap-6 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+        {/* Stats */}
+        <div className="bg-white/15 rounded-2xl p-4 mt-8 animate-fade-in">
+          <div className="flex">
             {[
               { value: "50+", label: t("freshDrinksCount"), emoji: "🍹" },
               { value: "15min", label: t("delivery"), emoji: "🚀" },
@@ -82,11 +82,16 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
             ].map((stat, index) => (
               <div 
                 key={stat.label} 
-                className={`flex-1 ${index !== 2 ? "border-r border-white/20" : ""} ${direction === "rtl" ? "text-right" : ""} group/stat cursor-default opacity-0 animate-slide-up`}
+                className={`flex-1 text-center opacity-0 animate-slide-up ${
+                  index !== 2 ? (direction === "rtl" ? "border-l border-white/20" : "border-r border-white/20") : ""
+                } group/stat cursor-default`}
                 style={{ animationDelay: `${0.6 + index * 0.15}s`, animationFillMode: 'forwards' }}
               >
                 <p className="text-xl font-bold text-white transition-transform duration-300 group-hover/stat:scale-110">{stat.value}</p>
-                <p className="text-xs text-white/75">{stat.label} <span className="inline-block transition-transform duration-300 group-hover/stat:scale-125">{stat.emoji}</span></p>
+                <p className="text-xs text-white/75">
+                  {stat.label}{" "}
+                  <span className="inline-block transition-transform duration-300 group-hover/stat:scale-125">{stat.emoji}</span>
+                </p>
               </div>
             ))}
           </div>
