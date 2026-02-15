@@ -4,7 +4,6 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -32,13 +31,10 @@ const Auth = () => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     try {
       const validated = authSchema.parse({ email, password });
       setLoading(true);
-      
       const { error } = await signIn(validated.email, validated.password);
-      
       if (error) {
         if (error.message.includes("Invalid login credentials")) {
           toast.error("Invalid email or password");
@@ -60,13 +56,10 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     try {
       const validated = authSchema.parse({ email, password, fullName });
       setLoading(true);
-      
       const { error } = await signUp(validated.email, validated.password, validated.fullName);
-      
       if (error) {
         if (error.message.includes("already registered")) {
           toast.error("This email is already registered. Please sign in.");
@@ -95,22 +88,25 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-background p-4">
-      <Card className="w-full max-w-md border-primary/20">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-20 h-20 rounded-2xl overflow-hidden shadow-lg">
-            <img src={logoImage} alt="MR. Juice" className="w-full h-full object-cover" />
-          </div>
-          <CardTitle className="text-2xl font-display text-foreground">Welcome to MR. Juice</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Sign in to access your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+    <div className="min-h-screen flex flex-col bg-background">
+      {/* Yellow header area */}
+      <div className="bg-secondary pt-16 pb-12 flex flex-col items-center rounded-b-[3rem] shadow-yellow relative overflow-hidden">
+        <div className="absolute -top-8 -right-8 w-28 h-28 bg-primary/10 rounded-full" />
+        <div className="absolute bottom-4 -left-6 w-20 h-20 bg-primary/10 rounded-full" />
+        <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-elevated ring-4 ring-white mb-4 animate-logo-entrance">
+          <img src={logoImage} alt="MR. Juice" className="w-full h-full object-cover" />
+        </div>
+        <h1 className="text-2xl font-display font-bold text-foreground">Welcome to MR. Juice</h1>
+        <p className="text-foreground/60 text-sm mt-1">Sign in to your account</p>
+      </div>
+
+      {/* Form area */}
+      <div className="flex-1 px-6 -mt-6 relative z-10">
+        <div className="bg-card rounded-3xl shadow-elevated p-6">
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted rounded-2xl p-1">
+              <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
@@ -124,7 +120,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="border-border"
+                    className="h-12 rounded-2xl bg-background border-border"
                   />
                 </div>
                 <div className="space-y-2">
@@ -136,11 +132,11 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="border-border"
+                    className="h-12 rounded-2xl bg-background border-border"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing in..." : "Sign In"}
+                <Button type="submit" variant="golden" className="w-full h-14 text-base font-bold rounded-2xl" disabled={loading}>
+                  {loading ? "Signing in..." : "Login"}
                 </Button>
               </form>
             </TabsContent>
@@ -155,7 +151,7 @@ const Auth = () => {
                     placeholder="Your name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="border-border"
+                    className="h-12 rounded-2xl bg-background border-border"
                   />
                 </div>
                 <div className="space-y-2">
@@ -167,7 +163,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="border-border"
+                    className="h-12 rounded-2xl bg-background border-border"
                   />
                 </div>
                 <div className="space-y-2">
@@ -179,17 +175,17 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="border-border"
+                    className="h-12 rounded-2xl bg-background border-border"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : "Create Account"}
+                <Button type="submit" variant="golden" className="w-full h-14 text-base font-bold rounded-2xl" disabled={loading}>
+                  {loading ? "Creating account..." : "Sign in"}
                 </Button>
               </form>
             </TabsContent>
           </Tabs>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

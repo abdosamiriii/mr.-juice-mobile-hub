@@ -15,14 +15,14 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-5 pb-24">
-        <div className="w-24 h-24 rounded-full glass-card flex items-center justify-center mb-6 glossy-highlight">
-          <ShoppingBag className="w-12 h-12 text-muted-foreground" />
+        <div className="w-24 h-24 rounded-full bg-secondary/30 flex items-center justify-center mb-6">
+          <ShoppingBag className="w-12 h-12 text-primary" />
         </div>
         <h2 className="font-display text-2xl font-bold text-foreground mb-2">{t("cartEmpty")}</h2>
         <p className="text-muted-foreground text-center max-w-xs mb-6">
           {t("cartEmptyDescription")}
         </p>
-        <Button variant="default" size="lg" onClick={onBrowseMenu} className="shadow-button glossy-highlight">
+        <Button variant="default" size="lg" onClick={onBrowseMenu}>
           {t("browseMenu")}
         </Button>
       </div>
@@ -35,7 +35,7 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
         <h2 className="font-display text-2xl font-bold text-foreground">{t("yourCart")}</h2>
         <button 
           onClick={clearCart}
-          className={`glass-button text-destructive text-sm font-medium flex items-center gap-1 px-3 py-1.5 rounded-xl transition-all hover:bg-destructive/10 ${direction === "rtl" ? "flex-row-reverse" : ""}`}
+          className={`text-destructive text-sm font-medium flex items-center gap-1 px-3 py-1.5 rounded-xl bg-destructive/10 transition-all hover:bg-destructive/20 ${direction === "rtl" ? "flex-row-reverse" : ""}`}
         >
           <Trash2 className="w-4 h-4" />
           {t("clear")}
@@ -54,11 +54,11 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
             <div
               key={item.id}
               style={{ animationDelay: `${index * 50}ms` }}
-              className="glass-card rounded-2xl p-4 animate-scale-in floating"
+              className="bg-card rounded-3xl p-4 animate-scale-in shadow-card floating"
             >
               <div className={`flex gap-4 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
                 {/* Product Icon */}
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0 glossy-highlight">
+                <div className="w-16 h-16 rounded-2xl bg-juice-pink/10 flex items-center justify-center flex-shrink-0">
                   <span className="text-3xl">
                     {item.product.categoryId === "fresh-juice" && "🍊"}
                     {item.product.categoryId === "smoothies" && "🥤"}
@@ -91,13 +91,13 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
 
                 {/* Price */}
                 <div className={direction === "rtl" ? "text-left" : "text-right"}>
-                  <p className="font-bold text-foreground text-lg">{(itemPrice * item.quantity).toFixed(0)}</p>
+                  <p className="font-bold text-primary text-lg">{(itemPrice * item.quantity).toFixed(0)}</p>
                   <p className="text-xs text-muted-foreground">{t("egp")}</p>
                 </div>
               </div>
 
               {/* Quantity Controls */}
-              <div className={`flex items-center justify-between mt-4 pt-4 border-t border-border/50 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+              <div className={`flex items-center justify-between mt-4 pt-4 border-t border-border ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
                 <button
                   onClick={() => removeItem(item.id)}
                   className={`text-destructive text-sm flex items-center gap-1 hover:bg-destructive/10 px-2 py-1 rounded-lg transition-all ${direction === "rtl" ? "flex-row-reverse" : ""}`}
@@ -106,19 +106,19 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
                   {t("remove")}
                 </button>
 
-                <div className="flex items-center gap-3 glass-button rounded-2xl p-1.5">
+                <div className="flex items-center gap-3 bg-primary rounded-2xl p-1">
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    className="w-8 h-8 rounded-xl bg-card flex items-center justify-center shadow-sm hover:bg-muted transition-colors"
+                    className="w-8 h-8 rounded-xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
                   >
-                    <Minus className="w-4 h-4 text-foreground" />
+                    <Minus className="w-4 h-4 text-primary-foreground" />
                   </button>
-                  <span className="w-6 text-center font-bold text-foreground">{item.quantity}</span>
+                  <span className="w-6 text-center font-bold text-primary-foreground">{item.quantity}</span>
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="w-8 h-8 rounded-xl bg-card flex items-center justify-center shadow-sm hover:bg-muted transition-colors"
+                    className="w-8 h-8 rounded-xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
                   >
-                    <Plus className="w-4 h-4 text-foreground" />
+                    <Plus className="w-4 h-4 text-primary-foreground" />
                   </button>
                 </div>
               </div>
@@ -128,7 +128,7 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
       </div>
 
       {/* Order Summary */}
-      <div className="glass-card rounded-2xl p-5 mb-6">
+      <div className="bg-card rounded-3xl p-5 mb-6 shadow-card">
         <h3 className={`font-semibold text-foreground mb-4 ${direction === "rtl" ? "text-right" : ""}`}>{t("orderSummary")}</h3>
         
         <div className="space-y-3 text-sm">
@@ -139,7 +139,7 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
           <p className={`text-xs text-muted-foreground ${direction === "rtl" ? "text-right" : ""}`}>
             {t("deliveryFeeNote")}
           </p>
-          <div className={`flex justify-between pt-3 border-t border-border/50 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+          <div className={`flex justify-between pt-3 border-t border-border ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
             <span className="font-bold text-foreground">{t("subtotal")}</span>
             <span className="font-bold text-primary text-lg">{subtotal.toFixed(0)} {t("egp")}</span>
           </div>
@@ -149,12 +149,12 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
       {/* Fixed Checkout Button */}
       <div className="fixed bottom-20 left-0 right-0 p-5 bg-gradient-to-t from-background via-background/95 to-transparent">
         <Button 
-          variant="default" 
+          variant="pink" 
           size="xl" 
-          className={`w-full shadow-button glossy-highlight ${direction === "rtl" ? "flex-row-reverse" : ""}`}
+          className={`w-full ${direction === "rtl" ? "flex-row-reverse" : ""}`}
           onClick={onCheckout}
         >
-          {t("proceedToCheckout")}
+          {t("proceedToCheckout")} • {subtotal.toFixed(0)} {t("egp")}
           <ArrowRight className={`w-5 h-5 ${direction === "rtl" ? "mr-2 rotate-180" : "ml-2"}`} />
         </Button>
       </div>

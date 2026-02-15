@@ -24,50 +24,36 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
   if (!product) return null;
 
-  // Categories that only have Standard size (no M/L)
   const standardOnlyCategories = ["Gelato", "Sundae", "Waffles", "Pancakes", "Mojito", "Belila", "Om Ali", "Greek Yogurt", "Fruit Salad", "Hot", "Family Juices"];
-  
-  // Categories that have M/L sizes (no Standard)
   const mlOnlyCategories = ["Smoothie", "Fresh Juice", "Milkshake"];
   
-  // Determine which sizes to show based on category
   const isStandardOnly = standardOnlyCategories.includes(categoryName || "");
   const isMlOnly = mlOnlyCategories.includes(categoryName || "");
   
-  // Filter sizes based on category
   const productSizes = product.sizes.length > 0 ? product.sizes : defaultSizes;
   const availableSizes = productSizes.filter(size => {
-    if (isStandardOnly) {
-      return size.name === "Standard";
-    }
-    if (isMlOnly) {
-      return size.name === "Medium" || size.name === "Large";
-    }
+    if (isStandardOnly) return size.name === "Standard";
+    if (isMlOnly) return size.name === "Medium" || size.name === "Large";
     return true;
   });
   const currentSize = selectedSize || availableSizes[0];
 
   const productImage = getCategoryImage(product.categoryId, categoryName);
 
-  // Check if add-on is a scoop add-on
   const isScoopAddOn = (name: string) => ["2 Scoops", "3 Scoops", "4 Scoops", "5 Scoops"].includes(name);
   const hasScoopAddOns = product.addOns.some(a => isScoopAddOn(a.name));
 
   const toggleAddOn = (addOn: AddOn) => {
-    // For scoop add-ons, make them mutually exclusive (single select)
     if (isScoopAddOn(addOn.name)) {
       setSelectedAddOns((prev) => {
         const isCurrentlySelected = prev.find((a) => a.id === addOn.id);
         if (isCurrentlySelected) {
-          // Deselect - go back to 1 scoop
           return prev.filter((a) => !isScoopAddOn(a.name));
         } else {
-          // Select this scoop, remove any other scoop selections
           return [...prev.filter((a) => !isScoopAddOn(a.name)), addOn];
         }
       });
     } else {
-      // Regular add-ons: toggle normally
       setSelectedAddOns((prev) =>
         prev.find((a) => a.id === addOn.id)
           ? prev.filter((a) => a.id !== addOn.id)
@@ -76,15 +62,6 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     }
   };
 
-  const toggleIngredient = (ingredient: string) => {
-    setExcludedIngredients((prev) =>
-      prev.includes(ingredient)
-        ? prev.filter((i) => i !== ingredient)
-        : [...prev, ingredient]
-    );
-  };
-
-  // Calculate number of scoops for Gelato
   const getNumberOfScoops = () => {
     const scoopAddOn = selectedAddOns.find(a => isScoopAddOn(a.name));
     if (!scoopAddOn) return 1;
@@ -95,14 +72,11 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     return 1;
   };
 
-  // Calculate total price
   const calculateTotalPrice = () => {
     if (hasScoopAddOns) {
-      // Gelato: price = basePrice × number of scoops × quantity
       const scoops = getNumberOfScoops();
       return product.basePrice * scoops * quantity;
     } else {
-      // Regular products: use actual price based on size selection
       const sizePrice = currentSize.name === "Large" && product.largePrice
         ? product.largePrice
         : product.basePrice + currentSize.priceModifier;
@@ -116,7 +90,6 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
   const handleAddToCart = () => {
     addItem(product, currentSize, selectedAddOns, excludedIngredients, quantity);
     onClose();
-    // Reset state
     setSelectedSize(null);
     setSelectedAddOns([]);
     setExcludedIngredients([]);
@@ -127,7 +100,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 backdrop-blur-md z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -135,7 +108,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
       {/* Sheet */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 glass-sheet rounded-t-[2rem] max-h-[90vh] overflow-hidden transition-transform duration-300 ${
+        className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-[2rem] max-h-[90vh] overflow-hidden transition-transform duration-300 shadow-elevated ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         dir={direction}
@@ -147,12 +120,12 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             alt={product.name}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-white/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
           <button
             onClick={onClose}
-            className="absolute top-4 end-4 w-10 h-10 rounded-full glass-button flex items-center justify-center text-white z-10 transition-transform hover:scale-110"
+            className="absolute top-4 end-4 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-soft z-10 transition-transform hover:scale-110"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-foreground" />
           </button>
           
           {/* Product title overlay */}
@@ -172,27 +145,26 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                 {language === "ar" ? product.name : product.description}
               </p>
             </div>
-            <div className="text-end glass-button rounded-xl px-3 py-2">
-              <p className="text-2xl font-bold text-primary">{product.basePrice}</p>
-              <p className="text-muted-foreground text-xs">{t("egp")}</p>
+            <div className="text-end bg-secondary rounded-2xl px-4 py-2">
+              <p className="text-2xl font-bold text-secondary-foreground">{product.basePrice}</p>
+              <p className="text-secondary-foreground/60 text-xs">{t("egp")}</p>
             </div>
           </div>
 
           {/* Calories */}
           <div className="flex items-center gap-2 mb-6">
-            <div className="glass-button rounded-full px-3 py-1.5 flex items-center gap-2">
+            <div className="bg-muted rounded-full px-3 py-1.5 flex items-center gap-2">
               <Leaf className="w-4 h-4 text-primary" />
               <span className="text-sm text-foreground font-medium">{product.calories} {t("calories")}</span>
             </div>
           </div>
 
-          {/* Size Selection - only show if there are multiple sizes with ml > 0 */}
+          {/* Size Selection */}
           {availableSizes.length > 1 && availableSizes.some(s => s.ml > 0) && (
             <div className="mb-6">
               <h3 className="font-semibold text-foreground mb-3">{t("size")}</h3>
               <div className="flex gap-3">
                 {availableSizes.map((size) => {
-                  // Calculate price for this size
                   const sizeDisplayPrice = size.name === "Large" && product.largePrice
                     ? product.largePrice
                     : product.basePrice + size.priceModifier;
@@ -203,8 +175,8 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                       onClick={() => setSelectedSize(size)}
                       className={`flex-1 py-3 rounded-2xl transition-all duration-300 floating ${
                         currentSize.id === size.id
-                          ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
-                          : "glass-card hover:shadow-lg"
+                          ? "bg-primary text-primary-foreground shadow-button"
+                          : "bg-card shadow-card hover:shadow-elevated"
                       }`}
                     >
                       <p className={`font-semibold ${currentSize.id === size.id ? "text-primary-foreground" : "text-foreground"}`}>{size.name}</p>
@@ -228,14 +200,12 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                   const isSelected = selectedAddOns.find((a) => a.id === addOn.id);
                   const isScoop = isScoopAddOn(addOn.name);
                   
-                  // Get scoop count and calculate price for scoops
                   const scoopCount = addOn.name === "2 Scoops" ? 2 :
                                     addOn.name === "3 Scoops" ? 3 :
                                     addOn.name === "4 Scoops" ? 4 :
                                     addOn.name === "5 Scoops" ? 5 : 1;
                   const scoopPrice = isScoop ? product.basePrice * scoopCount : 0;
                   
-                  // Translate scoop names
                   const displayName = addOn.name === "2 Scoops" ? t("twoScoops") :
                                      addOn.name === "3 Scoops" ? t("threeScoops") :
                                      addOn.name === "4 Scoops" ? t("fourScoops") :
@@ -246,8 +216,8 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                       onClick={() => toggleAddOn(addOn)}
                       className={`flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 floating ${
                         isSelected
-                          ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
-                          : "glass-card hover:shadow-lg"
+                          ? "bg-primary text-primary-foreground shadow-button"
+                          : "bg-card shadow-card hover:shadow-elevated"
                       }`}
                     >
                       <span className="text-xl">{addOn.icon}</span>
@@ -268,34 +238,33 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
               </div>
             </div>
           )}
-
         </div>
 
         {/* Footer */}
-        <div className="p-5 border-t border-white/10 glass-nav safe-bottom">
+        <div className="p-5 border-t border-border safe-bottom bg-card">
           <div className="flex items-center gap-4 mb-4">
             {/* Quantity */}
-            <div className="flex items-center gap-3 glass-button rounded-2xl p-2">
+            <div className="flex items-center gap-3 bg-primary rounded-2xl p-1.5">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 rounded-xl bg-card flex items-center justify-center shadow-sm hover:bg-muted transition-colors"
+                className="w-10 h-10 rounded-xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
               >
-                <Minus className="w-4 h-4 text-foreground" />
+                <Minus className="w-4 h-4 text-primary-foreground" />
               </button>
-              <span className="w-8 text-center font-bold text-foreground">{quantity}</span>
+              <span className="w-8 text-center font-bold text-primary-foreground">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 rounded-xl bg-card flex items-center justify-center shadow-sm hover:bg-muted transition-colors"
+                className="w-10 h-10 rounded-xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
               >
-                <Plus className="w-4 h-4 text-foreground" />
+                <Plus className="w-4 h-4 text-primary-foreground" />
               </button>
             </div>
 
             {/* Add to Cart Button */}
             <Button
-              variant="default"
+              variant="golden"
               size="lg"
-              className="flex-1 shadow-button glossy-highlight"
+              className="flex-1"
               onClick={handleAddToCart}
             >
               {t("addToCart")} • {totalPrice.toFixed(0)} {t("egp")}

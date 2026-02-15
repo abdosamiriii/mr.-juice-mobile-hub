@@ -1,4 +1,4 @@
-import { Plus, Star } from "lucide-react";
+import { Plus, Star, Heart } from "lucide-react";
 import { Product } from "@/types/menu";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
@@ -18,21 +18,17 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
   const { t, language } = useLanguage();
   const productImage = getCategoryImage(product.categoryId, categoryName);
   
-  // Check if this product has multiple sizes based on category name
   const hasMultipleSizes = ML_ONLY_CATEGORIES.includes(categoryName || "");
-
-  // Get prices - use product-specific large price if available, otherwise fallback to base + 10
   const basePrice = product.basePrice;
   const largePrice = product.largePrice ?? (basePrice + 10);
 
-  // Display name based on language
   const displayName = language === "ar" ? product.description || product.name : product.name;
   const displayDescription = language === "ar" ? product.name : product.description;
 
   return (
     <div
       style={{ animationDelay: `${index * 50}ms` }}
-      className="glass-card rounded-3xl overflow-hidden animate-scale-in group/card transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15 active:scale-[0.98]"
+      className="bg-card rounded-3xl overflow-hidden animate-scale-in group/card transition-all duration-300 ease-out shadow-card hover:-translate-y-2 hover:shadow-elevated active:scale-[0.98]"
     >
       {/* Product Image */}
       <div 
@@ -45,18 +41,23 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           className="w-full h-full object-cover transition-all duration-500 ease-out group-hover/card:scale-110"
         />
         
-        {/* Gradient overlay with glass effect */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/10" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
         
-        {/* Badges with glass effect */}
+        {/* Heart icon */}
+        <button className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center shadow-sm transition-transform hover:scale-110">
+          <Heart className="w-4 h-4 text-juice-pink" />
+        </button>
+
+        {/* Badges */}
         <div className="absolute top-2 right-2 flex gap-1">
           {product.isPopular && (
-            <span className="glass-button bg-primary/90 text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-lg">
+            <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
               <Star className="w-3 h-3" /> {language === "ar" ? "شائع" : "Popular"}
             </span>
           )}
           {product.isSeasonal && (
-            <span className="glass-button bg-secondary/90 text-secondary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg">
+            <span className="bg-juice-pink text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
               🌸 {language === "ar" ? "موسمي" : "Seasonal"}
             </span>
           )}
@@ -76,9 +77,9 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           <div className="flex flex-col">
             {hasMultipleSizes ? (
               <div className="flex items-center gap-2">
-                <span className="glass-button text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground">M</span>
+                <span className="bg-muted text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground font-medium">M</span>
                 <span className="text-sm font-semibold text-foreground">{basePrice}</span>
-                <span className="glass-button text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground">L</span>
+                <span className="bg-muted text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground font-medium">L</span>
                 <span className="text-sm font-semibold text-primary">{largePrice}</span>
               </div>
             ) : (
@@ -88,9 +89,8 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           </div>
 
           <Button
-            variant="default"
             size="icon"
-            className="rounded-xl w-10 h-10 shadow-lg shadow-primary/25 transition-all duration-300 hover:rotate-90 hover:scale-110 hover:shadow-xl hover:shadow-primary/35 active:scale-95"
+            className="rounded-xl w-10 h-10 bg-primary text-primary-foreground shadow-button transition-all duration-300 hover:rotate-90 hover:scale-110 hover:shadow-xl active:scale-95"
             onClick={(e) => {
               e.stopPropagation();
               onSelect(product);

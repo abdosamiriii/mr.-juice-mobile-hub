@@ -34,12 +34,11 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
               className="relative flex flex-col items-center gap-1 p-2 min-w-[60px] group"
             >
               <div className="relative">
-                {/* Active background glow */}
+                {/* Active background */}
                 {isActive && (
-                  <div className="absolute inset-0 -m-2 bg-primary/20 rounded-2xl blur-lg" />
+                  <div className="absolute inset-0 -m-2 bg-secondary/40 rounded-2xl" />
                 )}
                 
-                {/* Icon container with glass effect when active */}
                 <div
                   className={`relative transition-all duration-300 ${
                     isActive 
@@ -47,9 +46,6 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
                       : "scale-100 group-hover:scale-105"
                   }`}
                 >
-                  {isActive && (
-                    <div className="absolute inset-0 -m-1 glass-button rounded-xl" />
-                  )}
                   <Icon
                     className={`relative w-6 h-6 transition-colors duration-200 ${
                       isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
@@ -57,9 +53,9 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
                   />
                 </div>
 
-                {/* Cart badge with glass effect */}
+                {/* Cart badge */}
                 {showBadge && (
-                  <span className="absolute -top-1 -right-2 bg-primary text-primary-foreground text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-scale-in shadow-lg ring-2 ring-white/50">
+                  <span className="absolute -top-1 -right-2 bg-juice-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-scale-in shadow-sm">
                     {totalItems > 9 ? "9+" : totalItems}
                   </span>
                 )}
@@ -75,7 +71,7 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
 
               {/* Active indicator dot */}
               {isActive && (
-                <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-lg animate-scale-in" />
+                <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-secondary shadow-sm animate-scale-in" />
               )}
             </button>
           );
