@@ -42,7 +42,7 @@ export const ProfileView = () => {
           <div className={`flex items-center gap-3 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
             <button 
               onClick={() => setActiveTab("main")}
-              className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center"
+              className="w-10 h-10 rounded-xl bg-card shadow-soft flex items-center justify-center"
             >
               <ArrowLeft className={`w-5 h-5 ${direction === "rtl" ? "rotate-180" : ""}`} />
             </button>
@@ -61,7 +61,7 @@ export const ProfileView = () => {
           <div className={`flex items-center gap-3 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
             <button 
               onClick={() => setActiveTab("main")}
-              className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center"
+              className="w-10 h-10 rounded-xl bg-card shadow-soft flex items-center justify-center"
             >
               <ArrowLeft className={`w-5 h-5 ${direction === "rtl" ? "rotate-180" : ""}`} />
             </button>
@@ -75,24 +75,27 @@ export const ProfileView = () => {
 
   return (
     <div className="px-5 py-6 pb-24">
-      {/* Profile Header */}
-      <div className={`flex items-center gap-4 mb-8 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg">
-          <User className="w-10 h-10 text-white" />
-        </div>
-        <div className={`flex-1 ${direction === "rtl" ? "text-right" : ""}`}>
-          <h2 className="font-display text-xl font-bold text-foreground">
-            {user ? (user.user_metadata?.full_name || user.email?.split("@")[0]) : t("guestUser")}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {user ? user.email : t("signInForRewards")}
-          </p>
-          {isAdmin && (
-            <span className={`inline-flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full mt-1 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
-              <Shield className="w-3 h-3" />
-              {t("admin")}
-            </span>
-          )}
+      {/* Profile Header - Yellow banner style */}
+      <div className="bg-secondary rounded-3xl p-6 mb-6 shadow-yellow relative overflow-hidden">
+        <div className="absolute -top-6 -right-6 w-20 h-20 bg-primary/10 rounded-full" />
+        <div className={`flex items-center gap-4 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+          <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-button">
+            <User className="w-10 h-10 text-white" />
+          </div>
+          <div className={`flex-1 ${direction === "rtl" ? "text-right" : ""}`}>
+            <h2 className="font-display text-xl font-bold text-foreground">
+              {user ? (user.user_metadata?.full_name || user.email?.split("@")[0]) : t("guestUser")}
+            </h2>
+            <p className="text-sm text-foreground/60">
+              {user ? user.email : t("signInForRewards")}
+            </p>
+            {isAdmin && (
+              <span className={`inline-flex items-center gap-1 text-xs font-medium text-primary-foreground bg-primary px-2.5 py-0.5 rounded-full mt-1 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+                <Shield className="w-3 h-3" />
+                {t("admin")}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -108,13 +111,13 @@ export const ProfileView = () => {
       )}
 
       {!user && (
-        <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl p-5 mb-6 border border-primary/20">
+        <div className="bg-card rounded-3xl p-5 mb-6 shadow-card">
           <div className={`flex items-start gap-4 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
-            <img src={logoImage} alt="MR. Juice" className="w-12 h-12 rounded-xl object-cover" />
+            <img src={logoImage} alt="MR. Juice" className="w-12 h-12 rounded-xl object-cover shadow-soft" />
             <div className={`flex-1 ${direction === "rtl" ? "text-right" : ""}`}>
               <h3 className="font-semibold text-foreground mb-1">{t("joinMrJuice")}</h3>
               <p className="text-sm text-muted-foreground mb-3">{t("joinDescription")}</p>
-              <Button variant="hero" size="sm" onClick={() => navigate("/auth")}>
+              <Button variant="golden" size="sm" onClick={() => navigate("/auth")}>
                 {t("signInSignUp")}
               </Button>
             </div>
@@ -123,7 +126,7 @@ export const ProfileView = () => {
       )}
 
       {/* Menu Items */}
-      <div className="bg-card rounded-2xl shadow-soft border border-border overflow-hidden">
+      <div className="bg-card rounded-3xl shadow-card overflow-hidden">
         {menuItems.map((item, index) => (
           <button
             key={item.label}
@@ -132,14 +135,14 @@ export const ProfileView = () => {
               index !== menuItems.length - 1 ? "border-b border-border" : ""
             } ${direction === "rtl" ? "flex-row-reverse" : ""}`}
           >
-            <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
-              <item.icon className="w-5 h-5 text-foreground" />
+            <div className="w-10 h-10 rounded-xl bg-secondary/30 flex items-center justify-center">
+              <item.icon className="w-5 h-5 text-primary" />
             </div>
             <div className={`flex-1 ${direction === "rtl" ? "text-right" : "text-left"}`}>
               <p className="font-medium text-foreground">{item.label}</p>
             </div>
             {item.badge && (
-              <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+              <span className="text-xs font-medium text-primary-foreground bg-primary px-2 py-1 rounded-full">
                 {item.badge}
               </span>
             )}
