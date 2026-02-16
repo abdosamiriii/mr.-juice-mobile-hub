@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Minus, Plus, Check, Leaf } from "lucide-react";
+import { X, Minus, Plus, Check, Leaf, Star } from "lucide-react";
 import { Product, Size, AddOn } from "@/types/menu";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -13,6 +13,13 @@ interface ProductDetailSheetProps {
   onClose: () => void;
   categoryName?: string;
 }
+
+// Alternating detail card colors matching reference
+const DETAIL_COLORS = [
+  "bg-secondary", // yellow
+  "bg-juice-pink/20", // pink
+  "bg-primary", // purple
+];
 
 export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: ProductDetailSheetProps) => {
   const { addItem } = useCart();
@@ -96,6 +103,9 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     setQuantity(1);
   };
 
+  const displayName = language === "ar" ? product.description || product.name : product.name;
+  const displayDesc = language === "ar" ? product.name : product.description;
+
   return (
     <>
       {/* Backdrop */}
@@ -108,61 +118,58 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
       {/* Sheet */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-[2rem] max-h-[90vh] overflow-hidden transition-transform duration-300 shadow-elevated ${
+        className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-[2.5rem] max-h-[92vh] overflow-hidden transition-transform duration-300 shadow-elevated ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         dir={direction}
       >
-        {/* Header Image */}
-        <div className="relative h-56 overflow-hidden">
+        {/* Header with colored background matching reference */}
+        <div className="relative bg-secondary h-48 overflow-hidden">
           <img 
             src={productImage} 
             alt={product.name}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          
           <button
             onClick={onClose}
-            className="absolute top-4 end-4 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-soft z-10 transition-transform hover:scale-110"
+            className="absolute top-4 end-4 w-10 h-10 rounded-full bg-card/90 flex items-center justify-center shadow-sm z-10"
           >
             <X className="w-5 h-5 text-foreground" />
           </button>
-          
-          {/* Product title overlay */}
-          <div className="absolute bottom-4 start-4 end-4">
-            <h2 className="font-display text-2xl font-bold text-white drop-shadow-lg">
-              {language === "ar" ? product.description || product.name : product.name}
-            </h2>
+
+          {/* Info badges overlay - matching reference: Calories + ML */}
+          <div className="absolute top-4 start-4 flex flex-col gap-2">
+            <div className="bg-card/90 rounded-2xl px-3 py-2 shadow-sm">
+              <p className="text-[10px] text-muted-foreground">Calories</p>
+              <p className="text-sm font-bold text-foreground">{product.calories || 120}</p>
+            </div>
+            {currentSize.ml > 0 && (
+              <div className="bg-card/90 rounded-2xl px-3 py-2 shadow-sm">
+                <p className="text-[10px] text-muted-foreground">ml</p>
+                <p className="text-sm font-bold text-foreground">{currentSize.ml}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Price badge */}
+          <div className="absolute bottom-4 start-4 bg-secondary rounded-2xl px-4 py-2 shadow-sm">
+            <p className="text-[10px] text-secondary-foreground/60">Price</p>
+            <p className="text-lg font-bold text-secondary-foreground">{product.basePrice}.00 LE</p>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-5 overflow-y-auto max-h-[calc(90vh-12rem)] hide-scrollbar">
-          {/* Title & Price */}
-          <div className="flex items-start justify-between mb-2">
-            <div className="flex-1">
-              <p className="text-muted-foreground text-sm">
-                {language === "ar" ? product.name : product.description}
-              </p>
-            </div>
-            <div className="text-end bg-secondary rounded-2xl px-4 py-2">
-              <p className="text-2xl font-bold text-secondary-foreground">{product.basePrice}</p>
-              <p className="text-secondary-foreground/60 text-xs">{t("egp")}</p>
-            </div>
-          </div>
+        <div className="p-5 overflow-y-auto max-h-[calc(92vh-14rem)] hide-scrollbar">
+          {/* Product name and description */}
+          <h2 className="font-display text-xl font-bold text-foreground mb-1">{displayName}</h2>
+          <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{displayDesc}</p>
 
-          {/* Calories */}
-          <div className="flex items-center gap-2 mb-6">
-            <div className="bg-muted rounded-full px-3 py-1.5 flex items-center gap-2">
-              <Leaf className="w-4 h-4 text-primary" />
-              <span className="text-sm text-foreground font-medium">{product.calories} {t("calories")}</span>
-            </div>
-          </div>
-
-          {/* Size Selection */}
+          {/* Size Selection - pill style matching reference */}
           {availableSizes.length > 1 && availableSizes.some(s => s.ml > 0) && (
-            <div className="mb-6">
-              <h3 className="font-semibold text-foreground mb-3">{t("size")}</h3>
+            <div className="mb-5">
+              <h3 className="font-semibold text-foreground mb-3 text-sm">{t("size")}</h3>
               <div className="flex gap-3">
                 {availableSizes.map((size) => {
                   const sizeDisplayPrice = size.name === "Large" && product.largePrice
@@ -173,15 +180,15 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                     <button
                       key={size.id}
                       onClick={() => setSelectedSize(size)}
-                      className={`flex-1 py-3 rounded-2xl transition-all duration-300 floating ${
+                      className={`flex-1 py-3 rounded-2xl transition-all duration-300 ${
                         currentSize.id === size.id
                           ? "bg-primary text-primary-foreground shadow-button"
-                          : "bg-card shadow-card hover:shadow-elevated"
+                          : "bg-muted text-foreground hover:bg-muted/80"
                       }`}
                     >
-                      <p className={`font-semibold ${currentSize.id === size.id ? "text-primary-foreground" : "text-foreground"}`}>{size.name}</p>
-                      {size.ml > 0 && <p className={`text-xs ${currentSize.id === size.id ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{size.ml}ml</p>}
-                      <p className={`text-xs mt-1 font-medium ${currentSize.id === size.id ? "text-primary-foreground" : "text-primary"}`}>{sizeDisplayPrice} {t("egp")}</p>
+                      <p className="font-semibold text-sm">{size.name}</p>
+                      {size.ml > 0 && <p className="text-[10px] opacity-70">{size.ml}ml</p>}
+                      <p className="text-xs mt-0.5 font-medium">{sizeDisplayPrice} {t("egp")}</p>
                     </button>
                   );
                 })}
@@ -191,11 +198,11 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
           {/* Add-ons */}
           {product.addOns.length > 0 && (
-            <div className="mb-6">
-              <h3 className="font-semibold text-foreground mb-3">
+            <div className="mb-5">
+              <h3 className="font-semibold text-foreground mb-3 text-sm">
                 {hasScoopAddOns ? t("scoops") : t("addOns")}
               </h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2.5">
                 {product.addOns.map((addOn) => {
                   const isSelected = selectedAddOns.find((a) => a.id === addOn.id);
                   const isScoop = isScoopAddOn(addOn.name);
@@ -206,7 +213,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                                     addOn.name === "5 Scoops" ? 5 : 1;
                   const scoopPrice = isScoop ? product.basePrice * scoopCount : 0;
                   
-                  const displayName = addOn.name === "2 Scoops" ? t("twoScoops") :
+                  const displayAddonName = addOn.name === "2 Scoops" ? t("twoScoops") :
                                      addOn.name === "3 Scoops" ? t("threeScoops") :
                                      addOn.name === "4 Scoops" ? t("fourScoops") :
                                      addOn.name === "5 Scoops" ? t("fiveScoops") : addOn.name;
@@ -214,60 +221,69 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
                     <button
                       key={addOn.id}
                       onClick={() => toggleAddOn(addOn)}
-                      className={`flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 floating ${
+                      className={`flex items-center gap-2.5 p-3 rounded-2xl transition-all duration-300 ${
                         isSelected
                           ? "bg-primary text-primary-foreground shadow-button"
-                          : "bg-card shadow-card hover:shadow-elevated"
+                          : "bg-muted hover:bg-muted/80"
                       }`}
                     >
-                      <span className="text-xl">{addOn.icon}</span>
+                      <span className="text-lg">{addOn.icon}</span>
                       <div className="text-start flex-1">
-                        <p className={`font-medium text-sm ${isSelected ? "text-primary-foreground" : "text-foreground"}`}>{displayName}</p>
-                        <p className={`text-xs ${isSelected ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                        <p className={`font-medium text-xs ${isSelected ? "text-primary-foreground" : "text-foreground"}`}>{displayAddonName}</p>
+                        <p className={`text-[10px] ${isSelected ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                           {isScoop 
                             ? `${scoopPrice} ${t("egp")}` 
                             : addOn.price > 0 ? `+${addOn.price} ${t("egp")}` : t("free")}
                         </p>
                       </div>
-                      {isSelected && (
-                        <Check className="w-5 h-5 text-primary-foreground" />
-                      )}
+                      {isSelected && <Check className="w-4 h-4 text-primary-foreground" />}
                     </button>
                   );
                 })}
               </div>
             </div>
           )}
+
+          {/* Reviews placeholder matching reference */}
+          <div className="mb-4">
+            <h3 className="font-semibold text-foreground mb-3 text-sm">Reviews</h3>
+            <div className="flex items-center gap-1">
+              {[1,2,3,4,5].map(i => (
+                <Star key={i} className={`w-4 h-4 ${i <= 4 ? "text-secondary fill-secondary" : "text-muted"}`} />
+              ))}
+              <span className="text-xs text-muted-foreground ms-2">(4.0)</span>
+            </div>
+          </div>
         </div>
 
-        {/* Footer */}
+        {/* Footer - quantity + Add to Cart */}
         <div className="p-5 border-t border-border safe-bottom bg-card">
-          <div className="flex items-center gap-4 mb-4">
-            {/* Quantity */}
-            <div className="flex items-center gap-3 bg-primary rounded-2xl p-1.5">
+          <div className="flex items-center gap-4">
+            {/* Quantity stepper */}
+            <div className="flex items-center gap-2 bg-primary rounded-full p-1">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 rounded-xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
+                className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
               >
                 <Minus className="w-4 h-4 text-primary-foreground" />
               </button>
-              <span className="w-8 text-center font-bold text-primary-foreground">{quantity}</span>
+              <span className="w-6 text-center font-bold text-primary-foreground text-sm">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 rounded-xl bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
+                className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
               >
                 <Plus className="w-4 h-4 text-primary-foreground" />
               </button>
             </div>
 
-            {/* Add to Cart Button */}
+            {/* Add to Cart */}
             <Button
               variant="golden"
               size="lg"
-              className="flex-1"
+              className="flex-1 rounded-full h-12"
               onClick={handleAddToCart}
             >
-              {t("addToCart")} • {totalPrice.toFixed(0)} {t("egp")}
+              {t("addToCart")} · {totalPrice.toFixed(0)} {t("egp")}
             </Button>
           </div>
         </div>
