@@ -20,8 +20,8 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 glass-nav safe-bottom">
-      <div className={`flex items-center justify-around py-2 px-4 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-bottom">
+      <div className={`flex items-center justify-around py-2 px-2 ${direction === "rtl" ? "flex-row-reverse" : ""}`}>
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           const Icon = item.icon;
@@ -31,48 +31,38 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className="relative flex flex-col items-center gap-1 p-2 min-w-[60px] group"
+              className="relative flex flex-col items-center gap-0.5 p-2 min-w-[56px]"
             >
               <div className="relative">
-                {/* Active background */}
+                {/* Active pill background */}
                 {isActive && (
-                  <div className="absolute inset-0 -m-2 bg-secondary/40 rounded-2xl" />
+                  <div className="absolute -inset-2.5 bg-secondary/50 rounded-2xl animate-scale-in" />
                 )}
                 
-                <div
-                  className={`relative transition-all duration-300 ${
-                    isActive 
-                      ? "scale-110 -translate-y-1" 
-                      : "scale-100 group-hover:scale-105"
+                <Icon
+                  className={`relative w-5.5 h-5.5 transition-all duration-200 ${
+                    isActive ? "text-primary scale-110" : "text-muted-foreground"
                   }`}
-                >
-                  <Icon
-                    className={`relative w-6 h-6 transition-colors duration-200 ${
-                      isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
-                    }`}
-                  />
-                </div>
+                  style={{ width: 22, height: 22 }}
+                />
 
                 {/* Cart badge */}
                 {showBadge && (
-                  <span className="absolute -top-1 -right-2 bg-juice-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-scale-in shadow-sm">
+                  <span className="absolute -top-1.5 -end-2.5 bg-juice-pink text-white text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center animate-scale-in shadow-sm"
+                    style={{ width: 18, height: 18, fontSize: 10 }}
+                  >
                     {totalItems > 9 ? "9+" : totalItems}
                   </span>
                 )}
               </div>
 
               <span
-                className={`text-[10px] font-medium transition-all duration-200 ${
-                  isActive ? "text-primary font-semibold" : "text-muted-foreground group-hover:text-foreground"
+                className={`text-[10px] font-medium mt-0.5 ${
+                  isActive ? "text-primary font-semibold" : "text-muted-foreground"
                 }`}
               >
                 {item.label}
               </span>
-
-              {/* Active indicator dot */}
-              {isActive && (
-                <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-secondary shadow-sm animate-scale-in" />
-              )}
             </button>
           );
         })}

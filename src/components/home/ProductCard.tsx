@@ -1,6 +1,5 @@
 import { Plus, Star, Heart } from "lucide-react";
 import { Product } from "@/types/menu";
-import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
 import { getCategoryImage } from "@/utils/categoryImages";
 
@@ -11,8 +10,15 @@ interface ProductCardProps {
   categoryName?: string;
 }
 
-// Categories that have M/L sizes (no Standard)
 const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
+
+// Alternating card accent colors matching reference
+const CARD_ACCENTS = [
+  "bg-secondary", // yellow
+  "bg-juice-pink/15", // pink tint
+  "bg-primary/10", // purple tint
+  "bg-secondary/60", // light yellow
+];
 
 export const ProductCard = ({ product, onSelect, index, categoryName }: ProductCardProps) => {
   const { t, language } = useLanguage();
@@ -23,81 +29,73 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
   const largePrice = product.largePrice ?? (basePrice + 10);
 
   const displayName = language === "ar" ? product.description || product.name : product.name;
-  const displayDescription = language === "ar" ? product.name : product.description;
+
+  const accentClass = CARD_ACCENTS[index % CARD_ACCENTS.length];
 
   return (
     <div
-      style={{ animationDelay: `${index * 50}ms` }}
+      style={{ animationDelay: `${index * 60}ms` }}
       className="bg-card rounded-3xl overflow-hidden animate-scale-in group/card transition-all duration-300 ease-out shadow-card hover:-translate-y-2 hover:shadow-elevated active:scale-[0.98]"
+      onClick={() => onSelect(product)}
     >
-      {/* Product Image */}
-      <div 
-        className="relative h-36 overflow-hidden cursor-pointer"
-        onClick={() => onSelect(product)}
-      >
+      {/* Image area with colored accent background */}
+      <div className={`relative h-32 ${accentClass} overflow-hidden flex items-center justify-center`}>
         <img 
           src={productImage} 
           alt={product.name}
-          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover/card:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
         />
         
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-        
-        {/* Heart icon */}
-        <button className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center shadow-sm transition-transform hover:scale-110">
+        {/* Heart button */}
+        <button 
+          className="absolute top-2.5 start-2.5 w-8 h-8 rounded-full bg-card/90 flex items-center justify-center shadow-sm transition-transform hover:scale-110"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Heart className="w-4 h-4 text-juice-pink" />
         </button>
 
         {/* Badges */}
-        <div className="absolute top-2 right-2 flex gap-1">
+        <div className="absolute top-2.5 end-2.5 flex gap-1">
           {product.isPopular && (
-            <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
-              <Star className="w-3 h-3" /> {language === "ar" ? "شائع" : "Popular"}
-            </span>
-          )}
-          {product.isSeasonal && (
-            <span className="bg-juice-pink text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
-              🌸 {language === "ar" ? "موسمي" : "Seasonal"}
+            <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-0.5 shadow-sm">
+              <Star className="w-3 h-3" /> {language === "ar" ? "شائع" : "Hot"}
             </span>
           )}
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <h4 className="font-display font-bold text-foreground text-base mb-1 truncate">
+      <div className="p-3.5">
+        <h4 className="font-display font-bold text-foreground text-sm mb-1 truncate leading-tight">
           {displayName}
         </h4>
-        <p className="text-muted-foreground text-xs line-clamp-2 mb-3 h-8">
-          {displayDescription}
-        </p>
 
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col">
+        <div className="flex items-end justify-between mt-2">
+          <div>
             {hasMultipleSizes ? (
-              <div className="flex items-center gap-2">
-                <span className="bg-muted text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground font-medium">M</span>
-                <span className="text-sm font-semibold text-foreground">{basePrice}</span>
-                <span className="bg-muted text-[10px] px-1.5 py-0.5 rounded-md text-muted-foreground font-medium">L</span>
-                <span className="text-sm font-semibold text-primary">{largePrice}</span>
+              <div className="flex items-center gap-1.5">
+                <span className="bg-muted text-[9px] px-1.5 py-0.5 rounded-md text-muted-foreground font-semibold">M</span>
+                <span className="text-sm font-bold text-foreground">{basePrice}</span>
+                <span className="bg-muted text-[9px] px-1.5 py-0.5 rounded-md text-muted-foreground font-semibold">L</span>
+                <span className="text-sm font-bold text-primary">{largePrice}</span>
               </div>
             ) : (
-              <span className="text-lg font-bold text-primary">{basePrice}</span>
+              <div>
+                <span className="text-base font-bold text-primary">{basePrice}</span>
+                <span className="text-muted-foreground text-[10px] ms-1">{t("egp")}</span>
+              </div>
             )}
-            <span className="text-muted-foreground text-[10px]">{t("egp")}</span>
           </div>
 
-          <Button
-            size="icon"
-            className="rounded-xl w-10 h-10 bg-primary text-primary-foreground shadow-button transition-all duration-300 hover:rotate-90 hover:scale-110 hover:shadow-xl active:scale-95"
+          <button
+            className="w-9 h-9 rounded-full bg-primary text-primary-foreground shadow-button flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
             onClick={(e) => {
               e.stopPropagation();
               onSelect(product);
             }}
           >
-            <Plus className="w-5 h-5 transition-transform duration-300" />
-          </Button>
+            <Plus className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>

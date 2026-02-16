@@ -89,30 +89,26 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Yellow header area */}
-      <div className="bg-secondary pt-16 pb-12 flex flex-col items-center rounded-b-[3rem] shadow-yellow relative overflow-hidden">
-        <div className="absolute -top-8 -right-8 w-28 h-28 bg-primary/10 rounded-full" />
-        <div className="absolute bottom-4 -left-6 w-20 h-20 bg-primary/10 rounded-full" />
-        <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-elevated ring-4 ring-white mb-4 animate-logo-entrance">
-          <img src={logoImage} alt="MR. Juice" className="w-full h-full object-cover" />
+      {/* Logo area - centered circle on white background matching reference */}
+      <div className="flex flex-col items-center pt-16 pb-8">
+        <div className="w-24 h-24 rounded-full bg-secondary flex items-center justify-center shadow-yellow ring-4 ring-secondary/30 mb-4 animate-logo-entrance">
+          <img src={logoImage} alt="MR. Juice" className="w-16 h-16 rounded-full object-cover" />
         </div>
-        <h1 className="text-2xl font-display font-bold text-foreground">Welcome to MR. Juice</h1>
-        <p className="text-foreground/60 text-sm mt-1">Sign in to your account</p>
       </div>
 
-      {/* Form area */}
-      <div className="flex-1 px-6 -mt-6 relative z-10">
+      {/* Form card */}
+      <div className="flex-1 px-6">
         <div className="bg-card rounded-3xl shadow-elevated p-6">
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted rounded-2xl p-1">
-              <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted rounded-full p-1 h-12">
+              <TabsTrigger value="signin" className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold text-sm">Login</TabsTrigger>
+              <TabsTrigger value="signup" className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold text-sm">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
+                  <Label htmlFor="signin-email" className="text-muted-foreground text-sm">Email</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -120,11 +116,11 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-12 rounded-2xl bg-background border-border"
+                    className="h-12 rounded-full bg-background border-border px-5"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
+                  <Label htmlFor="signin-password" className="text-muted-foreground text-sm">Password</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -132,30 +128,34 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-12 rounded-2xl bg-background border-border"
+                    className="h-12 rounded-full bg-background border-border px-5"
                   />
                 </div>
-                <Button type="submit" variant="golden" className="w-full h-14 text-base font-bold rounded-2xl" disabled={loading}>
+                <p className="text-end text-xs text-primary font-medium cursor-pointer">Forgot Password?</p>
+                <Button type="submit" variant="pink" className="w-full h-14 text-base font-bold rounded-full" disabled={loading}>
                   {loading ? "Signing in..." : "Login"}
                 </Button>
+                <p className="text-center text-xs text-muted-foreground mt-2">
+                  Don't have an account? <span className="text-primary font-semibold cursor-pointer">Sign up</span>
+                </p>
               </form>
             </TabsContent>
             
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name">Full Name</Label>
+                  <Label htmlFor="signup-name" className="text-muted-foreground text-sm">Full Name</Label>
                   <Input
                     id="signup-name"
                     type="text"
                     placeholder="Your name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="h-12 rounded-2xl bg-background border-border"
+                    className="h-12 rounded-full bg-background border-border px-5"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email" className="text-muted-foreground text-sm">Email</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -163,11 +163,11 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-12 rounded-2xl bg-background border-border"
+                    className="h-12 rounded-full bg-background border-border px-5"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                  <Label htmlFor="signup-password" className="text-muted-foreground text-sm">Password</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -175,10 +175,10 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-12 rounded-2xl bg-background border-border"
+                    className="h-12 rounded-full bg-background border-border px-5"
                   />
                 </div>
-                <Button type="submit" variant="golden" className="w-full h-14 text-base font-bold rounded-2xl" disabled={loading}>
+                <Button type="submit" variant="pink" className="w-full h-14 text-base font-bold rounded-full" disabled={loading}>
                   {loading ? "Creating account..." : "Sign in"}
                 </Button>
               </form>
