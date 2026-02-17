@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { z } from "zod";
+import { ArrowLeft } from "lucide-react";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
 const authSchema = z.object({
@@ -89,15 +90,21 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Logo area - centered circle on white background matching reference */}
-      <div className="flex flex-col items-center pt-16 pb-8">
-        <div className="w-24 h-24 rounded-full bg-secondary flex items-center justify-center shadow-yellow ring-4 ring-secondary/30 mb-4 animate-logo-entrance">
+      {/* Yellow header banner matching reference */}
+      <div className="bg-secondary rounded-b-[2.5rem] pt-12 pb-16 flex flex-col items-center relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute -top-8 -right-8 w-28 h-28 bg-primary/10 rounded-full" />
+        <div className="absolute top-12 -left-6 w-16 h-16 bg-juice-pink/20 rounded-full" />
+        <div className="absolute bottom-4 right-12 w-10 h-10 bg-primary/15 rounded-full" />
+
+        {/* Logo in yellow circle */}
+        <div className="w-24 h-24 rounded-full bg-card flex items-center justify-center shadow-elevated ring-4 ring-card animate-logo-entrance">
           <img src={logoImage} alt="MR. Juice" className="w-16 h-16 rounded-full object-cover" />
         </div>
       </div>
 
-      {/* Form card */}
-      <div className="flex-1 px-6">
+      {/* Form card - overlapping the yellow header */}
+      <div className="flex-1 px-5 -mt-8 relative z-10">
         <div className="bg-card rounded-3xl shadow-elevated p-6">
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted rounded-full p-1 h-12">
@@ -116,7 +123,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-12 rounded-full bg-background border-border px-5"
+                    className="h-12 rounded-3xl bg-background border-border px-5"
                   />
                 </div>
                 <div className="space-y-2">
@@ -128,13 +135,32 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-12 rounded-full bg-background border-border px-5"
+                    className="h-12 rounded-3xl bg-background border-border px-5"
                   />
                 </div>
-                <p className="text-end text-xs text-primary font-medium cursor-pointer">Forgot Password?</p>
-                <Button type="submit" variant="pink" className="w-full h-14 text-base font-bold rounded-full" disabled={loading}>
+                <p className="text-center text-xs text-primary font-medium cursor-pointer">Forget Password?</p>
+                <Button type="submit" variant="golden" className="w-full h-14 text-base font-bold rounded-full" disabled={loading}>
                   {loading ? "Signing in..." : "Login"}
                 </Button>
+
+                {/* Social login - matching reference */}
+                <div className="text-center">
+                  <p className="text-xs text-muted-foreground mb-3">Or login With</p>
+                  <div className="flex justify-center gap-4">
+                    {["facebook", "instagram", "apple"].map((provider) => (
+                      <button
+                        key={provider}
+                        type="button"
+                        className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-sm transition-transform hover:scale-110 active:scale-95"
+                      >
+                        <span className="text-primary font-bold text-lg">
+                          {provider === "facebook" ? "f" : provider === "instagram" ? "📷" : ""}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <p className="text-center text-xs text-muted-foreground mt-2">
                   Don't have an account? <span className="text-primary font-semibold cursor-pointer">Sign up</span>
                 </p>
@@ -151,7 +177,7 @@ const Auth = () => {
                     placeholder="Your name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="h-12 rounded-full bg-background border-border px-5"
+                    className="h-12 rounded-3xl bg-background border-border px-5"
                   />
                 </div>
                 <div className="space-y-2">
@@ -163,7 +189,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-12 rounded-full bg-background border-border px-5"
+                    className="h-12 rounded-3xl bg-background border-border px-5"
                   />
                 </div>
                 <div className="space-y-2">
@@ -175,12 +201,30 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-12 rounded-full bg-background border-border px-5"
+                    className="h-12 rounded-3xl bg-background border-border px-5"
                   />
                 </div>
-                <Button type="submit" variant="pink" className="w-full h-14 text-base font-bold rounded-full" disabled={loading}>
+                <Button type="submit" variant="golden" className="w-full h-14 text-base font-bold rounded-full" disabled={loading}>
                   {loading ? "Creating account..." : "Sign in"}
                 </Button>
+
+                {/* Social signup */}
+                <div className="text-center">
+                  <p className="text-xs text-muted-foreground mb-3">Or Sign in With</p>
+                  <div className="flex justify-center gap-4">
+                    {["facebook", "instagram", "apple"].map((provider) => (
+                      <button
+                        key={provider}
+                        type="button"
+                        className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-sm transition-transform hover:scale-110 active:scale-95"
+                      >
+                        <span className="text-primary font-bold text-lg">
+                          {provider === "facebook" ? "f" : provider === "instagram" ? "📷" : ""}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </form>
             </TabsContent>
           </Tabs>
