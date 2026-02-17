@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Minus, Plus, Check, Leaf, Star } from "lucide-react";
+import { X, Minus, Plus, Check, Star } from "lucide-react";
 import { Product, Size, AddOn } from "@/types/menu";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -13,13 +13,6 @@ interface ProductDetailSheetProps {
   onClose: () => void;
   categoryName?: string;
 }
-
-// Alternating detail card colors matching reference
-const DETAIL_COLORS = [
-  "bg-secondary", // yellow
-  "bg-juice-pink/20", // pink
-  "bg-primary", // purple
-];
 
 export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: ProductDetailSheetProps) => {
   const { addItem } = useCart();
@@ -118,7 +111,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
       {/* Sheet */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-[2.5rem] max-h-[92vh] overflow-hidden transition-transform duration-300 shadow-elevated ${
+        className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-[2rem] max-h-[92vh] overflow-hidden transition-transform duration-300 shadow-elevated ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         dir={direction}
@@ -156,7 +149,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
           {/* Price badge */}
           <div className="absolute bottom-4 start-4 bg-secondary rounded-2xl px-4 py-2 shadow-sm">
             <p className="text-[10px] text-secondary-foreground/60">Price</p>
-            <p className="text-lg font-bold text-secondary-foreground">{product.basePrice}.00 LE</p>
+            <p className="text-lg font-extrabold text-secondary-foreground">{product.basePrice}.00 LE</p>
           </div>
         </div>
 
@@ -244,41 +237,55 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             </div>
           )}
 
-          {/* Reviews placeholder matching reference */}
+          {/* Reviews matching reference - star rating + avatar circles */}
           <div className="mb-4">
             <h3 className="font-semibold text-foreground mb-3 text-sm">Reviews</h3>
-            <div className="flex items-center gap-1">
-              {[1,2,3,4,5].map(i => (
+            <div className="flex items-center gap-1 mb-3">
+              {[1, 2, 3, 4, 5].map(i => (
                 <Star key={i} className={`w-4 h-4 ${i <= 4 ? "text-secondary fill-secondary" : "text-muted"}`} />
               ))}
               <span className="text-xs text-muted-foreground ms-2">(4.0)</span>
             </div>
+            {/* Review avatars matching reference */}
+            <div className="flex items-center -space-x-2">
+              {[1, 2, 3, 4, 5].map(i => (
+                <div
+                  key={i}
+                  className="w-8 h-8 rounded-full bg-muted border-2 border-card flex items-center justify-center"
+                >
+                  <span className="text-xs">😊</span>
+                </div>
+              ))}
+              <div className="w-8 h-8 rounded-full bg-primary border-2 border-card flex items-center justify-center">
+                <Plus className="w-3 h-3 text-primary-foreground" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Footer - quantity + Add to Cart */}
+        {/* Footer - quantity + Add to Cart matching reference */}
         <div className="p-5 border-t border-border safe-bottom bg-card">
           <div className="flex items-center gap-4">
-            {/* Quantity stepper */}
-            <div className="flex items-center gap-2 bg-primary rounded-full p-1">
+            {/* Quantity stepper - pink circles matching reference */}
+            <div className="flex items-center gap-2 bg-juice-pink/15 rounded-full p-1">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
+                className="w-9 h-9 rounded-full bg-juice-pink text-white flex items-center justify-center hover:opacity-90 transition-colors"
               >
-                <Minus className="w-4 h-4 text-primary-foreground" />
+                <Minus className="w-4 h-4" />
               </button>
-              <span className="w-6 text-center font-bold text-primary-foreground text-sm">{quantity}</span>
+              <span className="w-6 text-center font-bold text-foreground text-sm">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors"
+                className="w-9 h-9 rounded-full bg-juice-pink text-white flex items-center justify-center hover:opacity-90 transition-colors"
               >
-                <Plus className="w-4 h-4 text-primary-foreground" />
+                <Plus className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Add to Cart */}
+            {/* Add to Cart - pink button matching reference */}
             <Button
-              variant="golden"
+              variant="pink"
               size="lg"
               className="flex-1 rounded-full h-12"
               onClick={handleAddToCart}

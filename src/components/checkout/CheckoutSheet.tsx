@@ -45,7 +45,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
   const [selectedZoneId, setSelectedZoneId] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash");
   
-  // Address details
   const [streetAddress, setStreetAddress] = useState("");
   const [building, setBuilding] = useState("");
   const [floor, setFloor] = useState("");
@@ -63,7 +62,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
   };
 
   const handleFillAll = () => {
-    // Demo fill for testing
     if (!streetAddress) setStreetAddress("123 Main Street");
     if (!building) setBuilding("Building A");
     if (!floor) setFloor("3");
@@ -80,7 +78,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
   };
 
   const handleSubmitOrder = async () => {
-    // Validate inputs with zod
     const validation = orderSchema.safeParse({
       customerName,
       customerPhone,
@@ -115,7 +112,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
     try {
       const fullAddress = getFullAddress();
       
-      // Create order
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
@@ -135,7 +131,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
 
       if (orderError) throw orderError;
 
-      // Create order items
       const orderItems = items.map((item) => ({
         order_id: order.id,
         product_id: null,
@@ -163,7 +158,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
       onSuccess();
       onClose();
 
-      // Reset form
       setCustomerName("");
       setCustomerPhone("");
       setNotes("");
@@ -189,7 +183,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 backdrop-blur-md z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -197,20 +191,20 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
 
       {/* Sheet */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 glass-sheet rounded-t-[2rem] max-h-[90vh] overflow-hidden transition-transform duration-300 ${
+        className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-[2rem] max-h-[90vh] overflow-hidden transition-transform duration-300 shadow-elevated ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         dir={direction}
       >
         {/* Header */}
-        <div className="relative p-5 border-b border-white/10 flex items-center justify-between">
+        <div className="relative p-5 border-b border-border flex items-center justify-between">
           <div>
             <h2 className="font-display text-xl font-bold text-foreground">{t("checkout")}</h2>
             <p className="text-sm text-muted-foreground">{items.length} {t("items")}</p>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full glass-button flex items-center justify-center transition-transform hover:scale-110"
+            className="w-10 h-10 rounded-full bg-muted flex items-center justify-center transition-transform hover:scale-110"
           >
             <X className="w-5 h-5 text-muted-foreground" />
           </button>
@@ -226,12 +220,12 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 {t("yourName")}
               </Label>
               <Input
-                    id="name"
-                    placeholder={t("enterYourName")}
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    maxLength={100}
-                    className="h-12 glass-input rounded-xl border-white/20 focus:border-primary/50"
+                id="name"
+                placeholder={t("enterYourName")}
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                maxLength={100}
+                className="h-12 rounded-3xl bg-background border-border px-5"
               />
             </div>
 
@@ -242,13 +236,13 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 {t("phoneNumber")}
               </Label>
               <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="01XXXXXXXXX"
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    maxLength={15}
-                    className="h-12 glass-input rounded-xl border-white/20 focus:border-primary/50"
+                id="phone"
+                type="tel"
+                placeholder="01XXXXXXXXX"
+                value={customerPhone}
+                onChange={(e) => setCustomerPhone(e.target.value)}
+                maxLength={15}
+                className="h-12 rounded-3xl bg-background border-border px-5"
               />
             </div>
 
@@ -268,10 +262,10 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                         handleClearAll();
                       }
                     }}
-                    className={`p-3 rounded-xl text-start transition-all duration-300 floating ${
+                    className={`p-3 rounded-2xl text-start transition-all duration-300 ${
                       selectedZoneId === zone.id
-                        ? "bg-primary text-primary-foreground shadow-button glossy-highlight"
-                        : "glass-card hover:shadow-lg"
+                        ? "bg-primary text-primary-foreground shadow-button"
+                        : "bg-card shadow-card border border-border hover:shadow-elevated"
                     }`}
                   >
                     <div className={`font-medium text-sm ${selectedZoneId === zone.id ? "text-primary-foreground" : "text-foreground"}`}>{zone.name}</div>
@@ -283,9 +277,9 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
               </div>
             </div>
 
-            {/* Address Details (only if delivery selected) */}
+            {/* Address Details */}
             {isDelivery && selectedZoneId && (
-              <div className="animate-fade-in glass-card rounded-xl p-4 space-y-4">
+              <div className="animate-fade-in bg-card rounded-3xl p-4 space-y-4 shadow-card border border-border">
                 <div className="flex items-center justify-between">
                   <Label className="flex items-center gap-2 text-base font-medium">
                     <MapPin className="w-4 h-4 text-primary" />
@@ -297,7 +291,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       variant="outline"
                       size="sm"
                       onClick={handleFillAll}
-                      className="text-xs h-7 glass-button border-white/20"
+                      className="text-xs h-7 rounded-full"
                     >
                       <CheckCircle2 className="w-3 h-3 me-1" />
                       {t("fillAllFields")}
@@ -314,7 +308,6 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                   </div>
                 </div>
 
-                {/* Street Address */}
                 <div>
                   <Label htmlFor="street" className="flex items-center gap-2 mb-2 text-sm">
                     <Navigation className="w-3.5 h-3.5 text-muted-foreground" />
@@ -325,11 +318,10 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                     placeholder={t("enterStreetAddress")}
                     value={streetAddress}
                     onChange={(e) => setStreetAddress(e.target.value)}
-                    className="h-11 glass-input rounded-xl border-white/20"
+                    className="h-11 rounded-3xl bg-background border-border px-5"
                   />
                 </div>
 
-                {/* Building & Floor */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="building" className="flex items-center gap-2 mb-2 text-sm">
@@ -341,7 +333,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterBuilding")}
                       value={building}
                       onChange={(e) => setBuilding(e.target.value)}
-                      className="h-11 glass-input rounded-xl border-white/20"
+                      className="h-11 rounded-3xl bg-background border-border px-5"
                     />
                   </div>
                   <div>
@@ -354,12 +346,11 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterFloor")}
                       value={floor}
                       onChange={(e) => setFloor(e.target.value)}
-                      className="h-11 glass-input rounded-xl border-white/20"
+                      className="h-11 rounded-3xl bg-background border-border px-5"
                     />
                   </div>
                 </div>
 
-                {/* Apartment & Landmark */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="apartment" className="flex items-center gap-2 mb-2 text-sm">
@@ -371,7 +362,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterApartment")}
                       value={apartment}
                       onChange={(e) => setApartment(e.target.value)}
-                      className="h-11 glass-input rounded-xl border-white/20"
+                      className="h-11 rounded-3xl bg-background border-border px-5"
                     />
                   </div>
                   <div>
@@ -384,7 +375,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                       placeholder={t("enterLandmark")}
                       value={landmark}
                       onChange={(e) => setLandmark(e.target.value)}
-                      className="h-11 glass-input rounded-xl border-white/20"
+                      className="h-11 rounded-3xl bg-background border-border px-5"
                     />
                   </div>
                 </div>
@@ -399,7 +390,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
 
             {/* InstaPay Instructions */}
             {paymentMethod === "instapay" && (
-              <div className="animate-fade-in glass-card bg-green-500/10 border-green-500/20 rounded-xl p-4 space-y-3">
+              <div className="animate-fade-in bg-card border border-green-500/20 rounded-3xl p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <Smartphone className="w-5 h-5 text-green-600" />
                   <span className="font-semibold text-green-700">{t("instaPayInstructions")}</span>
@@ -409,7 +400,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                   <p>2. {t("instaPayStep2")}</p>
                   <p>3. {t("instaPayStep3")}</p>
                 </div>
-                <div className="glass-button rounded-lg p-3 border-green-500/20">
+                <div className="bg-muted rounded-2xl p-3 border border-green-500/20">
                   <p className="text-xs text-muted-foreground mb-1">{t("instaPayNumber")}</p>
                   <p className="font-mono text-lg font-bold text-green-700 select-all">01012345678</p>
                   <p className="text-xs text-muted-foreground mt-1">{t("instaPayName")}: Mr. Juice</p>
@@ -432,12 +423,12 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 maxLength={500}
-                className="min-h-20 glass-input rounded-xl border-white/20"
+                className="min-h-20 rounded-3xl bg-background border-border px-5"
               />
             </div>
 
             {/* Order Summary */}
-            <div className="glass-card rounded-xl p-4 space-y-2">
+            <div className="bg-card rounded-3xl p-4 space-y-2 shadow-card border border-border">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t("subtotal")}</span>
                 <span className="text-foreground font-medium">{subtotal.toFixed(0)} {t("egp")}</span>
@@ -452,7 +443,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
                   </span>
                 </div>
               )}
-              <div className="flex justify-between font-bold pt-2 border-t border-white/10">
+              <div className="flex justify-between font-bold pt-2 border-t border-border">
                 <span className="text-foreground">{t("total")}</span>
                 <span className="text-primary text-xl">{total.toFixed(0)} {t("egp")}</span>
               </div>
@@ -461,11 +452,11 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
         </div>
 
         {/* Footer */}
-        <div className="p-5 border-t border-white/10 glass-nav safe-bottom">
+        <div className="p-5 border-t border-border bg-card safe-bottom">
           <Button
             variant="default"
             size="xl"
-            className="w-full shadow-button glossy-highlight"
+            className="w-full rounded-full"
             onClick={handleSubmitOrder}
             disabled={isSubmitting}
           >

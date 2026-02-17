@@ -77,7 +77,7 @@ export const ProfileView = () => {
 
   return (
     <div className="pb-24" dir={direction}>
-      {/* Yellow header with avatar - matching reference */}
+      {/* Yellow header with avatar - matching reference exactly */}
       <div className="bg-secondary rounded-b-[2.5rem] px-5 pt-8 pb-10 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/10 rounded-full" />
@@ -99,7 +99,7 @@ export const ProfileView = () => {
             <User className="w-12 h-12 text-primary-foreground" />
           </div>
 
-          {/* Share + Points badges flanking the avatar */}
+          {/* Share + Points badges flanking the avatar - matching reference */}
           <div className="flex items-center gap-4 -mt-2 mb-2">
             <span className="bg-juice-pink text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
               <Share2 className="w-3 h-3 inline me-1" />
@@ -122,7 +122,7 @@ export const ProfileView = () => {
         </div>
       </div>
 
-      {/* Tab pills - matching reference: Orders / Personal Info / Settings */}
+      {/* Tab pills - matching reference: Orders / Personal Info / Settings (pink) */}
       <div className="flex justify-center gap-2 -mt-5 px-5 relative z-10">
         {[
           { id: "orders" as ProfileTab, label: t("orderHistory") },
@@ -165,7 +165,7 @@ export const ProfileView = () => {
           </div>
         )}
 
-        {/* Menu Items */}
+        {/* Menu Items - matching reference structure */}
         <div className="bg-card rounded-3xl shadow-card overflow-hidden">
           {menuItems.map((item, index) => (
             <button

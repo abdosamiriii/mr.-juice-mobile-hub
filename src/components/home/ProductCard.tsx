@@ -32,6 +32,9 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
 
   const accentClass = CARD_ACCENTS[index % CARD_ACCENTS.length];
 
+  // Simulated rating (4-5 stars based on popularity)
+  const rating = product.isPopular ? 5 : 4;
+
   return (
     <div
       style={{ animationDelay: `${index * 60}ms` }}
@@ -70,7 +73,17 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           {displayName}
         </h4>
 
-        <div className="flex items-end justify-between mt-2">
+        {/* Star rating - matching reference */}
+        <div className="flex items-center gap-0.5 mb-2">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star
+              key={i}
+              className={`w-3 h-3 ${i <= rating ? "text-secondary fill-secondary" : "text-muted"}`}
+            />
+          ))}
+        </div>
+
+        <div className="flex items-end justify-between">
           <div>
             {hasMultipleSizes ? (
               <div className="flex items-center gap-1.5">
@@ -81,7 +94,7 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
               </div>
             ) : (
               <div>
-                <span className="text-base font-bold text-primary">{basePrice}</span>
+                <span className="text-base font-extrabold text-primary">{basePrice}</span>
                 <span className="text-muted-foreground text-[10px] ms-1">{t("egp")}</span>
               </div>
             )}
