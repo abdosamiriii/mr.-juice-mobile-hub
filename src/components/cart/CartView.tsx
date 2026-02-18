@@ -16,7 +16,7 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-5 pb-24">
-        <div className="w-24 h-24 rounded-full bg-secondary/30 flex items-center justify-center mb-6">
+        <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
           <ShoppingBag className="w-12 h-12 text-primary" />
         </div>
         <h2 className="font-display text-2xl font-bold text-foreground mb-2">{t("cartEmpty")}</h2>
@@ -32,10 +32,9 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
 
   return (
     <div className="px-5 py-6 pb-40" dir={direction}>
-      {/* Header matching reference: back arrow + logo + "My Cart" */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
             <img src={logoImage} alt="MR. Juice" className="w-7 h-7 rounded-full object-cover" />
           </div>
           <h2 className="font-display text-2xl font-bold text-foreground">{t("yourCart")}</h2>
@@ -49,7 +48,6 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
         </button>
       </div>
 
-      {/* Cart Items - reference style: pink-tinted rows with round product image */}
       <div className="space-y-4 mb-6">
         {items.map((item, index) => {
           const itemPrice =
@@ -61,15 +59,13 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
             <div
               key={item.id}
               style={{ animationDelay: `${index * 50}ms` }}
-              className="bg-juice-pink/8 rounded-3xl p-4 animate-scale-in"
+              className="bg-primary/5 rounded-3xl p-4 animate-scale-in"
             >
               <div className="flex gap-3 items-start">
-                {/* Round product thumbnail */}
-                <div className="w-16 h-16 rounded-2xl bg-juice-pink/15 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex-shrink-0 overflow-hidden flex items-center justify-center">
                   <span className="text-3xl">🍹</span>
                 </div>
 
-                {/* Details */}
                 <div className="flex-1 min-w-0">
                   <h4 className="font-display font-bold text-foreground text-sm truncate">
                     {item.product.name}
@@ -90,7 +86,7 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
                   </div>
                 </div>
 
-                {/* Quantity controls - purple vertical stepper matching reference */}
+                {/* Quantity controls - purple vertical stepper */}
                 <div className="flex flex-col items-center gap-1 bg-primary rounded-2xl p-1">
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
@@ -114,7 +110,6 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
         })}
       </div>
 
-      {/* Order Summary - reference style */}
       <div className="bg-card rounded-3xl p-5 mb-6 shadow-card">
         <div className="space-y-2 text-sm">
           {items.map((item) => {
@@ -134,10 +129,9 @@ export const CartView = ({ onCheckout, onBrowseMenu }: CartViewProps) => {
         </div>
       </div>
 
-      {/* Fixed bottom checkout button - pink matching reference */}
       <div className="fixed bottom-20 left-0 right-0 p-5 bg-gradient-to-t from-background via-background/95 to-transparent">
         <Button 
-          variant="pink" 
+          variant="default" 
           size="xl" 
           className="w-full rounded-full"
           onClick={onCheckout}
