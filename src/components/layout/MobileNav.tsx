@@ -34,9 +34,8 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
               className="relative flex flex-col items-center gap-0.5 p-2 min-w-[56px]"
             >
               <div className="relative">
-                {/* Active pill background */}
                 {isActive && (
-                  <div className="absolute -inset-2.5 bg-secondary/50 rounded-2xl animate-scale-in" />
+                  <div className="absolute -inset-2.5 bg-primary/15 rounded-2xl animate-scale-in" />
                 )}
                 
                 <Icon
@@ -46,9 +45,8 @@ export const MobileNav = ({ activeTab, onTabChange }: MobileNavProps) => {
                   style={{ width: 22, height: 22 }}
                 />
 
-                {/* Cart badge */}
                 {showBadge && (
-                  <span className="absolute -top-1.5 -end-2.5 bg-juice-pink text-white text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center animate-scale-in shadow-sm"
+                  <span className="absolute -top-1.5 -end-2.5 bg-primary text-primary-foreground text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center animate-scale-in shadow-sm"
                     style={{ width: 18, height: 18, fontSize: 10 }}
                   >
                     {totalItems > 9 ? "9+" : totalItems}

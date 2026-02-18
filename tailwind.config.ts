@@ -62,14 +62,9 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         juice: {
-          yellow: "hsl(var(--juice-yellow))",
-          "yellow-light": "hsl(var(--juice-yellow-light))",
-          "yellow-dark": "hsl(var(--juice-yellow-dark))",
-          purple: "hsl(var(--juice-purple))",
-          "purple-light": "hsl(var(--juice-purple-light))",
-          "purple-dark": "hsl(var(--juice-purple-dark))",
-          pink: "hsl(var(--juice-pink))",
-          "pink-light": "hsl(var(--juice-pink-light))",
+          purple: "hsl(var(--primary))",
+          "purple-light": "hsl(262 50% 65%)",
+          "purple-dark": "hsl(262 70% 32%)",
         },
       },
       borderRadius: {

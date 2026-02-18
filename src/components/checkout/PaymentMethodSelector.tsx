@@ -19,13 +19,11 @@ export const PaymentMethodSelector = ({
       id: "cash" as PaymentMethod,
       label: t("cashOnDelivery"),
       icon: Banknote,
-      color: "from-amber-500 to-amber-600",
     },
     {
       id: "instapay" as PaymentMethod,
       label: t("instaPay"),
       icon: Smartphone,
-      color: "from-green-500 to-green-600",
     },
   ];
 
@@ -43,10 +41,8 @@ export const PaymentMethodSelector = ({
                 : "border-border bg-card hover:border-primary/50"
             } ${direction === "rtl" ? "flex-row-reverse" : ""}`}
           >
-            <div
-              className={`w-10 h-10 rounded-xl bg-gradient-to-br ${method.color} flex items-center justify-center`}
-            >
-              <method.icon className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+              <method.icon className="w-5 h-5 text-primary" />
             </div>
             <span
               className={`font-medium text-sm text-foreground ${

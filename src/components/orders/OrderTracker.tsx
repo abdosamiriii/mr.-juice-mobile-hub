@@ -15,11 +15,11 @@ interface Order {
 }
 
 const STATUS_STEPS = [
-  { key: "pending", label: "Order Placed", labelAr: "تم الطلب", icon: Clock, color: "text-yellow-500", bgColor: "bg-yellow-500" },
-  { key: "confirmed", label: "Confirmed", labelAr: "تم التأكيد", icon: Check, color: "text-blue-500", bgColor: "bg-blue-500" },
-  { key: "preparing", label: "Preparation", labelAr: "التحضير", icon: ChefHat, color: "text-orange-500", bgColor: "bg-orange-500" },
-  { key: "ready", label: "Packaging", labelAr: "التغليف", icon: Package, color: "text-purple-500", bgColor: "bg-purple-500" },
-  { key: "out_for_delivery", label: "Delivery", labelAr: "التوصيل", icon: Truck, color: "text-green-500", bgColor: "bg-green-500" },
+  { key: "pending", label: "Order Placed", labelAr: "تم الطلب", icon: Clock, color: "text-primary", bgColor: "bg-primary" },
+  { key: "confirmed", label: "Confirmed", labelAr: "تم التأكيد", icon: Check, color: "text-primary", bgColor: "bg-primary" },
+  { key: "preparing", label: "Preparation", labelAr: "التحضير", icon: ChefHat, color: "text-primary", bgColor: "bg-primary" },
+  { key: "ready", label: "Packaging", labelAr: "التغليف", icon: Package, color: "text-primary", bgColor: "bg-primary" },
+  { key: "out_for_delivery", label: "Delivery", labelAr: "التوصيل", icon: Truck, color: "text-primary", bgColor: "bg-primary" },
   { key: "completed", label: "Completed", labelAr: "مكتمل", icon: Check, color: "text-primary", bgColor: "bg-primary" },
 ];
 
@@ -69,7 +69,6 @@ export const OrderTracker = () => {
 
     fetchOrders();
 
-    // Subscribe to real-time updates
     const channel = supabase
       .channel("order-updates")
       .on(
@@ -108,7 +107,7 @@ export const OrderTracker = () => {
     return (
       <div className="p-5">
         <div className="space-y-4">
-          <div className="h-32 glass-card rounded-2xl shimmer" />
+          <div className="h-32 bg-card rounded-2xl shimmer shadow-card" />
         </div>
       </div>
     );
@@ -126,7 +125,6 @@ export const OrderTracker = () => {
     return null;
   }
 
-  // For pickup orders, skip delivery step
   const getDisplaySteps = (orderType: string | null) => {
     if (orderType === "delivery") {
       return STATUS_STEPS.filter(s => s.key !== "completed");
@@ -153,9 +151,8 @@ export const OrderTracker = () => {
             <div
               key={order.id}
               style={{ animationDelay: `${orderIndex * 100}ms` }}
-              className="glass-card rounded-3xl p-5 overflow-hidden animate-scale-in floating"
+              className="bg-card rounded-3xl p-5 overflow-hidden animate-scale-in shadow-card floating"
             >
-              {/* Header */}
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <p className="font-display font-bold text-foreground text-lg">
@@ -170,10 +167,9 @@ export const OrderTracker = () => {
                 </span>
               </div>
 
-              {/* Estimated Time - Glass Card */}
               {!isCancelled && (
-                <div className="glass-button rounded-2xl p-4 mb-4 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center glossy-highlight">
+                <div className="bg-muted rounded-2xl p-4 mb-4 flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Timer className="w-6 h-6 text-primary glow-pulse" />
                   </div>
                   <div className="flex-1">
@@ -184,37 +180,33 @@ export const OrderTracker = () => {
                       {estimatedTime.min}-{estimatedTime.max} <span className="text-sm font-medium">{language === "ar" ? "دقيقة" : "min"}</span>
                     </p>
                   </div>
-                  <div className={`px-4 py-2 rounded-xl text-xs font-bold text-white ${currentStatusStep?.bgColor || "bg-primary"} shadow-lg glossy-highlight`}>
+                  <div className="px-4 py-2 rounded-xl text-xs font-bold text-primary-foreground bg-primary shadow-button">
                     {language === "ar" ? currentStatusStep?.labelAr : currentStatusStep?.label}
                   </div>
                 </div>
               )}
 
-              {/* Delivery Address */}
               {order.order_type === "delivery" && order.delivery_address && (
-                <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground glass-button rounded-xl px-3 py-2">
+                <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground bg-muted rounded-xl px-3 py-2">
                   <MapPin className="w-4 h-4 text-primary" />
                   <span className="truncate">{order.delivery_address}</span>
                 </div>
               )}
 
-              {/* Status Tracker */}
               {isCancelled ? (
-                <div className="flex items-center gap-2 text-destructive glass-button rounded-xl px-4 py-3">
+                <div className="flex items-center gap-2 text-destructive bg-destructive/10 rounded-xl px-4 py-3">
                   <X className="w-5 h-5" />
                   <span className="font-medium">{language === "ar" ? "تم إلغاء الطلب" : "Order Cancelled"}</span>
                 </div>
               ) : (
                 <div className="relative pt-2">
-                  {/* Progress Line */}
                   <div className="absolute top-7 left-5 right-5 h-1.5 bg-muted rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-700 ease-out"
+                      className="h-full bg-primary rounded-full transition-all duration-700 ease-out"
                       style={{ width: `${(currentStep / (displaySteps.length - 1)) * 100}%` }}
                     />
                   </div>
 
-                  {/* Steps */}
                   <div className="flex items-center justify-between relative z-10">
                     {displaySteps.map((step, index) => {
                       const isCompleted = index <= currentStep;
@@ -227,8 +219,8 @@ export const OrderTracker = () => {
                             className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-500 ${
                               isCompleted
                                 ? "bg-primary text-primary-foreground shadow-button"
-                                : "glass-button text-muted-foreground"
-                            } ${isCurrent ? "ring-4 ring-primary/30 scale-110 glow-pulse glossy-highlight" : ""}`}
+                                : "bg-muted text-muted-foreground"
+                            } ${isCurrent ? "ring-4 ring-primary/30 scale-110 glow-pulse" : ""}`}
                           >
                             <Icon className="w-5 h-5" />
                           </div>

@@ -101,7 +101,6 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -109,20 +108,14 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
         onClick={onClose}
       />
 
-      {/* Sheet */}
       <div
         className={`fixed inset-x-0 bottom-0 z-50 bg-card rounded-t-[2rem] max-h-[92vh] overflow-hidden transition-transform duration-300 shadow-elevated ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         dir={direction}
       >
-        {/* Header with colored background matching reference */}
-        <div className="relative bg-secondary h-48 overflow-hidden">
-          <img 
-            src={productImage} 
-            alt={product.name}
-            className="w-full h-full object-cover"
-          />
+        <div className="relative bg-primary/10 h-48 overflow-hidden">
+          <img src={productImage} alt={product.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           
           <button
@@ -132,7 +125,6 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             <X className="w-5 h-5 text-foreground" />
           </button>
 
-          {/* Info badges overlay - matching reference: Calories + ML */}
           <div className="absolute top-4 start-4 flex flex-col gap-2">
             <div className="bg-card/90 rounded-2xl px-3 py-2 shadow-sm">
               <p className="text-[10px] text-muted-foreground">Calories</p>
@@ -146,20 +138,16 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             )}
           </div>
 
-          {/* Price badge */}
-          <div className="absolute bottom-4 start-4 bg-secondary rounded-2xl px-4 py-2 shadow-sm">
-            <p className="text-[10px] text-secondary-foreground/60">Price</p>
-            <p className="text-lg font-extrabold text-secondary-foreground">{product.basePrice}.00 LE</p>
+          <div className="absolute bottom-4 start-4 bg-primary rounded-2xl px-4 py-2 shadow-sm">
+            <p className="text-[10px] text-primary-foreground/60">Price</p>
+            <p className="text-lg font-extrabold text-primary-foreground">{product.basePrice}.00 LE</p>
           </div>
         </div>
 
-        {/* Content */}
         <div className="p-5 overflow-y-auto max-h-[calc(92vh-14rem)] hide-scrollbar">
-          {/* Product name and description */}
           <h2 className="font-display text-xl font-bold text-foreground mb-1">{displayName}</h2>
           <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{displayDesc}</p>
 
-          {/* Size Selection - pill style matching reference */}
           {availableSizes.length > 1 && availableSizes.some(s => s.ml > 0) && (
             <div className="mb-5">
               <h3 className="font-semibold text-foreground mb-3 text-sm">{t("size")}</h3>
@@ -189,7 +177,6 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             </div>
           )}
 
-          {/* Add-ons */}
           {product.addOns.length > 0 && (
             <div className="mb-5">
               <h3 className="font-semibold text-foreground mb-3 text-sm">
@@ -237,22 +224,17 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             </div>
           )}
 
-          {/* Reviews matching reference - star rating + avatar circles */}
           <div className="mb-4">
             <h3 className="font-semibold text-foreground mb-3 text-sm">Reviews</h3>
             <div className="flex items-center gap-1 mb-3">
               {[1, 2, 3, 4, 5].map(i => (
-                <Star key={i} className={`w-4 h-4 ${i <= 4 ? "text-secondary fill-secondary" : "text-muted"}`} />
+                <Star key={i} className={`w-4 h-4 ${i <= 4 ? "text-primary fill-primary" : "text-muted"}`} />
               ))}
               <span className="text-xs text-muted-foreground ms-2">(4.0)</span>
             </div>
-            {/* Review avatars matching reference */}
             <div className="flex items-center -space-x-2">
               {[1, 2, 3, 4, 5].map(i => (
-                <div
-                  key={i}
-                  className="w-8 h-8 rounded-full bg-muted border-2 border-card flex items-center justify-center"
-                >
+                <div key={i} className="w-8 h-8 rounded-full bg-muted border-2 border-card flex items-center justify-center">
                   <span className="text-xs">😊</span>
                 </div>
               ))}
@@ -263,29 +245,26 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
           </div>
         </div>
 
-        {/* Footer - quantity + Add to Cart matching reference */}
         <div className="p-5 border-t border-border safe-bottom bg-card">
           <div className="flex items-center gap-4">
-            {/* Quantity stepper - pink circles matching reference */}
-            <div className="flex items-center gap-2 bg-juice-pink/15 rounded-full p-1">
+            <div className="flex items-center gap-2 bg-primary/10 rounded-full p-1">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-9 h-9 rounded-full bg-juice-pink text-white flex items-center justify-center hover:opacity-90 transition-colors"
+                className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-colors"
               >
                 <Minus className="w-4 h-4" />
               </button>
               <span className="w-6 text-center font-bold text-foreground text-sm">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-9 h-9 rounded-full bg-juice-pink text-white flex items-center justify-center hover:opacity-90 transition-colors"
+                className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-colors"
               >
                 <Plus className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Add to Cart - pink button matching reference */}
             <Button
-              variant="pink"
+              variant="default"
               size="lg"
               className="flex-1 rounded-full h-12"
               onClick={handleAddToCart}

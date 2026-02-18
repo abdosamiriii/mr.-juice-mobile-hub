@@ -12,14 +12,6 @@ interface ProductCardProps {
 
 const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
 
-// Alternating card accent colors matching reference
-const CARD_ACCENTS = [
-  "bg-secondary", // yellow
-  "bg-juice-pink/15", // pink tint
-  "bg-primary/10", // purple tint
-  "bg-secondary/60", // light yellow
-];
-
 export const ProductCard = ({ product, onSelect, index, categoryName }: ProductCardProps) => {
   const { t, language } = useLanguage();
   const productImage = getCategoryImage(product.categoryId, categoryName);
@@ -30,9 +22,6 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
 
   const displayName = language === "ar" ? product.description || product.name : product.name;
 
-  const accentClass = CARD_ACCENTS[index % CARD_ACCENTS.length];
-
-  // Simulated rating (4-5 stars based on popularity)
   const rating = product.isPopular ? 5 : 4;
 
   return (
@@ -41,8 +30,8 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
       className="bg-card rounded-3xl overflow-hidden animate-scale-in group/card transition-all duration-300 ease-out shadow-card hover:-translate-y-2 hover:shadow-elevated active:scale-[0.98]"
       onClick={() => onSelect(product)}
     >
-      {/* Image area with colored accent background */}
-      <div className={`relative h-32 ${accentClass} overflow-hidden flex items-center justify-center`}>
+      {/* Image area */}
+      <div className="relative h-32 bg-muted overflow-hidden flex items-center justify-center">
         <img 
           src={productImage} 
           alt={product.name}
@@ -54,13 +43,13 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           className="absolute top-2.5 start-2.5 w-8 h-8 rounded-full bg-card/90 flex items-center justify-center shadow-sm transition-transform hover:scale-110"
           onClick={(e) => e.stopPropagation()}
         >
-          <Heart className="w-4 h-4 text-juice-pink" />
+          <Heart className="w-4 h-4 text-primary" />
         </button>
 
         {/* Badges */}
         <div className="absolute top-2.5 end-2.5 flex gap-1">
           {product.isPopular && (
-            <span className="bg-secondary text-secondary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-0.5 shadow-sm">
+            <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-0.5 shadow-sm">
               <Star className="w-3 h-3" /> {language === "ar" ? "شائع" : "Hot"}
             </span>
           )}
@@ -73,12 +62,12 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
           {displayName}
         </h4>
 
-        {/* Star rating - matching reference */}
+        {/* Star rating */}
         <div className="flex items-center gap-0.5 mb-2">
           {[1, 2, 3, 4, 5].map((i) => (
             <Star
               key={i}
-              className={`w-3 h-3 ${i <= rating ? "text-secondary fill-secondary" : "text-muted"}`}
+              className={`w-3 h-3 ${i <= rating ? "text-primary fill-primary" : "text-muted"}`}
             />
           ))}
         </div>
