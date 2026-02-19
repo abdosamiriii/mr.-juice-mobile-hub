@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
@@ -13,60 +13,25 @@ import { OrdersManager } from "@/components/admin/OrdersManager";
 import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard";
 import { AdminInvitations } from "@/components/admin/AdminInvitations";
 import { DeliveryZonesManager } from "@/components/admin/DeliveryZonesManager";
+import { AdminGuard } from "@/components/admin/AdminGuard";
 import { useOrderNotifications } from "@/hooks/useOrderNotifications";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
-const Admin = () => {
+const AdminContent = () => {
   const navigate = useNavigate();
-  const { user, isAdmin, isLoading, signOut } = useAuth();
-  const { t, direction, language } = useLanguage();
+  const { signOut } = useAuth();
+  const { t, direction } = useLanguage();
   const [activeTab, setActiveTab] = useState("orders");
   const [soundEnabled, setSoundEnabled] = useState(true);
-  
-  // Order notifications with sound
-  const { playNotificationSound } = useOrderNotifications(soundEnabled);
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      navigate("/auth");
-    }
-  }, [user, isLoading, navigate]);
-
-  useEffect(() => {
-    if (!isLoading && user && !isAdmin) {
-      navigate("/");
-    }
-  }, [user, isAdmin, isLoading, navigate]);
+  useOrderNotifications(soundEnabled);
 
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
   };
 
-  const testSound = () => {
-    playNotificationSound();
-  };
-
   const BackArrow = direction === "rtl" ? ArrowRight : ArrowLeft;
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-primary">{t("loading")}</div>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center space-y-4">
-          <p className="text-muted-foreground">{t("noAccessPage")}</p>
-          <Button onClick={() => navigate("/")}>{t("goHome")}</Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background" dir={direction}>
@@ -142,41 +107,29 @@ const Admin = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="orders">
-            <OrdersManager />
-          </TabsContent>
-
-          <TabsContent value="analytics">
-            <AnalyticsDashboard />
-          </TabsContent>
-
-          <TabsContent value="products">
-            <ProductsManager />
-          </TabsContent>
-
-          <TabsContent value="categories">
-            <CategoriesManager />
-          </TabsContent>
-
-          <TabsContent value="sizes">
-            <SizesManager />
-          </TabsContent>
-
-          <TabsContent value="addons">
-            <AddOnsManager />
-          </TabsContent>
-
-          <TabsContent value="delivery">
-            <DeliveryZonesManager />
-          </TabsContent>
-
-          <TabsContent value="team">
-            <AdminInvitations />
-          </TabsContent>
+          <TabsContent value="orders"><OrdersManager /></TabsContent>
+          <TabsContent value="analytics"><AnalyticsDashboard /></TabsContent>
+          <TabsContent value="products"><ProductsManager /></TabsContent>
+          <TabsContent value="categories"><CategoriesManager /></TabsContent>
+          <TabsContent value="sizes"><SizesManager /></TabsContent>
+          <TabsContent value="addons"><AddOnsManager /></TabsContent>
+          <TabsContent value="delivery"><DeliveryZonesManager /></TabsContent>
+          <TabsContent value="team"><AdminInvitations /></TabsContent>
         </Tabs>
       </main>
     </div>
   );
 };
+
+/**
+ * Admin page — wrapped in AdminGuard which verifies the server-side
+ * has_role('admin') check before rendering any dashboard content.
+ * Non-admins are hard-redirected; the dashboard is never rendered.
+ */
+const Admin = () => (
+  <AdminGuard>
+    <AdminContent />
+  </AdminGuard>
+);
 
 export default Admin;
