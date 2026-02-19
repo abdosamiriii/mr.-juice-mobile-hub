@@ -26,8 +26,8 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
             <h2 className="text-primary-foreground font-display text-xl font-bold">{t("welcomeBack")}</h2>
           </div>
           <div className="relative animate-logo-entrance">
-            <div className="w-16 h-16 rounded-full bg-card shadow-elevated flex items-center justify-center ring-4 ring-card">
-              <img src={logoImage} alt="MR. Juice" className="w-12 h-12 rounded-full object-cover" />
+            <div className="w-16 h-16 rounded-full bg-card shadow-elevated overflow-hidden ring-4 ring-card/40">
+              <img src={logoImage} alt="MR. Juice" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
