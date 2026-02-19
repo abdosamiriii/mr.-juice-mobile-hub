@@ -36,7 +36,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
     if (isMlOnly) return size.name === "Medium" || size.name === "Large";
     return true;
   });
-  const currentSize = selectedSize || availableSizes[0];
+  const currentSize = selectedSize || availableSizes[0] || defaultSizes[0];
 
   const productImage = getCategoryImage(product.categoryId, categoryName);
 
@@ -130,10 +130,10 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
               <p className="text-[10px] text-muted-foreground">Calories</p>
               <p className="text-sm font-bold text-foreground">{product.calories || 120}</p>
             </div>
-            {currentSize.ml > 0 && (
+            {currentSize?.ml > 0 && (
               <div className="bg-card/90 rounded-2xl px-3 py-2 shadow-sm">
                 <p className="text-[10px] text-muted-foreground">ml</p>
-                <p className="text-sm font-bold text-foreground">{currentSize.ml}</p>
+                <p className="text-sm font-bold text-foreground">{currentSize?.ml}</p>
               </div>
             )}
           </div>
