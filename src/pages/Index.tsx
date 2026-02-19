@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { HeroSection } from "@/components/home/HeroSection";
@@ -14,6 +15,7 @@ import { OrderTracker } from "@/components/orders/OrderTracker";
 import { Product } from "@/types/menu";
 
 const IndexContent = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("home");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -35,8 +37,8 @@ const IndexContent = () => {
     setIsCheckoutOpen(true);
   };
 
-  const handleOrderSuccess = () => {
-    setActiveTab("home");
+  const handleOrderSuccess = (orderId: string) => {
+    navigate(`/order-confirmation?id=${orderId}`);
   };
 
   const renderTabContent = () => {
