@@ -27,7 +27,7 @@ const orderSchema = z.object({
 interface CheckoutSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (orderId: string) => void;
 }
 
 type PaymentMethod = "instapay" | "cash";
@@ -155,7 +155,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
       });
 
       clearCart();
-      onSuccess();
+      onSuccess(order.id);
       onClose();
 
       setCustomerName("");
