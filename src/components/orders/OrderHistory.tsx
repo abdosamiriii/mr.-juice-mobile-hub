@@ -99,6 +99,12 @@ export const OrderHistory = ({ onReorder }: OrderHistoryProps) => {
   }, [user]);
 
   const handleDelete = async (orderId: string) => {
+    const order = orders.find((o) => o.id === orderId);
+    if (order && order.status !== "pending") {
+      toast.error(language === "ar" ? "لا يمكن حذف طلب قيد التنفيذ" : "Only pending orders can be deleted");
+      return;
+    }
+
     setDeletingId(orderId);
     
     // First delete order items

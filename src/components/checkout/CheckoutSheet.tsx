@@ -112,27 +112,7 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
     try {
       const fullAddress = getFullAddress();
       
-      const { data: order, error: orderError } = await supabase
-        .from("orders")
-        .insert({
-          user_id: user?.id || null,
-          customer_name: customerName.trim(),
-          customer_phone: customerPhone.trim(),
-          notes: notes.trim() || null,
-          total_amount: total,
-          status: "pending",
-          order_type: isDelivery ? "delivery" : "pickup",
-          delivery_zone_id: selectedZoneId,
-          delivery_fee: deliveryFee,
-          delivery_address: isDelivery ? fullAddress : null,
-        })
-        .select()
-        .single();
-
-      if (orderError) throw orderError;
-
       const orderItems = items.map((item) => ({
-        order_id: order.id,
         product_id: null,
         product_name: item.product.name,
         size_name: item.selectedSize.name,
@@ -144,18 +124,28 @@ export const CheckoutSheet = ({ isOpen, onClose, onSuccess }: CheckoutSheetProps
         add_ons: item.selectedAddOns.map((a) => ({ name: a.name, price: a.price })),
       }));
 
-      const { error: itemsError } = await supabase
-        .from("order_items")
-        .insert(orderItems);
+      const { data: orderId, error: orderError } = await supabase
+        .rpc("create_order_with_items", {
+          p_user_id: user?.id || null,
+          p_customer_name: customerName.trim(),
+          p_customer_phone: customerPhone.trim(),
+          p_notes: notes.trim() || null,
+          p_total_amount: total,
+          p_order_type: isDelivery ? "delivery" : "pickup",
+          p_delivery_zone_id: selectedZoneId,
+          p_delivery_fee: deliveryFee,
+          p_delivery_address: isDelivery ? fullAddress : null,
+          p_items: orderItems,
+        });
 
-      if (itemsError) throw itemsError;
+      if (orderError) throw orderError;
 
       toast.success(t("orderPlacedSuccess"), {
-        description: `${t("orderNotification")} #${order.id.slice(0, 8)}`,
+        description: `${t("orderNotification")} #${(orderId as string).slice(0, 8)}`,
       });
 
       clearCart();
-      onSuccess(order.id);
+      onSuccess(orderId as string);
       onClose();
 
       setCustomerName("");
