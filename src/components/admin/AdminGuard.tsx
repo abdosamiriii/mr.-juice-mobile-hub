@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Shield } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 interface AdminGuardProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ interface AdminGuardProps {
  * Redirects unauthenticated users to /auth and non-admins to /.
  * Never trusts client-side state alone — role check runs via the
  * security-definer has_role() DB function through AuthContext.
+ * Injects noindex/nofollow meta to prevent search engine indexation.
  */
 export const AdminGuard = ({ children }: AdminGuardProps) => {
   const navigate = useNavigate();
@@ -45,5 +47,13 @@ export const AdminGuard = ({ children }: AdminGuardProps) => {
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+        <title>Admin Dashboard — MR. Juice</title>
+      </Helmet>
+      {children}
+    </>
+  );
 };
