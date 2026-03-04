@@ -38,7 +38,9 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
   });
   const currentSize = selectedSize || availableSizes[0] || defaultSizes[0];
 
-  const productImage = getCategoryImage(product.categoryId, categoryName);
+  const productImage = product.image && product.image.startsWith("http")
+    ? product.image
+    : getCategoryImage(product.categoryId, categoryName);
 
   const isScoopAddOn = (name: string) => ["2 Scoops", "3 Scoops", "4 Scoops", "5 Scoops"].includes(name);
   const hasScoopAddOns = product.addOns.some(a => isScoopAddOn(a.name));
