@@ -14,7 +14,9 @@ const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
 
 export const ProductCard = ({ product, onSelect, index, categoryName }: ProductCardProps) => {
   const { t, language } = useLanguage();
-  const productImage = getCategoryImage(product.categoryId, categoryName);
+  const productImage = product.image && product.image.startsWith("http") 
+    ? product.image 
+    : getCategoryImage(product.categoryId, categoryName);
   
   const hasMultipleSizes = ML_ONLY_CATEGORIES.includes(categoryName || "");
   const basePrice = product.basePrice;
