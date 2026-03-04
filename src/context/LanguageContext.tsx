@@ -224,6 +224,65 @@ const translations: Translations = {
   comingSoon: { en: "Coming Soon", ar: "قريباً" },
   failedToDelete: { en: "Failed to delete order", ar: "فشل في حذف الطلب" },
   deleting: { en: "Deleting...", ar: "جاري الحذف..." },
+
+  // Settings - Account
+  fullName: { en: "Full Name", ar: "الاسم الكامل" },
+  enterFullName: { en: "Enter your full name", ar: "أدخل اسمك الكامل" },
+  phone: { en: "Phone", ar: "الهاتف" },
+  enterPhone: { en: "Enter your phone number", ar: "أدخل رقم هاتفك" },
+  email: { en: "Email", ar: "البريد الإلكتروني" },
+  profileUpdated: { en: "Profile updated successfully", ar: "تم تحديث الملف الشخصي بنجاح" },
+  failedToUpdateProfile: { en: "Failed to update profile", ar: "فشل في تحديث الملف الشخصي" },
+  saving: { en: "Saving...", ar: "جاري الحفظ..." },
+
+  // Settings - Change Password
+  currentPassword: { en: "Current Password", ar: "كلمة المرور الحالية" },
+  newPassword: { en: "New Password", ar: "كلمة المرور الجديدة" },
+  confirmNewPassword: { en: "Confirm New Password", ar: "تأكيد كلمة المرور الجديدة" },
+  passwordsDoNotMatch: { en: "Passwords do not match", ar: "كلمات المرور غير متطابقة" },
+  passwordTooShort: { en: "Password must be at least 6 characters", ar: "يجب أن تكون كلمة المرور 6 أحرف على الأقل" },
+  passwordChanged: { en: "Password changed successfully", ar: "تم تغيير كلمة المرور بنجاح" },
+  failedToChangePassword: { en: "Failed to change password", ar: "فشل في تغيير كلمة المرور" },
+  updatePassword: { en: "Update Password", ar: "تحديث كلمة المرور" },
+
+  // Settings - Change Email
+  newEmail: { en: "New Email", ar: "البريد الإلكتروني الجديد" },
+  enterNewEmail: { en: "Enter your new email", ar: "أدخل بريدك الإلكتروني الجديد" },
+  emailChangeRequested: { en: "Check your new email for a confirmation link", ar: "تحقق من بريدك الإلكتروني الجديد لرابط التأكيد" },
+  failedToChangeEmail: { en: "Failed to change email", ar: "فشل في تغيير البريد الإلكتروني" },
+  updateEmail: { en: "Update Email", ar: "تحديث البريد الإلكتروني" },
+  currentEmail: { en: "Current Email", ar: "البريد الإلكتروني الحالي" },
+
+  // Settings - Notifications
+  orderUpdates: { en: "Order Updates", ar: "تحديثات الطلبات" },
+  orderUpdatesDesc: { en: "Get notified when your order status changes", ar: "احصل على إشعارات عند تغيير حالة طلبك" },
+  promotions: { en: "Promotions", ar: "العروض" },
+  promotionsDesc: { en: "Receive special offers and discounts", ar: "احصل على عروض وخصومات خاصة" },
+  soundAlerts: { en: "Sound Alerts", ar: "التنبيهات الصوتية" },
+  soundAlertsDesc: { en: "Play a sound for new notifications", ar: "تشغيل صوت للإشعارات الجديدة" },
+  notificationsSaved: { en: "Notification preferences saved", ar: "تم حفظ تفضيلات الإشعارات" },
+
+  // Settings - Addresses
+  noSavedAddresses: { en: "No saved addresses yet", ar: "لا توجد عناوين محفوظة بعد" },
+  addNewAddress: { en: "Add New Address", ar: "إضافة عنوان جديد" },
+  addressLabel: { en: "Label (e.g. Home, Work)", ar: "التسمية (مثل: المنزل، العمل)" },
+  addressSaved: { en: "Address saved successfully", ar: "تم حفظ العنوان بنجاح" },
+  addressDeleted: { en: "Address deleted", ar: "تم حذف العنوان" },
+  labelHome: { en: "Home", ar: "المنزل" },
+  labelWork: { en: "Work", ar: "العمل" },
+  labelOther: { en: "Other", ar: "أخرى" },
+
+  // Payment Methods view
+  paymentMethodsTitle: { en: "Payment Methods", ar: "طرق الدفع" },
+  paymentMethodsDesc: { en: "Available payment options for your orders", ar: "خيارات الدفع المتاحة لطلباتك" },
+  cashOnDeliveryDesc: { en: "Pay with cash when your order arrives", ar: "ادفع نقداً عند وصول طلبك" },
+  instaPayDesc: { en: "Transfer via InstaPay to complete your order", ar: "حوّل عبر إنستا باي لإكمال طلبك" },
+
+  // Loyalty
+  loyaltyPoints: { en: "Loyalty Points", ar: "نقاط الولاء" },
+  pointsEarned: { en: "Points Earned", ar: "النقاط المكتسبة" },
+  resetCalendar: { en: "Reset Calendar", ar: "إعادة تعيين التقويم" },
+  calendarReset: { en: "Loyalty calendar has been reset", ar: "تم إعادة تعيين تقويم الولاء" },
 };
 
 interface LanguageContextType {
