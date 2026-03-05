@@ -227,25 +227,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             </div>
           )}
 
-          <div className="mb-4">
-            <h3 className="font-semibold text-foreground mb-3 text-sm">Reviews</h3>
-            <div className="flex items-center gap-1 mb-3">
-              {[1, 2, 3, 4, 5].map(i => (
-                <Star key={i} className={`w-4 h-4 ${i <= 4 ? "text-primary fill-primary" : "text-muted"}`} />
-              ))}
-              <span className="text-xs text-muted-foreground ms-2">(4.0)</span>
-            </div>
-            <div className="flex items-center -space-x-2">
-              {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="w-8 h-8 rounded-full bg-muted border-2 border-card flex items-center justify-center">
-                  <span className="text-xs">😊</span>
-                </div>
-              ))}
-              <div className="w-8 h-8 rounded-full bg-primary border-2 border-card flex items-center justify-center">
-                <Plus className="w-3 h-3 text-primary-foreground" />
-              </div>
-            </div>
-          </div>
+          <ProductReviews productId={product.id} />
         </div>
 
         <div className="p-5 border-t border-border safe-bottom bg-card">
