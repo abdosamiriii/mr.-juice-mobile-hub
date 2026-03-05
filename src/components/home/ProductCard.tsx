@@ -8,6 +8,8 @@ interface ProductCardProps {
   onSelect: (product: Product) => void;
   index: number;
   categoryName?: string;
+  reviewAvg?: number;
+  reviewCount?: number;
 }
 
 const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
