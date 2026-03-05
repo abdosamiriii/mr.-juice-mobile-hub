@@ -33,6 +33,27 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
   const { data: dbAddOns = [], isLoading: addOnsLoading } = useAddOns();
   const { data: dbCategories = [], isLoading: categoriesLoading } = useCategories();
   const { t } = useLanguage();
+  const [reviewStats, setReviewStats] = useState<Record<string, { avg: number; count: number }>>({});
+
+  useEffect(() => {
+    const fetchReviewStats = async () => {
+      const { data } = await supabase.from("reviews" as any).select("product_id, rating");
+      if (data) {
+        const stats: Record<string, { total: number; count: number }> = {};
+        (data as any[]).forEach((r: any) => {
+          if (!stats[r.product_id]) stats[r.product_id] = { total: 0, count: 0 };
+          stats[r.product_id].total += r.rating;
+          stats[r.product_id].count += 1;
+        });
+        const result: Record<string, { avg: number; count: number }> = {};
+        Object.entries(stats).forEach(([id, s]) => {
+          result[id] = { avg: s.total / s.count, count: s.count };
+        });
+        setReviewStats(result);
+      }
+    };
+    fetchReviewStats();
+  }, []);
 
   const isLoading = productsLoading || sizesLoading || addOnsLoading || categoriesLoading;
 
