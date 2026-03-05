@@ -1,8 +1,9 @@
 import { useProducts, useSizes, useAddOns, useCategories } from "@/hooks/useProducts";
 import { ProductCard } from "./ProductCard";
 import { Product } from "@/types/menu";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 // Categories that should NOT have size selection (single size only)
 const NO_SIZE_CATEGORIES = [
@@ -32,6 +33,27 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
   const { data: dbAddOns = [], isLoading: addOnsLoading } = useAddOns();
   const { data: dbCategories = [], isLoading: categoriesLoading } = useCategories();
   const { t } = useLanguage();
+  const [reviewStats, setReviewStats] = useState<Record<string, { avg: number; count: number }>>({});
+
+  useEffect(() => {
+    const fetchReviewStats = async () => {
+      const { data } = await supabase.from("reviews" as any).select("product_id, rating");
+      if (data) {
+        const stats: Record<string, { total: number; count: number }> = {};
+        (data as any[]).forEach((r: any) => {
+          if (!stats[r.product_id]) stats[r.product_id] = { total: 0, count: 0 };
+          stats[r.product_id].total += r.rating;
+          stats[r.product_id].count += 1;
+        });
+        const result: Record<string, { avg: number; count: number }> = {};
+        Object.entries(stats).forEach(([id, s]) => {
+          result[id] = { avg: s.total / s.count, count: s.count };
+        });
+        setReviewStats(result);
+      }
+    };
+    fetchReviewStats();
+  }, []);
 
   const isLoading = productsLoading || sizesLoading || addOnsLoading || categoriesLoading;
 
@@ -122,6 +144,8 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
             onSelect={(p) => onSelectProduct(p, categoryName)}
             index={index}
             categoryName={categoryName}
+            reviewAvg={reviewStats[product.id]?.avg || 0}
+            reviewCount={reviewStats[product.id]?.count || 0}
           />
         ))}
       </div>

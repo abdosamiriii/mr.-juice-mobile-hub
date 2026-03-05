@@ -8,11 +8,13 @@ interface ProductCardProps {
   onSelect: (product: Product) => void;
   index: number;
   categoryName?: string;
+  reviewAvg?: number;
+  reviewCount?: number;
 }
 
 const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
 
-export const ProductCard = ({ product, onSelect, index, categoryName }: ProductCardProps) => {
+export const ProductCard = ({ product, onSelect, index, categoryName, reviewAvg = 0, reviewCount = 0 }: ProductCardProps) => {
   const { t, language } = useLanguage();
   const productImage = product.image && product.image.startsWith("http") 
     ? product.image 
@@ -24,7 +26,7 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
 
   const displayName = language === "ar" ? product.description || product.name : product.name;
 
-  const rating = product.isPopular ? 5 : 4;
+  const rating = reviewCount > 0 ? Math.round(reviewAvg) : (product.isPopular ? 5 : 4);
 
   return (
     <div
@@ -65,13 +67,18 @@ export const ProductCard = ({ product, onSelect, index, categoryName }: ProductC
         </h4>
 
         {/* Star rating */}
-        <div className="flex items-center gap-0.5 mb-2">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Star
-              key={i}
-              className={`w-3 h-3 ${i <= rating ? "text-primary fill-primary" : "text-muted"}`}
-            />
-          ))}
+        <div className="flex items-center gap-1 mb-2">
+          <div className="flex items-center gap-0.5">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star
+                key={i}
+                className={`w-3 h-3 ${i <= rating ? "text-primary fill-primary" : "text-muted"}`}
+              />
+            ))}
+          </div>
+          {reviewCount > 0 && (
+            <span className="text-[10px] text-muted-foreground">({reviewCount})</span>
+          )}
         </div>
 
         <div className="flex items-end justify-between">
