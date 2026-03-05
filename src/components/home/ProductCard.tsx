@@ -67,13 +67,18 @@ export const ProductCard = ({ product, onSelect, index, categoryName, reviewAvg 
         </h4>
 
         {/* Star rating */}
-        <div className="flex items-center gap-0.5 mb-2">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Star
-              key={i}
-              className={`w-3 h-3 ${i <= rating ? "text-primary fill-primary" : "text-muted"}`}
-            />
-          ))}
+        <div className="flex items-center gap-1 mb-2">
+          <div className="flex items-center gap-0.5">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star
+                key={i}
+                className={`w-3 h-3 ${i <= rating ? "text-primary fill-primary" : "text-muted"}`}
+              />
+            ))}
+          </div>
+          {reviewCount > 0 && (
+            <span className="text-[10px] text-muted-foreground">({reviewCount})</span>
+          )}
         </div>
 
         <div className="flex items-end justify-between">

@@ -144,6 +144,8 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
             onSelect={(p) => onSelectProduct(p, categoryName)}
             index={index}
             categoryName={categoryName}
+            reviewAvg={reviewStats[product.id]?.avg || 0}
+            reviewCount={reviewStats[product.id]?.count || 0}
           />
         ))}
       </div>
