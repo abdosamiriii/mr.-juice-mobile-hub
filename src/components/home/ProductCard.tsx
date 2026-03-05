@@ -14,7 +14,7 @@ interface ProductCardProps {
 
 const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
 
-export const ProductCard = ({ product, onSelect, index, categoryName }: ProductCardProps) => {
+export const ProductCard = ({ product, onSelect, index, categoryName, reviewAvg = 0, reviewCount = 0 }: ProductCardProps) => {
   const { t, language } = useLanguage();
   const productImage = product.image && product.image.startsWith("http") 
     ? product.image 
