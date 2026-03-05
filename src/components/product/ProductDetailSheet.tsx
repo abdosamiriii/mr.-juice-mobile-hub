@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { X, Minus, Plus, Check, Star } from "lucide-react";
+import { X, Minus, Plus, Check } from "lucide-react";
+import { ProductReviews } from "@/components/product/ProductReviews";
 import { Product, Size, AddOn } from "@/types/menu";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
