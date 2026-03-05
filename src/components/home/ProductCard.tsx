@@ -26,7 +26,7 @@ export const ProductCard = ({ product, onSelect, index, categoryName, reviewAvg 
 
   const displayName = language === "ar" ? product.description || product.name : product.name;
 
-  const rating = product.isPopular ? 5 : 4;
+  const rating = reviewCount > 0 ? Math.round(reviewAvg) : (product.isPopular ? 5 : 4);
 
   return (
     <div
