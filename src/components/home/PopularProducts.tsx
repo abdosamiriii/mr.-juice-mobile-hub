@@ -1,8 +1,9 @@
 import { useProducts, useSizes, useAddOns, useCategories } from "@/hooks/useProducts";
 import { ProductCard } from "./ProductCard";
 import { Product } from "@/types/menu";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 // Categories that should NOT have size selection (single size only)
 const NO_SIZE_CATEGORIES = [
