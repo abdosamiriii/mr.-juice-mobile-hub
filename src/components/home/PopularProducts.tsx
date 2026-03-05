@@ -78,12 +78,14 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
         largePrice: p.large_price ?? undefined,
         image: p.image_url || "https://images.unsplash.com/photo-1546173159-315724a31696?w=400",
         categoryId: p.category_id || "",
-        sizes: hasSize ? dbSizes.map((s) => ({
-          id: s.id,
-          name: s.name,
-          priceModifier: s.price_modifier,
-          ml: s.ml,
-        })) : [{ id: "default", name: "Regular", priceModifier: 0, ml: 0 }],
+        sizes: hasSize ? dbSizes
+          .filter((s) => ML_ONLY_CATEGORIES.includes(categoryName) ? s.name !== "Standard" : true)
+          .map((s) => ({
+            id: s.id,
+            name: s.name,
+            priceModifier: s.price_modifier,
+            ml: s.ml,
+          })) : [{ id: "default", name: "Regular", priceModifier: 0, ml: 0 }],
         addOns: dbAddOns
           .filter((a) => {
             // Scoop add-ons only for Gelato
