@@ -133,12 +133,35 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
               <p className="text-[10px] text-muted-foreground">Calories</p>
               <p className="text-sm font-bold text-foreground">{product.calories || 120}</p>
             </div>
-            {currentSize?.ml > 0 && (
-              <div className="bg-card/90 rounded-2xl px-3 py-2 shadow-sm">
-                <p className="text-[10px] text-muted-foreground">ml</p>
-                <p className="text-sm font-bold text-foreground">{currentSize?.ml}</p>
-              </div>
-            )}
+            {(() => {
+              const catOverrides: Record<string, { label: string; value: string } | null> = {
+                "Fresh Juice": null,
+                "Pancakes": { label: "Qty", value: "15 Piece" },
+                "Sundae": { label: "ml", value: "250" },
+                "Family Juices": { label: "ml", value: "1200" },
+                "Mojito": { label: "ml", value: "600" },
+              };
+              const cat = categoryName || "";
+              if (cat in catOverrides) {
+                const override = catOverrides[cat];
+                if (!override) return null;
+                return (
+                  <div className="bg-card/90 rounded-2xl px-3 py-2 shadow-sm">
+                    <p className="text-[10px] text-muted-foreground">{override.label}</p>
+                    <p className="text-sm font-bold text-foreground">{override.value}</p>
+                  </div>
+                );
+              }
+              if (currentSize?.ml > 0) {
+                return (
+                  <div className="bg-card/90 rounded-2xl px-3 py-2 shadow-sm">
+                    <p className="text-[10px] text-muted-foreground">ml</p>
+                    <p className="text-sm font-bold text-foreground">{currentSize?.ml}</p>
+                  </div>
+                );
+              }
+              return null;
+            })()}
           </div>
 
           <div className="absolute bottom-4 start-4 bg-primary rounded-2xl px-4 py-2 shadow-sm">
