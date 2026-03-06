@@ -166,7 +166,11 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
 
           <div className="absolute bottom-4 start-4 bg-primary rounded-2xl px-4 py-2 shadow-sm">
             <p className="text-[10px] text-primary-foreground/60">Price</p>
-            <p className="text-lg font-extrabold text-primary-foreground">{product.basePrice}.00 LE</p>
+            <p className="text-lg font-extrabold text-primary-foreground">
+              {currentSize.name === "Large" && product.largePrice
+                ? product.largePrice
+                : product.basePrice + currentSize.priceModifier}.00 LE
+            </p>
           </div>
         </div>
 
