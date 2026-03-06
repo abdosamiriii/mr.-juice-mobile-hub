@@ -26,7 +26,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
   if (!product) return null;
 
   const standardOnlyCategories = ["Gelato", "Sundae", "Waffles", "Pancakes", "Mojito", "Belila", "Om Ali", "Greek Yogurt", "Fruit Salad", "Hot", "Family Juices"];
-  const mlOnlyCategories = ["Smoothie", "Fresh Juice", "Milkshake"];
+  const mlOnlyCategories = ["Smoothie", "Fresh Juice", "Fresh Juices", "Milkshake"];
   
   const isStandardOnly = standardOnlyCategories.includes(categoryName || "");
   const isMlOnly = mlOnlyCategories.includes(categoryName || "");
