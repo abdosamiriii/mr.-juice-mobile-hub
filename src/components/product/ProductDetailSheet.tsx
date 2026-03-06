@@ -136,6 +136,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             {(() => {
               const catOverrides: Record<string, { label: string; value: string } | null> = {
                 "Fresh Juice": null,
+                "Fresh Juices": null,
                 "Pancakes": { label: "Qty", value: "15 Piece" },
                 "Sundae": { label: "ml", value: "250" },
                 "Family Juices": { label: "ml", value: "1200" },
