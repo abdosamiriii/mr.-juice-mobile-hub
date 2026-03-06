@@ -26,7 +26,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
   if (!product) return null;
 
   const standardOnlyCategories = ["Gelato", "Sundae", "Waffles", "Pancakes", "Mojito", "Belila", "Om Ali", "Greek Yogurt", "Fruit Salad", "Hot", "Family Juices"];
-  const mlOnlyCategories = ["Smoothie", "Fresh Juice", "Milkshake"];
+  const mlOnlyCategories = ["Smoothie", "Fresh Juice", "Fresh Juices", "Milkshake"];
   
   const isStandardOnly = standardOnlyCategories.includes(categoryName || "");
   const isMlOnly = mlOnlyCategories.includes(categoryName || "");
@@ -136,6 +136,7 @@ export const ProductDetailSheet = ({ product, isOpen, onClose, categoryName }: P
             {(() => {
               const catOverrides: Record<string, { label: string; value: string } | null> = {
                 "Fresh Juice": null,
+                "Fresh Juices": null,
                 "Pancakes": { label: "Qty", value: "15 Piece" },
                 "Sundae": { label: "ml", value: "250" },
                 "Family Juices": { label: "ml", value: "1200" },
