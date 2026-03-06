@@ -20,7 +20,8 @@ export const ProductCard = ({ product, onSelect, index, categoryName, reviewAvg 
     ? product.image 
     : getCategoryImage(product.categoryId, categoryName);
   
-  const hasMultipleSizes = ML_ONLY_CATEGORIES.includes(categoryName || "");
+  const catName = categoryName || "";
+  const hasMultipleSizes = ML_ONLY_CATEGORIES.includes(catName);
   const basePrice = product.basePrice;
   const largePrice = product.largePrice ?? (basePrice + 10);
 
