@@ -12,7 +12,7 @@ interface ProductCardProps {
   reviewCount?: number;
 }
 
-const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Milkshake"];
+const ML_ONLY_CATEGORIES = ["Smoothie", "Fresh Juice", "Fresh Juices", "Milkshake"];
 
 export const ProductCard = ({ product, onSelect, index, categoryName, reviewAvg = 0, reviewCount = 0 }: ProductCardProps) => {
   const { t, language } = useLanguage();
