@@ -18,6 +18,7 @@ export const ProfileView = () => {
   const navigate = useNavigate();
   const { user, isAdmin, signOut, isLoading } = useAuth();
   const { t, direction } = useLanguage();
+  const { avatarId } = useProfile();
   const [activeTab, setActiveTab] = useState<ProfileTab>("main");
 
   const menuItems = [
