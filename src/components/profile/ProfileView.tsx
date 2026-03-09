@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, MapPin, CreditCard, History, LogOut, ChevronRight, Shield, ArrowLeft, Settings, Calendar } from "lucide-react";
+import { User, MapPin, CreditCard, History, LogOut, ChevronRight, Shield, ArrowLeft, Settings, Calendar, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { OrderHistory } from "@/components/orders/OrderHistory";
 import { SettingsView } from "@/components/settings/SettingsView";
 import { LoyaltyCalendar } from "@/components/profile/LoyaltyCalendar";
+import { AvatarSelector } from "@/components/profile/AvatarSelector";
+import { UserAvatar } from "@/components/shared/UserAvatar";
+import { useProfile } from "@/hooks/useProfile";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
-type ProfileTab = "main" | "orders" | "settings" | "loyalty";
+type ProfileTab = "main" | "orders" | "settings" | "loyalty" | "avatar";
 
 export const ProfileView = () => {
   const navigate = useNavigate();
