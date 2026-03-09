@@ -84,9 +84,18 @@ export const ProfileView = () => {
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="w-24 h-24 rounded-full bg-card flex items-center justify-center shadow-elevated mb-3 ring-4 ring-primary-foreground/20">
-            <User className="w-12 h-12 text-primary" />
-          </div>
+          <button
+            onClick={() => setActiveTab("avatar")}
+            className="w-24 h-24 rounded-full bg-card shadow-elevated mb-3 ring-4 ring-primary-foreground/20 overflow-hidden"
+          >
+            {user ? (
+              <UserAvatar avatarId={avatarId} size={96} />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <User className="w-12 h-12 text-primary" />
+              </div>
+            )}
+          </button>
 
           <div className="flex items-center gap-4 -mt-2 mb-2">
             <span className="bg-primary-foreground/20 text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full">
