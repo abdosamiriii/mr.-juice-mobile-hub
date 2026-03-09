@@ -24,6 +24,7 @@ export const ProfileView = () => {
   const menuItems = [
     { icon: History, label: t("orderHistory"), action: () => setActiveTab("orders") },
     { icon: Calendar, label: "Loyalty Calendar", action: () => setActiveTab("loyalty") },
+    { icon: ImageIcon, label: "Change Avatar", action: () => setActiveTab("avatar") },
     { icon: MapPin, label: t("savedAddresses"), action: undefined },
     { icon: CreditCard, label: t("paymentMethods"), action: undefined },
     { icon: Settings, label: t("settings"), action: () => setActiveTab("settings") },
