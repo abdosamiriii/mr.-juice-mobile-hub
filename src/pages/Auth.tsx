@@ -10,6 +10,7 @@ import { z } from "zod";
 import { Loader2, Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 
 const signInSchema = z.object({
   email: z.string().trim().email("Invalid email address").max(255, "Email too long"),
