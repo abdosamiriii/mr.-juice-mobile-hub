@@ -63,6 +63,8 @@ export const ProfileView = () => {
   if (activeTab === "orders") return renderSubScreen(t("orderHistory"), <OrderHistory />);
   if (activeTab === "settings") return renderSubScreen(t("settings"), <SettingsView />);
   if (activeTab === "loyalty") return renderSubScreen("Loyalty Calendar", <div className="px-5 pt-4"><LoyaltyCalendar /></div>);
+  if (activeTab === "avatar") return renderSubScreen("Change Avatar", <AvatarSelector />);
+  if (activeTab === "loyalty") return renderSubScreen("Loyalty Calendar", <div className="px-5 pt-4"><LoyaltyCalendar /></div>);
 
   const userName = user ? (user.user_metadata?.full_name || user.email?.split("@")[0]) : t("guestUser");
 
