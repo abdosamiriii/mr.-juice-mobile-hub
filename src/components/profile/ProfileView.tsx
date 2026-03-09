@@ -1,25 +1,30 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, MapPin, CreditCard, History, LogOut, ChevronRight, Shield, ArrowLeft, Settings, Calendar } from "lucide-react";
+import { User, MapPin, CreditCard, History, LogOut, ChevronRight, Shield, ArrowLeft, Settings, Calendar, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { OrderHistory } from "@/components/orders/OrderHistory";
 import { SettingsView } from "@/components/settings/SettingsView";
 import { LoyaltyCalendar } from "@/components/profile/LoyaltyCalendar";
+import { AvatarSelector } from "@/components/profile/AvatarSelector";
+import { UserAvatar } from "@/components/shared/UserAvatar";
+import { useProfile } from "@/hooks/useProfile";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
-type ProfileTab = "main" | "orders" | "settings" | "loyalty";
+type ProfileTab = "main" | "orders" | "settings" | "loyalty" | "avatar";
 
 export const ProfileView = () => {
   const navigate = useNavigate();
   const { user, isAdmin, signOut, isLoading } = useAuth();
   const { t, direction } = useLanguage();
+  const { avatarId } = useProfile();
   const [activeTab, setActiveTab] = useState<ProfileTab>("main");
 
   const menuItems = [
     { icon: History, label: t("orderHistory"), action: () => setActiveTab("orders") },
     { icon: Calendar, label: "Loyalty Calendar", action: () => setActiveTab("loyalty") },
+    { icon: ImageIcon, label: "Change Avatar", action: () => setActiveTab("avatar") },
     { icon: MapPin, label: t("savedAddresses"), action: undefined },
     { icon: CreditCard, label: t("paymentMethods"), action: undefined },
     { icon: Settings, label: t("settings"), action: () => setActiveTab("settings") },
@@ -58,6 +63,7 @@ export const ProfileView = () => {
   if (activeTab === "orders") return renderSubScreen(t("orderHistory"), <OrderHistory />);
   if (activeTab === "settings") return renderSubScreen(t("settings"), <SettingsView />);
   if (activeTab === "loyalty") return renderSubScreen("Loyalty Calendar", <div className="px-5 pt-4"><LoyaltyCalendar /></div>);
+  if (activeTab === "avatar") return renderSubScreen("Change Avatar", <AvatarSelector />);
 
   const userName = user ? (user.user_metadata?.full_name || user.email?.split("@")[0]) : t("guestUser");
 
@@ -78,9 +84,18 @@ export const ProfileView = () => {
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="w-24 h-24 rounded-full bg-card flex items-center justify-center shadow-elevated mb-3 ring-4 ring-primary-foreground/20">
-            <User className="w-12 h-12 text-primary" />
-          </div>
+          <button
+            onClick={() => setActiveTab("avatar")}
+            className="w-24 h-24 rounded-full bg-card shadow-elevated mb-3 ring-4 ring-primary-foreground/20 overflow-hidden"
+          >
+            {user ? (
+              <UserAvatar avatarId={avatarId} size={96} />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <User className="w-12 h-12 text-primary" />
+              </div>
+            )}
+          </button>
 
           <div className="flex items-center gap-4 -mt-2 mb-2">
             <span className="bg-primary-foreground/20 text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full">
