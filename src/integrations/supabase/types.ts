@@ -470,6 +470,20 @@ export type Database = {
         }
         Returns: boolean
       }
+      staff_get_orders: { Args: { p_pin: string }; Returns: Json[] }
+      staff_get_products: { Args: { p_pin: string }; Returns: Json[] }
+      staff_toggle_product: {
+        Args: { p_is_active: boolean; p_pin: string; p_product_id: string }
+        Returns: undefined
+      }
+      staff_update_order_status: {
+        Args: {
+          p_order_id: string
+          p_pin: string
+          p_status: Database["public"]["Enums"]["order_status"]
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
