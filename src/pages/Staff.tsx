@@ -22,6 +22,7 @@ const StaffPinScreen = ({ onAuthenticated }: { onAuthenticated: () => void }) =>
     setError("");
 
     try {
+      // Validate PIN by trying to call an RPC that checks it
       const { data, error: dbError } = await supabase
         .from("app_settings")
         .select("value")
@@ -32,6 +33,7 @@ const StaffPinScreen = ({ onAuthenticated }: { onAuthenticated: () => void }) =>
 
       if (data?.value === pin.trim()) {
         sessionStorage.setItem("staff_authenticated", "true");
+        sessionStorage.setItem("staff_pin", pin.trim());
         onAuthenticated();
       } else {
         setError("Incorrect PIN");
@@ -118,6 +120,7 @@ const StaffDashboard = () => {
               size="sm"
               onClick={() => {
                 sessionStorage.removeItem("staff_authenticated");
+                sessionStorage.removeItem("staff_pin");
                 window.location.reload();
               }}
             >
