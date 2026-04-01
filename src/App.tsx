@@ -48,6 +48,7 @@ const App = () => (
                 />
                 <Route path="/order-confirmation" element={<OrderConfirmation />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/staff" element={<Staff />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
