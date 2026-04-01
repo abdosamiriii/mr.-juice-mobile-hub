@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import { ShoppingBag, Package, Volume2, VolumeX, Lock } from "lucide-react";
 import { StaffOrders } from "@/components/staff/StaffOrders";
 import { StaffAvailability } from "@/components/staff/StaffAvailability";
 import { useOrderNotifications } from "@/hooks/useOrderNotifications";
-import { toast } from "sonner";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
 const StaffPinScreen = ({ onAuthenticated }: { onAuthenticated: () => void }) => {
