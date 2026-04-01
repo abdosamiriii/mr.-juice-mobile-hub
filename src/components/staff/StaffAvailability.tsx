@@ -1,12 +1,52 @@
-import { useProducts, useCategories, useUpdateProduct } from "@/hooks/useProducts";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useCategories } from "@/hooks/useProducts";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Package } from "lucide-react";
+import { toast } from "sonner";
+
+interface StaffProduct {
+  id: string;
+  name: string;
+  base_price: number;
+  image_url: string | null;
+  category_id: string | null;
+  is_active: boolean;
+}
+
+const getStaffPin = () => sessionStorage.getItem("staff_pin") || "";
 
 export function StaffAvailability() {
-  const { data: products, isLoading: productsLoading } = useProducts();
+  const queryClient = useQueryClient();
   const { data: categories, isLoading: categoriesLoading } = useCategories();
-  const updateProduct = useUpdateProduct();
+
+  const { data: products, isLoading: productsLoading } = useQuery({
+    queryKey: ["staff-products"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("staff_get_products", { p_pin: getStaffPin() });
+      if (error) throw error;
+      return (data as unknown as StaffProduct[]) || [];
+    },
+  });
+
+  const toggleProduct = useMutation({
+    mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
+      const { error } = await supabase.rpc("staff_toggle_product", {
+        p_pin: getStaffPin(),
+        p_product_id: id,
+        p_is_active: is_active,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["staff-products"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error) => {
+      toast.error(`Failed to update: ${error.message}`);
+    },
+  });
 
   const isLoading = productsLoading || categoriesLoading;
 
@@ -18,18 +58,12 @@ export function StaffAvailability() {
     );
   }
 
-  // Group products by category
   const grouped = (categories || []).map(cat => ({
     ...cat,
     products: (products || []).filter(p => p.category_id === cat.id),
   })).filter(g => g.products.length > 0);
 
-  // Uncategorized products
   const uncategorized = (products || []).filter(p => !p.category_id);
-
-  const handleToggle = (productId: string, currentActive: boolean) => {
-    updateProduct.mutate({ id: productId, is_active: !currentActive });
-  };
 
   return (
     <div className="space-y-6">
@@ -67,8 +101,8 @@ export function StaffAvailability() {
                 </div>
                 <Switch
                   checked={product.is_active}
-                  onCheckedChange={() => handleToggle(product.id, product.is_active)}
-                  disabled={updateProduct.isPending}
+                  onCheckedChange={(checked) => toggleProduct.mutate({ id: product.id, is_active: checked })}
+                  disabled={toggleProduct.isPending}
                 />
               </div>
             ))}
@@ -93,8 +127,8 @@ export function StaffAvailability() {
                 </div>
                 <Switch
                   checked={product.is_active}
-                  onCheckedChange={() => handleToggle(product.id, product.is_active)}
-                  disabled={updateProduct.isPending}
+                  onCheckedChange={(checked) => toggleProduct.mutate({ id: product.id, is_active: checked })}
+                  disabled={toggleProduct.isPending}
                 />
               </div>
             ))}

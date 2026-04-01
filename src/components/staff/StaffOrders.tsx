@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useOrders, useUpdateOrderStatus, OrderStatus, OrderWithItems } from "@/hooks/useOrders";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +10,35 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ShoppingBag, Eye, MapPin, Phone, User, StickyNote, ChevronRight } from "lucide-react";
 import { format } from "date-fns";
+import { toast } from "sonner";
+import { OrderStatus } from "@/hooks/useOrders";
+
+interface StaffOrder {
+  id: string;
+  user_id: string | null;
+  customer_name: string | null;
+  customer_phone: string | null;
+  status: OrderStatus;
+  total_amount: number;
+  notes: string | null;
+  order_type: string | null;
+  delivery_address: string | null;
+  delivery_zone_id: string | null;
+  delivery_fee: number | null;
+  created_at: string;
+  updated_at: string;
+  order_items: {
+    id: string;
+    order_id: string;
+    product_id: string | null;
+    product_name: string;
+    size_name: string | null;
+    quantity: number;
+    unit_price: number;
+    add_ons: { name: string; price: number }[] | null;
+    created_at: string;
+  }[];
+}
 
 const statusColors: Record<OrderStatus, string> = {
   pending: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
@@ -39,11 +69,40 @@ const getNextStatus = (current: OrderStatus): OrderStatus | null => {
   return statusFlow[idx + 1];
 };
 
+const getStaffPin = () => sessionStorage.getItem("staff_pin") || "";
+
 export function StaffOrders() {
-  const { data: orders, isLoading } = useOrders();
-  const updateStatus = useUpdateOrderStatus();
-  const [selectedOrder, setSelectedOrder] = useState<OrderWithItems | null>(null);
+  const queryClient = useQueryClient();
+  const [selectedOrder, setSelectedOrder] = useState<StaffOrder | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("active");
+
+  const { data: orders, isLoading } = useQuery({
+    queryKey: ["staff-orders"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("staff_get_orders", { p_pin: getStaffPin() });
+      if (error) throw error;
+      return (data as unknown as StaffOrder[]) || [];
+    },
+    refetchInterval: 5000, // Poll every 5s for new orders
+  });
+
+  const updateStatus = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: OrderStatus }) => {
+      const { error } = await supabase.rpc("staff_update_order_status", {
+        p_pin: getStaffPin(),
+        p_order_id: id,
+        p_status: status,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["staff-orders"] });
+      toast.success("Order status updated");
+    },
+    onError: (error) => {
+      toast.error(`Failed to update: ${error.message}`);
+    },
+  });
 
   const filteredOrders = orders?.filter(order => {
     if (statusFilter === "active") return !["completed", "cancelled"].includes(order.status);
@@ -52,10 +111,6 @@ export function StaffOrders() {
   }) || [];
 
   const activeCount = orders?.filter(o => !["completed", "cancelled"].includes(o.status)).length || 0;
-
-  const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
-    updateStatus.mutate({ id: orderId, status: newStatus });
-  };
 
   if (isLoading) {
     return (
@@ -168,13 +223,21 @@ export function StaffOrders() {
                     </div>
                   )}
 
+                  {/* Delivery address */}
+                  {order.order_type === "delivery" && order.delivery_address && (
+                    <div className="flex items-start gap-2 text-sm text-muted-foreground bg-muted rounded-lg px-3 py-2 mb-3">
+                      <MapPin className="h-4 w-4 mt-0.5 text-primary shrink-0" />
+                      <span>{order.delivery_address}</span>
+                    </div>
+                  )}
+
                   {/* Actions */}
                   <div className="flex items-center gap-2">
                     {nextStatus && order.status !== "cancelled" && (
                       <Button
                         size="sm"
                         className="flex-1"
-                        onClick={() => handleStatusChange(order.id, nextStatus)}
+                        onClick={() => updateStatus.mutate({ id: order.id, status: nextStatus })}
                         disabled={updateStatus.isPending}
                       >
                         {statusLabels[nextStatus]}
@@ -185,7 +248,7 @@ export function StaffOrders() {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => handleStatusChange(order.id, "cancelled")}
+                        onClick={() => updateStatus.mutate({ id: order.id, status: "cancelled" })}
                         disabled={updateStatus.isPending}
                       >
                         Cancel
@@ -269,9 +332,9 @@ export function StaffOrders() {
                           {item.size_name && `Size: ${item.size_name}`}
                           {item.quantity > 1 && ` × ${item.quantity}`}
                         </p>
-                        {item.add_ons && (item.add_ons as { name: string; price: number }[]).length > 0 && (
+                        {item.add_ons && item.add_ons.length > 0 && (
                           <p className="text-xs text-muted-foreground">
-                            Add-ons: {(item.add_ons as { name: string; price: number }[]).map(a => a.name).join(", ")}
+                            Add-ons: {item.add_ons.map(a => a.name).join(", ")}
                           </p>
                         )}
                       </div>
