@@ -77,6 +77,30 @@ export type Database = {
         }
         Relationships: []
       }
+      app_settings: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -445,6 +469,20 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      staff_get_orders: { Args: { p_pin: string }; Returns: Json[] }
+      staff_get_products: { Args: { p_pin: string }; Returns: Json[] }
+      staff_toggle_product: {
+        Args: { p_is_active: boolean; p_pin: string; p_product_id: string }
+        Returns: undefined
+      }
+      staff_update_order_status: {
+        Args: {
+          p_order_id: string
+          p_pin: string
+          p_status: Database["public"]["Enums"]["order_status"]
+        }
+        Returns: undefined
       }
     }
     Enums: {

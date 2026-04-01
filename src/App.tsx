@@ -12,6 +12,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import ResetPassword from "./pages/ResetPassword";
+import Staff from "./pages/Staff";
 
 // Admin module is lazy-loaded — completely excluded from the customer bundle.
 // Vite produces a separate chunk that is only fetched when /admin is visited.
@@ -47,6 +48,7 @@ const App = () => (
                 />
                 <Route path="/order-confirmation" element={<OrderConfirmation />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/staff" element={<Staff />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
