@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowRight, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX, MapPin, Settings } from "lucide-react";
 import { ProductsManager } from "@/components/admin/ProductsManager";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { SizesManager } from "@/components/admin/SizesManager";
@@ -14,6 +14,7 @@ import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard";
 import { AdminInvitations } from "@/components/admin/AdminInvitations";
 import { DeliveryZonesManager } from "@/components/admin/DeliveryZonesManager";
 import { AdminGuard } from "@/components/admin/AdminGuard";
+import { SettingsManager } from "@/components/admin/SettingsManager";
 import { useOrderNotifications } from "@/hooks/useOrderNotifications";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
@@ -72,7 +73,7 @@ const AdminContent = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-8 mb-6">
+          <TabsList className="grid w-full grid-cols-9 mb-6">
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
               <span className="hidden sm:inline">{t("orders")}</span>
@@ -101,6 +102,10 @@ const AdminContent = () => {
               <MapPin className="h-4 w-4" />
               <span className="hidden sm:inline">{t("deliveryTab")}</span>
             </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              <span className="hidden sm:inline">Settings</span>
+            </TabsTrigger>
             <TabsTrigger value="team" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               <span className="hidden sm:inline">{t("team")}</span>
@@ -114,6 +119,7 @@ const AdminContent = () => {
           <TabsContent value="sizes"><SizesManager /></TabsContent>
           <TabsContent value="addons"><AddOnsManager /></TabsContent>
           <TabsContent value="delivery"><DeliveryZonesManager /></TabsContent>
+          <TabsContent value="settings"><SettingsManager /></TabsContent>
           <TabsContent value="team"><AdminInvitations /></TabsContent>
         </Tabs>
       </main>
