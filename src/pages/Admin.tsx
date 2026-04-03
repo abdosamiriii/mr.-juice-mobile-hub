@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowRight, Package, FolderOpen, Ruler, Plus, LogOut, ShoppingBag, BarChart3, Users, Volume2, VolumeX, MapPin, Settings } from "lucide-react";
 import { ProductsManager } from "@/components/admin/ProductsManager";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { SizesManager } from "@/components/admin/SizesManager";
