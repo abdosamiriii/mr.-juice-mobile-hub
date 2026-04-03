@@ -43,7 +43,6 @@ export function usePushNotifications() {
     registration.showNotification(title, {
       body,
       icon: "/mr-juice-logo-new.jpg",
-      vibrate: [200, 100, 200],
     });
   }, [requestPermission]);
 
