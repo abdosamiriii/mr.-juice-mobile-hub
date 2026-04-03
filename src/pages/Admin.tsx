@@ -15,6 +15,7 @@ import { AdminInvitations } from "@/components/admin/AdminInvitations";
 import { DeliveryZonesManager } from "@/components/admin/DeliveryZonesManager";
 import { AdminGuard } from "@/components/admin/AdminGuard";
 import { SettingsManager } from "@/components/admin/SettingsManager";
+import { NotificationsManager } from "@/components/admin/NotificationsManager";
 import { useOrderNotifications } from "@/hooks/useOrderNotifications";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 
