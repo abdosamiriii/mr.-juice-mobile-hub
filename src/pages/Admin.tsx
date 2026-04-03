@@ -119,6 +119,7 @@ const AdminContent = () => {
           <TabsContent value="sizes"><SizesManager /></TabsContent>
           <TabsContent value="addons"><AddOnsManager /></TabsContent>
           <TabsContent value="delivery"><DeliveryZonesManager /></TabsContent>
+          <TabsContent value="settings"><SettingsManager /></TabsContent>
           <TabsContent value="team"><AdminInvitations /></TabsContent>
         </Tabs>
       </main>
