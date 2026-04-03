@@ -1,5 +1,4 @@
 import { useEffect, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 
 // VAPID public key would normally be generated and stored as env var
