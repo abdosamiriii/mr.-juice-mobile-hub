@@ -1,5 +1,6 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import logoImage from "@/assets/mr-juice-logo-new.jpg";
 import { useLanguage, useGreeting } from "@/context/LanguageContext";
 
@@ -25,9 +26,12 @@ export const HeroSection = ({ onQuickOrder, onMenuClick }: HeroSectionProps) => 
             <p className="text-primary-foreground/60 text-sm font-medium">{greeting}</p>
             <h2 className="text-primary-foreground font-display text-xl font-bold">{t("welcomeBack")}</h2>
           </div>
-          <div className="relative animate-logo-entrance">
-            <div className="w-16 h-16 rounded-full bg-card shadow-elevated overflow-hidden ring-4 ring-card/40">
-              <img src={logoImage} alt="MR. Juice" className="w-full h-full object-cover" />
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <div className="relative animate-logo-entrance">
+              <div className="w-16 h-16 rounded-full bg-card shadow-elevated overflow-hidden ring-4 ring-card/40">
+                <img src={logoImage} alt="MR. Juice" className="w-full h-full object-cover" />
+              </div>
             </div>
           </div>
         </div>

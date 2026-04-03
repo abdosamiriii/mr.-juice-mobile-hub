@@ -1,42 +1,51 @@
-# Employee Orders Dashboard
+
+# Customer Notifications System
 
 ## Overview
-A standalone `/staff` page protected by a shared access code. Employees enter the code to access a simplified dashboard for managing incoming orders and toggling product availability.
+Add browser push notifications + in-app notification center for three use cases: abandoned cart reminders, order status updates, and promotional messages.
 
-## Implementation
+## Components
 
-### 1. Store access code in database
-- Create a `settings` table with key-value pairs
-- Store the staff access code there (default: `1234`, admin can change later)
-- RLS: anyone can read settings, only admins can modify
+### 1. Database — Notifications table
+- `notifications` table: `id`, `user_id`, `title`, `body`, `type` (cart_reminder / order_update / promotion), `is_read`, `order_id`, `created_at`
+- RLS: users can read/update their own notifications
 
-### 2. Create Staff Dashboard page (`src/pages/Staff.tsx`)
-- **PIN entry screen**: Simple 4-digit code input, validates against the DB
-- **After authentication**: Two tabs only:
-  - **Orders**: Real-time incoming orders with full status flow (pending → confirmed → preparing → ready → out_for_delivery → completed)
-  - **Menu Availability**: List of all products with on/off toggle switches
+### 2. In-App Notification Center
+- Bell icon with unread badge in the main app header
+- Dropdown/sheet showing notification list
+- Mark as read on tap, mark all as read button
+- Real-time updates via Supabase realtime
 
-### 3. Staff Orders View (`src/components/staff/StaffOrders.tsx`)
-- Real-time order list using Supabase realtime subscriptions
-- Each order card shows: order number, time, items list with quantities/sizes/add-ons, customer name, order type (pickup/delivery), delivery address, total amount
-- Status update buttons to progress through the flow
-- Sound notification for new orders
+### 3. Browser Push Notifications (PWA)
+- Service Worker registration for push notifications
+- Push subscription stored in a `push_subscriptions` table
+- Permission request prompt on first login
+- Uses Web Push API (no third-party service needed)
 
-### 4. Staff Availability View (`src/components/staff/StaffAvailability.tsx`)
-- Grid/list of all products grouped by category
-- Simple toggle switch per product (is_active on/off)
-- Changes reflect immediately on the customer menu
+### 4. Order Status Updates
+- Database trigger: when order status changes → insert notification for the customer
+- Push notification sent automatically
 
-### 5. Add route in App.tsx
-- Add `/staff` route (no lazy loading needed, it's lightweight)
+### 5. Abandoned Cart Reminders
+- Edge function triggered by pg_cron (every 30 min)
+- Checks for users with items in cart context who haven't ordered in 30+ minutes
+- Creates notification + sends push
 
-### File changes
+### 6. Promotional Notifications (Admin)
+- New "Notifications" tab in admin dashboard
+- Form to compose and send a promotional message to all users
+- Bulk insert into notifications table + push to all subscribers
+
+## Files to create/modify
 | File | Action |
 |------|--------|
-| `src/pages/Staff.tsx` | Create - PIN screen + dashboard shell |
-| `src/components/staff/StaffOrders.tsx` | Create - Order management |
-| `src/components/staff/StaffAvailability.tsx` | Create - Product toggles |
-| `src/App.tsx` | Update - add /staff route |
-| Migration | Create settings table with staff_pin |
-
-No changes to existing admin dashboard or customer-facing code.
+| DB migration | Create `notifications` + `push_subscriptions` tables, trigger for order updates |
+| `src/components/notifications/NotificationBell.tsx` | In-app notification bell + dropdown |
+| `src/components/notifications/NotificationList.tsx` | Notification items list |
+| `src/hooks/useNotifications.ts` | Hook for fetching/managing notifications |
+| `src/components/admin/NotificationsManager.tsx` | Admin promotional notifications UI |
+| `supabase/functions/send-push/index.ts` | Edge function to send web push |
+| `supabase/functions/cart-reminder/index.ts` | Scheduled abandoned cart checker |
+| `public/sw.js` | Service worker for push |
+| `src/pages/Admin.tsx` | Add Notifications tab |
+| `src/pages/Index.tsx` | Add NotificationBell to header |
