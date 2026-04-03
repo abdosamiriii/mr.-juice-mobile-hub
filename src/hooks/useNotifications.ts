@@ -80,8 +80,12 @@ export function useNotifications() {
           table: "notifications",
           filter: `user_id=eq.${user.id}`,
         },
-        () => {
+        (payload: any) => {
           queryClient.invalidateQueries({ queryKey: ["notifications", user.id] });
+          // Show browser push notification
+          if (payload.new?.title && payload.new?.body) {
+            showLocalNotification(payload.new.title, payload.new.body);
+          }
         }
       )
       .subscribe();
