@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DollarSign, ShoppingBag, Clock, CheckCircle, Eye, TrendingUp } from "lucide-react";
+import { DollarSign, ShoppingBag, Clock, Eye, TrendingUp, MapPin } from "lucide-react";
 import { format } from "date-fns";
 
 const statusColors: Record<OrderStatus, string> = {
