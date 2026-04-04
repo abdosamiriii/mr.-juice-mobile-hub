@@ -1,41 +1,41 @@
-import { useState } from "react";
-import avatar1 from "@/assets/avatars/avatar_1.png";
-import avatar2 from "@/assets/avatars/avatar_2.png";
-import avatar3 from "@/assets/avatars/avatar_3.png";
-import avatar4 from "@/assets/avatars/avatar_4.png";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-const avatarMap: Record<string, string> = {
-  avatar_1: avatar1,
-  avatar_2: avatar2,
-  avatar_3: avatar3,
-  avatar_4: avatar4,
-};
-
-export const getAvatarSrc = (avatarId: string): string => {
-  return avatarMap[avatarId] || avatarMap.avatar_1;
-};
+const AVATAR_COLORS = [
+  "bg-primary text-primary-foreground",
+  "bg-accent text-accent-foreground",
+  "bg-secondary text-secondary-foreground",
+  "bg-muted text-muted-foreground",
+] as const;
 
 export const AVATAR_OPTIONS = ["avatar_1", "avatar_2", "avatar_3", "avatar_4"] as const;
+
+const AVATAR_EMOJIS: Record<string, string> = {
+  avatar_1: "😊",
+  avatar_2: "😎",
+  avatar_3: "🤩",
+  avatar_4: "🧃",
+};
 
 interface UserAvatarProps {
   avatarId?: string;
   size?: number;
   className?: string;
+  name?: string;
 }
 
-export const UserAvatar = ({ avatarId = "avatar_1", size = 96, className = "" }: UserAvatarProps) => {
-  const [error, setError] = useState(false);
-  const src = error ? avatarMap.avatar_1 : getAvatarSrc(avatarId);
+export const UserAvatar = ({ avatarId = "avatar_1", size = 96, className = "", name }: UserAvatarProps) => {
+  const index = AVATAR_OPTIONS.indexOf(avatarId as any);
+  const colorClass = AVATAR_COLORS[index >= 0 ? index : 0];
+  const emoji = AVATAR_EMOJIS[avatarId] || "😊";
+  const fontSize = Math.max(size * 0.4, 16);
 
   return (
-    <img
-      src={src}
-      alt="User avatar"
-      width={size}
-      height={size}
-      onError={() => setError(true)}
-      className={`rounded-full object-cover ${className}`}
-      style={{ width: size, height: size }}
-    />
+    <Avatar className={`${className}`} style={{ width: size, height: size }}>
+      <AvatarFallback className={`${colorClass} text-lg`} style={{ fontSize }}>
+        {name ? name.charAt(0).toUpperCase() : emoji}
+      </AvatarFallback>
+    </Avatar>
   );
 };
+
+export const getAvatarSrc = (_avatarId: string): string => "";
