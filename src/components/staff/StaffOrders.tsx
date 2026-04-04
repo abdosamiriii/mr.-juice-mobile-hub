@@ -241,25 +241,27 @@ export function StaffOrders() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2">
-                    {nextStatus && order.status !== "cancelled" && (
+                    <Select
+                      value={order.status}
+                      onValueChange={(value) => updateStatus.mutate({ id: order.id, status: value as OrderStatus })}
+                    >
+                      <SelectTrigger className={`flex-1 h-9 text-xs ${statusColors[order.status]}`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {allStatuses.map(s => (
+                          <SelectItem key={s} value={s}>{statusLabels[s]}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {nextStatus && order.status !== "cancelled" && order.status !== "completed" && (
                       <Button
                         size="sm"
-                        className="flex-1"
                         onClick={() => updateStatus.mutate({ id: order.id, status: nextStatus })}
                         disabled={updateStatus.isPending}
                       >
                         {statusLabels[nextStatus]}
                         <ChevronRight className="h-4 w-4 ms-1" />
-                      </Button>
-                    )}
-                    {order.status !== "cancelled" && order.status !== "completed" && (
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => updateStatus.mutate({ id: order.id, status: "cancelled" })}
-                        disabled={updateStatus.isPending}
-                      >
-                        Cancel
                       </Button>
                     )}
                     <Button
