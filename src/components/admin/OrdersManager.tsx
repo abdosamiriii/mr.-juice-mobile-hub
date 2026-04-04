@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DollarSign, ShoppingBag, Clock, CheckCircle, Eye, TrendingUp } from "lucide-react";
+import { DollarSign, ShoppingBag, Clock, Eye, TrendingUp, MapPin } from "lucide-react";
 import { format } from "date-fns";
 
 const statusColors: Record<OrderStatus, string> = {
@@ -173,6 +173,12 @@ export function OrdersManager() {
                         <div>
                           <p className="font-medium">{order.customer_name || "Guest"}</p>
                           <p className="text-xs text-muted-foreground">{order.customer_phone || "-"}</p>
+                          {order.order_type === "delivery" && order.delivery_address && (
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                              <MapPin className="h-3 w-3" />
+                              {order.delivery_address.length > 40 ? order.delivery_address.slice(0, 40) + "…" : order.delivery_address}
+                            </p>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -242,18 +248,38 @@ export function OrdersManager() {
                 <p className="font-medium">{selectedOrder?.customer_phone || "-"}</p>
               </div>
               <div>
+                <p className="text-xs text-muted-foreground">Order Type</p>
+                <p className="font-medium capitalize">{selectedOrder?.order_type || "Pickup"}</p>
+              </div>
+              <div>
                 <p className="text-xs text-muted-foreground">Date</p>
                 <p className="font-medium">
                   {selectedOrder && format(new Date(selectedOrder.created_at), "MMM d, yyyy h:mm a")}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Total</p>
+                <p className="text-xs text-muted-foreground">Subtotal</p>
                 <p className="font-bold text-primary">
-                  ${Number(selectedOrder?.total_amount || 0).toFixed(2)}
+                  {Number(selectedOrder?.total_amount || 0).toFixed(0)} EGP
                 </p>
               </div>
+              {selectedOrder?.delivery_fee != null && Number(selectedOrder.delivery_fee) > 0 && (
+                <div>
+                  <p className="text-xs text-muted-foreground">Delivery Fee</p>
+                  <p className="font-medium">{Number(selectedOrder.delivery_fee).toFixed(0)} EGP</p>
+                </div>
+              )}
             </div>
+
+            {selectedOrder?.order_type === "delivery" && selectedOrder?.delivery_address && (
+              <div className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg">
+                <MapPin className="h-4 w-4 mt-0.5 text-primary shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Delivery Address</p>
+                  <p className="text-sm">{selectedOrder.delivery_address}</p>
+                </div>
+              </div>
+            )}
 
             {selectedOrder?.notes && (
               <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">

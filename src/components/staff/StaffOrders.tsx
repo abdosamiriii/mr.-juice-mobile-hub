@@ -209,9 +209,17 @@ export function StaffOrders() {
                         +{order.order_items!.length - 3} more items
                       </p>
                     )}
-                    <div className="border-t border-border/50 mt-2 pt-2 flex justify-between font-bold">
-                      <span>Total</span>
-                      <span className="text-primary">{Number(order.total_amount).toFixed(0)} EGP</span>
+                    <div className="border-t border-border/50 mt-2 pt-2 space-y-1">
+                      {order.order_type === "delivery" && Number(order.delivery_fee) > 0 && (
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>Delivery Fee</span>
+                          <span>{Number(order.delivery_fee).toFixed(0)} EGP</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between font-bold">
+                        <span>Total</span>
+                        <span className="text-primary">{Number(order.total_amount).toFixed(0)} EGP</span>
+                      </div>
                     </div>
                   </div>
 
