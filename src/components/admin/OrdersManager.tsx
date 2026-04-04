@@ -173,6 +173,12 @@ export function OrdersManager() {
                         <div>
                           <p className="font-medium">{order.customer_name || "Guest"}</p>
                           <p className="text-xs text-muted-foreground">{order.customer_phone || "-"}</p>
+                          {order.order_type === "delivery" && order.delivery_address && (
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                              <MapPin className="h-3 w-3" />
+                              {order.delivery_address.length > 40 ? order.delivery_address.slice(0, 40) + "…" : order.delivery_address}
+                            </p>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>
