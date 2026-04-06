@@ -47,6 +47,8 @@ export interface DbAddOn {
 export const useCategories = () => {
   return useQuery({
     queryKey: ["categories"],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("categories")
@@ -62,6 +64,8 @@ export const useCategories = () => {
 export const useProducts = () => {
   return useQuery({
     queryKey: ["products"],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
@@ -77,6 +81,8 @@ export const useProducts = () => {
 export const useSizes = () => {
   return useQuery({
     queryKey: ["sizes"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("sizes")
@@ -92,6 +98,8 @@ export const useSizes = () => {
 export const useAddOns = () => {
   return useQuery({
     queryKey: ["add_ons"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("add_ons")
