@@ -13,6 +13,8 @@ export interface DeliveryZone {
 export const useDeliveryZones = () => {
   return useQuery({
     queryKey: ["delivery_zones"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("delivery_zones")

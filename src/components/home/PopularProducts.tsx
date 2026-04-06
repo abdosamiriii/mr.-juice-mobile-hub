@@ -1,8 +1,9 @@
 import { useProducts, useSizes, useAddOns, useCategories } from "@/hooks/useProducts";
 import { ProductCard } from "./ProductCard";
 import { Product } from "@/types/menu";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 // Categories that should NOT have size selection (single size only)
@@ -36,27 +37,27 @@ export const PopularProducts = ({ categoryFilter, onSelectProduct }: PopularProd
   const { data: dbAddOns = [], isLoading: addOnsLoading } = useAddOns();
   const { data: dbCategories = [], isLoading: categoriesLoading } = useCategories();
   const { t } = useLanguage();
-  const [reviewStats, setReviewStats] = useState<Record<string, { avg: number; count: number }>>({});
 
-  useEffect(() => {
-    const fetchReviewStats = async () => {
+  const { data: reviewStats = {} } = useQuery({
+    queryKey: ["review_stats"],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    queryFn: async () => {
       const { data } = await supabase.from("reviews" as any).select("product_id, rating");
-      if (data) {
-        const stats: Record<string, { total: number; count: number }> = {};
-        (data as any[]).forEach((r: any) => {
-          if (!stats[r.product_id]) stats[r.product_id] = { total: 0, count: 0 };
-          stats[r.product_id].total += r.rating;
-          stats[r.product_id].count += 1;
-        });
-        const result: Record<string, { avg: number; count: number }> = {};
-        Object.entries(stats).forEach(([id, s]) => {
-          result[id] = { avg: s.total / s.count, count: s.count };
-        });
-        setReviewStats(result);
-      }
-    };
-    fetchReviewStats();
-  }, []);
+      if (!data) return {};
+      const stats: Record<string, { total: number; count: number }> = {};
+      (data as any[]).forEach((r: any) => {
+        if (!stats[r.product_id]) stats[r.product_id] = { total: 0, count: 0 };
+        stats[r.product_id].total += r.rating;
+        stats[r.product_id].count += 1;
+      });
+      const result: Record<string, { avg: number; count: number }> = {};
+      Object.entries(stats).forEach(([id, s]) => {
+        result[id] = { avg: s.total / s.count, count: s.count };
+      });
+      return result;
+    },
+  });
 
   const isLoading = productsLoading || sizesLoading || addOnsLoading || categoriesLoading;
 
