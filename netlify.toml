@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "echo \"VITE_SUPABASE_URL=https://lvnmrrpsrixvmbgxqvoj.supabase.co\" > .env && echo \"VITE_SUPABASE_PUBLISHABLE_KEY=$lvnmrrpsrixvmbgxqvoj\" >> .env && npm run build"
   publish = "dist"
 
 [[redirects]]
@@ -8,7 +8,7 @@
   status = 200
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
 
 [[headers]]
   for = "/assets/*"
